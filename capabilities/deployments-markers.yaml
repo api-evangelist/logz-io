@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Logz.io Deployment Markers
+  description: 'Logz.io Deployment Markers business capability. Self-contained Naftiko capability covering one Logz.io API surface
+    on the api.logz.io control plane.'
+  tags:
+  - Logz.io
+  - Observability
+  - Deployments
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LOGZIO_API_TOKEN: LOGZIO_API_TOKEN
+    LOGZIO_API_BASE: LOGZIO_API_BASE
+capability:
+  consumes:
+  - type: http
+    namespace: deployments-markers
+    baseUri: '{{env.LOGZIO_API_BASE}}'
+    description: Publish deployment markers.
+    resources:
+    - name: deployments-markers-resource
+      path: /v2/markers/create-markers
+      operations:
+      - name: get
+        method: GET
+        description: Retrieve Deployment Markers resources.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-API-TOKEN
+      value: '{{env.LOGZIO_API_TOKEN}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: deployments-markers-rest
+    port: 8080
+    description: REST adapter for Logz.io Deployment Markers.
+    resources:
+    - path: /v2/markers/create-markers
+      name: deployments-markers-resource
+      description: REST surface for Logz.io Deployment Markers.
+      operations:
+      - method: GET
+        name: get
+        description: Retrieve Deployment Markers resources.
+        call: deployments-markers.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: deployments-markers-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Logz.io Deployment Markers.
+    tools:
+    - name: logzio-deployments-markers-get
+      description: Retrieve Logz.io Deployment Markers resources.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: deployments-markers.get
+      outputParameters:
+      - type: object
+        mapping: $.

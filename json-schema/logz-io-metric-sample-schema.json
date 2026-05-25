@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/logz-io/main/json-schema/logz-io-metric-sample-schema.json",
+  "title": "Logz.io Metric Sample",
+  "description": "Representation of a single time-series sample as returned by the Logz.io Prometheus-compatible metrics gateway. Mirrors the upstream Prometheus query result envelope shape.",
+  "type": "object",
+  "properties": {
+    "metric": {
+      "type": "object",
+      "description": "Label set identifying the time series, including __name__, plus user labels.",
+      "additionalProperties": {"type": "string"},
+      "required": ["__name__"]
+    },
+    "value": {
+      "type": "array",
+      "description": "[timestamp_seconds, value_as_string] tuple for an instant query.",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": [
+        {"type": "number", "description": "Unix epoch seconds."},
+        {"type": "string", "description": "Sample value encoded as string per Prometheus convention."}
+      ]
+    },
+    "values": {
+      "type": "array",
+      "description": "Array of [timestamp, value] tuples for a range query.",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": [
+          {"type": "number"},
+          {"type": "string"}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,144 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Logz.io
+providerId: logz-io
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - FinOps
+  - FOCUS
+  - Observability
+  - Cost Management
+  - Cloud Cost
+description: FOCUS-aligned FinOps definition for the Logz.io managed observability platform. Logz.io meters multiple
+  unit types — GB of ingested log data, thousand-time-series-per-day for metrics, millions of spans per day for
+  traces, and millions of AI Agent tokens for the agentic observability tier — under a single account-level commitment
+  and overage model.
+sources:
+  - https://logz.io/pricing/
+  - https://docs.logz.io/api/
+  - https://docs.logz.io/user-guide/accounts/manage-the-main-account-and-sub-accounts.html
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Logz.io
+serviceCategory: Management and Governance
+billingModel:
+  pricingCategory: Usage-Based
+  billingFrequency: Monthly
+  billingCurrency: USD
+  chargeCategories:
+    - Usage
+    - Purchase
+    - Adjustment
+    - Credit
+    - Tax
+  primaryUnit: gigabyte
+  secondaryUnits:
+    - timeseries
+    - span
+    - token
+focusColumns:
+  ServiceName: Logz.io
+  ServiceCategory: Management and Governance
+  ProviderName: Logz.io
+  PublisherName: Logz.io
+  InvoiceIssuerName: Logz.io
+  PricingCategory: Usage-Based
+  PricingUnit: GB
+  BillingCurrency: USD
+  CommitmentDiscountType: Spend-based commitment
+meters:
+  - name: log_ingest_gb
+    unit: gigabyte
+    aggregation: sum
+    dimensions:
+      - account
+      - sub_account
+      - log_type
+      - region
+    description: Daily ingested log volume in gigabytes, charged at the Log Management plan's per-GB-per-day rate.
+  - name: hot_tier_extension_gb
+    unit: gigabyte
+    aggregation: sum
+    dimensions:
+      - account
+      - retention_days
+    description: Hot-tier retention extension beyond plan base retention.
+  - name: warm_tier_extension_gb
+    unit: gigabyte
+    aggregation: sum
+    dimensions:
+      - account
+      - retention_days
+  - name: cold_tier_gb
+    unit: gigabyte
+    aggregation: sum
+    dimensions:
+      - account
+      - retention_days
+  - name: metrics_time_series
+    unit: timeseries
+    aggregation: max
+    dimensions:
+      - metrics_account
+      - region
+    description: Peak number of active time series per day in the Infrastructure Monitoring plane.
+  - name: trace_spans
+    unit: span
+    aggregation: sum
+    dimensions:
+      - account
+      - service
+      - region
+    description: Number of spans accepted by the Distributed Tracing plane.
+  - name: ai_agent_tokens
+    unit: token
+    aggregation: sum
+    dimensions:
+      - account
+      - agent_workflow
+    description: AI Agent token usage for Agentic Observability features.
+commitmentDiscounts:
+  - type: spend-commitment
+    description: Logz.io plans are sold as annual commitments with usage drawn down against the commit. Monthly
+      billing carries a 1.2x uplift on equivalent annual unit rates.
+  - type: overage
+    description: Usage above the daily / monthly commit is billed at 1.4x the subscription unit rate (Ingest Overage
+      modifier).
+costAllocation:
+  strategies:
+    - name: Sub-account split
+      description: Logz.io's primary cost-allocation primitive is the time-based sub-account. Owners size sub-accounts
+        with daily GB quotas and assign log_type → sub_account routing so that engineering teams, environments,
+        or customer tenants each receive their own slice of the parent commit.
+    - name: Drop filters
+      description: Drop filters trim ingest at the platform edge to reduce billable volume without changing customer-side
+        shippers.
+    - name: Archive / restore tiering
+      description: Move cold data into customer-owned S3 / GCS / ADLS via Archive settings, then selectively restore
+        for incident review — reducing the hot-tier billable footprint.
+    - name: Tag-driven allocation
+      description: Customers tag logs (service, env, team) at ingest and use the Search API or Grafana to attribute
+        cost by dimension.
+recommendations:
+  - id: enable-drop-filters
+    name: Enable drop filters on high-volume / low-value log types
+    description: Discard noisy log types (debug, health-check pings) via /v1/drop to bring daily GB under the
+      commit and avoid the 1.4x overage multiplier.
+  - id: archive-cold-data
+    name: Archive cold data and shorten hot retention
+    description: Move long-tail data into customer-owned object storage via /v2/archive/settings and restore on
+      demand for incident response.
+  - id: right-size-subaccounts
+    name: Right-size time-based sub-accounts
+    description: Use /v1/account-management/time-based-accounts to redistribute daily GB quotas across environments
+      rather than holding unused headroom on one account.
+  - id: prefer-annual
+    name: Prefer annual commitment over monthly
+    description: Monthly billing carries a 1.2x uplift versus the equivalent annual commitment.

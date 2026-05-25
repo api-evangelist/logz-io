@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/logz-io/main/json-schema/logz-io-alert-rule-schema.json",
+  "title": "Logz.io Alert Rule",
+  "description": "Representation of a Logz.io v2 alert rule. An alert rule encodes a sub-account scope, a query, a list of sub-components describing what to watch for, severity thresholds, schedule, and the notification endpoints to fire when an alert triggers.",
+  "type": "object",
+  "properties": {
+    "id": {"type": "integer", "description": "Alert rule identifier."},
+    "title": {"type": "string", "description": "Human-readable alert title."},
+    "description": {"type": "string", "description": "Operator-facing description."},
+    "tags": {"type": "array", "items": {"type": "string"}, "description": "Tags applied to the alert."},
+    "searchTimeFrameMinutes": {"type": "integer", "description": "Lookback window in minutes for evaluating the alert."},
+    "isEnabled": {"type": "boolean", "description": "Whether the alert is currently armed."},
+    "notificationEmails": {"type": "array", "items": {"type": "string", "format": "email"}, "description": "Email recipients."},
+    "alertNotificationEndpoints": {"type": "array", "items": {"type": "integer"}, "description": "IDs of notification endpoints (Slack, PagerDuty, etc.) to fire."},
+    "suppressNotificationsMinutes": {"type": "integer", "description": "Suppression window after a fire to avoid notification storms."},
+    "subComponents": {
+      "type": "array",
+      "description": "One or more sub-components defining the conditions of the alert.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "queryDefinition": {
+            "type": "object",
+            "description": "Query that produces the count or aggregation evaluated against thresholds.",
+            "properties": {
+              "query": {"type": "string", "description": "Lucene-syntax search query."},
+              "filters": {"type": "object"},
+              "groupBy": {"type": "array", "items": {"type": "string"}, "description": "Fields to group by."},
+              "aggregation": {
+                "type": "object",
+                "properties": {
+                  "aggregationType": {"type": "string", "enum": ["NONE", "COUNT", "AVG", "MIN", "MAX", "SUM", "UNIQUE_COUNT"]},
+                  "fieldToAggregateOn": {"type": "string"}
+                }
+              },
+              "shouldQueryOnAllAccounts": {"type": "boolean"},
+              "accountIdsToQueryOn": {"type": "array", "items": {"type": "integer"}}
+            }
+          },
+          "trigger": {
+            "type": "object",
+            "properties": {
+              "operator": {"type": "string", "enum": ["LESS_THAN", "LESS_THAN_OR_EQUALS", "GREATER_THAN", "GREATER_THAN_OR_EQUALS", "EQUALS", "NOT_EQUAL_TO"]},
+              "severityThresholdTiers": {
+                "type": "object",
+                "additionalProperties": {"type": "number"},
+                "description": "Mapping of severity → threshold (e.g. HIGH=100, INFO=10)."
+              }
+            }
+          },
+          "output": {
+            "type": "object",
+            "properties": {
+              "type": {"type": "string", "enum": ["JSON", "TABLE"]},
+              "columns": {"type": "array", "items": {"type": "object"}}
+            }
+          }
+        }
+      }
+    }
+  },
+  "required": ["title", "subComponents"]
+}

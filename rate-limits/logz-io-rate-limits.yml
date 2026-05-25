@@ -1,0 +1,62 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Logz.io
+providerId: logz-io
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Observability
+  - Rate Limiting
+  - Quotas
+description: 'Reconciled rate-limit and concurrency policy for the Logz.io public API. The control plane caps
+  concurrent API requests per account; ingest plane is governed by daily ingest commitments rather than per-request
+  rate limits.'
+sources:
+  - https://docs.logz.io/api/
+  - https://api-docs.logz.io/docs/logz/logz-io-api
+  - https://logz.io/pricing/
+responseCodes:
+  throttled: 429
+  quotaExceeded: 429
+algorithm: concurrency-cap
+limits:
+  - tier: All Pro / Enterprise accounts
+    api: Public Control-Plane API
+    concurrentRequests: 100
+    description: Hard cap of 100 concurrent in-flight API requests per Logz.io account against `api.logz.io` (and
+      its regional siblings). To raise the cap contact Logz.io Customer Success or the account manager. Burst
+      requests beyond the cap return HTTP 429.
+notes:
+  - 'API access is available to Pro and Enterprise plan subscribers only. Free / community-tier accounts cannot
+    issue API tokens.'
+  - 'There is no documented per-second or per-minute request limit beyond the 100-concurrent cap; in practice
+    Logz.io recommends compressing large search and scroll responses with `Accept-Encoding: gzip, deflate`.'
+  - 'Ingest is governed by daily GB / time-series / span commitments (see plans/logz-io-plans-pricing.yml), not
+    by per-request rate limits. Overage above the daily commit is billed at 1.4x the subscription unit rate rather
+    than refused.'
+  - 'Region-specific URLs (`api-au`, `api-ca`, `api-eu`, `api-nl`, `api-uk`, `api-wa`) all apply the same limit
+    independently per region account.'
+regions:
+  - code: us
+    baseUrl: https://api.logz.io
+    description: US East (Northern Virginia)
+  - code: au
+    baseUrl: https://api-au.logz.io
+    description: Asia Pacific (Sydney)
+  - code: ca
+    baseUrl: https://api-ca.logz.io
+    description: Canada (Central)
+  - code: eu
+    baseUrl: https://api-eu.logz.io
+    description: Europe (Frankfurt)
+  - code: nl
+    baseUrl: https://api-nl.logz.io
+    description: West Europe (Netherlands)
+  - code: uk
+    baseUrl: https://api-uk.logz.io
+    description: Europe (London)
+  - code: wa
+    baseUrl: https://api-wa.logz.io
+    description: West US 2 (Washington)

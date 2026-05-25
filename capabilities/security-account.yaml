@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Logz.io Security Account
+  description: 'Logz.io Security Account business capability. Self-contained Naftiko capability covering one Logz.io API surface
+    on the api.logz.io control plane.'
+  tags:
+  - Logz.io
+  - Security
+  - SIEM
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LOGZIO_API_TOKEN: LOGZIO_API_TOKEN
+    LOGZIO_API_BASE: LOGZIO_API_BASE
+capability:
+  consumes:
+  - type: http
+    namespace: security-account
+    baseUri: '{{env.LOGZIO_API_BASE}}'
+    description: Manage SIEM account configuration.
+    resources:
+    - name: security-account-resource
+      path: /v2/security/account
+      operations:
+      - name: get
+        method: GET
+        description: Retrieve Security Account resources.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-API-TOKEN
+      value: '{{env.LOGZIO_API_TOKEN}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: security-account-rest
+    port: 8080
+    description: REST adapter for Logz.io Security Account.
+    resources:
+    - path: /v2/security/account
+      name: security-account-resource
+      description: REST surface for Logz.io Security Account.
+      operations:
+      - method: GET
+        name: get
+        description: Retrieve Security Account resources.
+        call: security-account.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: security-account-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Logz.io Security Account.
+    tools:
+    - name: logzio-security-account-get
+      description: Retrieve Logz.io Security Account resources.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: security-account.get
+      outputParameters:
+      - type: object
+        mapping: $.

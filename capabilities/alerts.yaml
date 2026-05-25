@@ -1,0 +1,72 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Logz.io Alerts
+  description: 'Logz.io Alerts business capability. Self-contained Naftiko capability covering one Logz.io API surface
+    on the api.logz.io control plane.'
+  tags:
+  - Logz.io
+  - Observability
+  - Alerting
+  created: '2026-05-25'
+  modified: '2026-05-25'
+binds:
+- namespace: env
+  keys:
+    LOGZIO_API_TOKEN: LOGZIO_API_TOKEN
+    LOGZIO_API_BASE: LOGZIO_API_BASE
+capability:
+  consumes:
+  - type: http
+    namespace: alerts
+    baseUri: '{{env.LOGZIO_API_BASE}}'
+    description: Manage Logz.io alert rules.
+    resources:
+    - name: alerts-resource
+      path: /v2/alerts
+      operations:
+      - name: get
+        method: GET
+        description: Retrieve Alerts resources.
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    authentication:
+      type: apikey
+      key: X-API-TOKEN
+      value: '{{env.LOGZIO_API_TOKEN}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: alerts-rest
+    port: 8080
+    description: REST adapter for Logz.io Alerts.
+    resources:
+    - path: /v2/alerts
+      name: alerts-resource
+      description: REST surface for Logz.io Alerts.
+      operations:
+      - method: GET
+        name: get
+        description: Retrieve Alerts resources.
+        call: alerts.get
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: alerts-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Logz.io Alerts.
+    tools:
+    - name: logzio-alerts-get
+      description: Retrieve Logz.io Alerts resources.
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: alerts.get
+      outputParameters:
+      - type: object
+        mapping: $.

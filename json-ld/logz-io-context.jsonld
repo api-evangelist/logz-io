@@ -1,0 +1,109 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "logzio": "https://raw.githubusercontent.com/api-evangelist/logz-io/main/json-ld/logz-io-context.jsonld#",
+    "schema": "https://schema.org/",
+    "prom": "https://prometheus.io/docs/concepts/",
+    "es": "https://www.elastic.co/guide/en/elasticsearch/reference/",
+    "otel": "https://opentelemetry.io/docs/concepts/",
+    "mitre": "https://attack.mitre.org/",
+    "Account": {
+      "@id": "logzio:Account",
+      "@type": "@id",
+      "schema:domainIncludes": "schema:Organization"
+    },
+    "TimeBasedAccount": {
+      "@id": "logzio:TimeBasedAccount",
+      "@type": "@id",
+      "subClassOf": "logzio:Account"
+    },
+    "MetricsAccount": {
+      "@id": "logzio:MetricsAccount",
+      "@type": "@id",
+      "subClassOf": "logzio:Account"
+    },
+    "AssociatedAccount": {
+      "@id": "logzio:AssociatedAccount",
+      "@type": "@id",
+      "subClassOf": "logzio:Account"
+    },
+    "User": {"@id": "logzio:User", "@type": "@id"},
+    "AuthenticationGroup": {"@id": "logzio:AuthenticationGroup", "@type": "@id"},
+    "ApiToken": {"@id": "logzio:ApiToken", "@type": "@id"},
+    "LogShippingToken": {"@id": "logzio:LogShippingToken", "@type": "@id"},
+    "SharedToken": {"@id": "logzio:SharedToken", "@type": "@id"},
+    "LogDocument": {
+      "@id": "logzio:LogDocument",
+      "@type": "@id",
+      "subClassOf": "es:Document"
+    },
+    "LogType": {"@id": "logzio:LogType", "@type": "@id"},
+    "ParsingPipeline": {
+      "@id": "logzio:ParsingPipeline",
+      "@type": "@id"
+    },
+    "DropFilter": {"@id": "logzio:DropFilter", "@type": "@id"},
+    "ArchiveSetting": {"@id": "logzio:ArchiveSetting", "@type": "@id"},
+    "ArchiveRestoreJob": {"@id": "logzio:ArchiveRestoreJob", "@type": "@id"},
+    "LookupList": {"@id": "logzio:LookupList", "@type": "@id"},
+    "Alert": {"@id": "logzio:Alert", "@type": "@id"},
+    "AlertSubComponent": {"@id": "logzio:AlertSubComponent", "@type": "@id"},
+    "TriggeredAlert": {"@id": "logzio:TriggeredAlert", "@type": "@id"},
+    "NotificationEndpoint": {"@id": "logzio:NotificationEndpoint", "@type": "@id"},
+    "Insight": {"@id": "logzio:Insight", "@type": "@id"},
+    "DeploymentMarker": {
+      "@id": "logzio:DeploymentMarker",
+      "@type": "@id",
+      "schema:domainIncludes": "schema:Event"
+    },
+    "TimeSeries": {
+      "@id": "logzio:TimeSeries",
+      "@type": "@id",
+      "subClassOf": "prom:metric_types"
+    },
+    "MetricSample": {"@id": "logzio:MetricSample", "@type": "@id"},
+    "Dashboard": {"@id": "logzio:Dashboard", "@type": "@id"},
+    "GrafanaDashboard": {
+      "@id": "logzio:GrafanaDashboard",
+      "@type": "@id",
+      "subClassOf": "logzio:Dashboard"
+    },
+    "PersesDashboard": {
+      "@id": "logzio:PersesDashboard",
+      "@type": "@id",
+      "subClassOf": "logzio:Dashboard"
+    },
+    "GrafanaFolder": {"@id": "logzio:GrafanaFolder", "@type": "@id"},
+    "GrafanaAlertRule": {"@id": "logzio:GrafanaAlertRule", "@type": "@id"},
+    "GrafanaContactPoint": {"@id": "logzio:GrafanaContactPoint", "@type": "@id"},
+    "GrafanaSilence": {"@id": "logzio:GrafanaSilence", "@type": "@id"},
+    "GrafanaAnnotation": {"@id": "logzio:GrafanaAnnotation", "@type": "@id"},
+    "SecurityRule": {
+      "@id": "logzio:SecurityRule",
+      "@type": "@id",
+      "schema:domainIncludes": "mitre:Detection"
+    },
+    "SecurityEvent": {
+      "@id": "logzio:SecurityEvent",
+      "@type": "@id",
+      "subClassOf": "logzio:LogDocument"
+    },
+    "AuditEvent": {
+      "@id": "logzio:AuditEvent",
+      "@type": "@id"
+    },
+    "S3BucketShipper": {"@id": "logzio:S3BucketShipper", "@type": "@id"},
+    "CloudTrailShipper": {"@id": "logzio:CloudTrailShipper", "@type": "@id"},
+    "Snapshot": {"@id": "logzio:Snapshot", "@type": "@id"},
+    "Trace": {
+      "@id": "logzio:Trace",
+      "@type": "@id",
+      "subClassOf": "otel:trace"
+    },
+    "Span": {
+      "@id": "logzio:Span",
+      "@type": "@id",
+      "subClassOf": "otel:span"
+    }
+  }
+}

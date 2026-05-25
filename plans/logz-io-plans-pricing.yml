@@ -1,0 +1,199 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Logz.io
+providerId: logz-io
+created: '2026-05-25'
+modified: '2026-05-25'
+reconciled: true
+tags:
+  - Observability
+  - Logging
+  - Metrics
+  - Tracing
+  - SIEM
+  - Cost Management
+description: 'Reconciled commercial plans and consumption pricing for the Logz.io managed observability platform.
+  Source: logz.io/pricing and docs.logz.io.'
+sources:
+  - https://logz.io/pricing/
+  - https://docs.logz.io/user-guide/accounts/manage-the-main-account-and-sub-accounts.html
+  - https://docs.logz.io/api/
+plans:
+  - id: logz-io-log-management
+    name: Log Management
+    type: usage-based
+    description: Managed ELK / OpenSearch log management with tiered hot / warm / cold retention.
+    entries:
+      - label: Ingested logs
+        name: log_ingest_gb_day
+        type: metered
+        metric: gigabyte
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: '0.92'
+        userMultiplied: false
+      - label: Hot tier retention extension
+        name: hot_tier_extension
+        type: metered
+        metric: gigabyte
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: '0.03'
+        userMultiplied: false
+      - label: Warm tier retention extension
+        name: warm_tier_extension
+        type: metered
+        metric: gigabyte
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: '0.015'
+        userMultiplied: false
+      - label: Cold tier retention
+        name: cold_tier
+        type: metered
+        metric: gigabyte
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: '0.001'
+        userMultiplied: false
+    elements:
+      - name: Managed Elasticsearch / OpenSearch
+      - name: Kibana-equivalent UI
+      - name: Drop filters
+      - name: Archive and restore to customer object storage
+      - name: 3 / 7 / 14 / 30 day base retention options
+  - id: logz-io-infrastructure-monitoring
+    name: Infrastructure Monitoring
+    type: usage-based
+    description: Managed Prometheus-compatible metrics platform with 18 months retention.
+    entries:
+      - label: Time series
+        name: time_series_per_day
+        type: metered
+        metric: timeseries
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1000
+        price: '0.40'
+        userMultiplied: false
+    elements:
+      - name: 18 month retention
+      - name: 6 DPM resolution
+      - name: Prometheus-compatible query API
+      - name: Managed Grafana
+      - name: Managed Perses dashboards
+  - id: logz-io-distributed-tracing
+    name: Distributed Tracing
+    type: usage-based
+    description: Managed distributed tracing for OpenTelemetry / Jaeger / Zipkin pipelines.
+    entries:
+      - label: Spans
+        name: spans_per_day
+        type: metered
+        metric: span
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1000000
+        price: '0.16'
+        userMultiplied: false
+    elements:
+      - name: 10 day retention
+      - name: OpenTelemetry-native ingest
+      - name: Jaeger / Zipkin compatible storage
+  - id: logz-io-cloud-siem
+    name: Cloud SIEM
+    type: custom
+    description: Cloud SIEM with MITRE ATT&CK-aligned detection rules. Custom commercial pricing.
+    entries:
+      - label: Custom quote
+        name: custom
+        type: custom
+        metric: account
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: 'Call'
+        userMultiplied: false
+    elements:
+      - name: MITRE ATT&CK-aligned detection
+      - name: Threat intelligence feeds
+      - name: Pre-built security analytics dashboards
+  - id: logz-io-agentic-observability
+    name: Agentic Observability
+    type: usage-based
+    description: AI Agent capability priced per million tokens consumed for root-cause analysis and automated workflows.
+    entries:
+      - label: AI Agent tokens
+        name: agent_tokens
+        type: metered
+        metric: token
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1000000
+        price: '10.00'
+        userMultiplied: false
+    elements:
+      - name: AI-driven root cause analysis
+      - name: Automated runbook generation
+      - name: Cross-signal correlation
+  - id: logz-io-pro
+    name: Pro Plan
+    type: subscription
+    description: Pro subscription tier offering full API access and production support.
+    entries:
+      - label: Account subscription
+        name: pro_account
+        type: subscription
+        metric: account
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: 'Call'
+        userMultiplied: false
+    elements:
+      - name: Full Logz.io API access
+      - name: Standard SLAs
+      - name: Email and chat support
+  - id: logz-io-enterprise
+    name: Enterprise Plan
+    type: subscription
+    description: Enterprise subscription tier with premium SLAs, dedicated CSM, and compliance attestations.
+    entries:
+      - label: Enterprise subscription
+        name: enterprise_account
+        type: subscription
+        metric: account
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: 'Call'
+        userMultiplied: false
+    elements:
+      - name: Custom commitment-based pricing
+      - name: 24/7 premium support
+      - name: SOC 2 / ISO 27001 / HIPAA / PCI DSS
+      - name: SSO, RBAC, audit trail
+modifiers:
+  - id: ingest-overage
+    name: Ingest Overage
+    description: Usage above committed plan billed at 1.4x the subscription unit rate.
+    multiplier: '1.4'
+  - id: monthly-billing-uplift
+    name: Monthly Billing Uplift
+    description: Monthly billing carries a 1.2x uplift vs equivalent annual commitment.
+    multiplier: '1.2'

@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/logz-io/main/json-schema/logz-io-search-request-schema.json",
+  "title": "Logz.io Search Request",
+  "description": "Request body for the Logz.io /v1/search API. Wraps an Elasticsearch-compatible query DSL payload, optionally targeting specific accounts and time windows. Mirrors the upstream Elasticsearch _search request body so existing Lucene / DSL queries port unmodified.",
+  "type": "object",
+  "properties": {
+    "query": {
+      "type": "object",
+      "description": "Elasticsearch query DSL. Supports bool / match / range / term and aggregations."
+    },
+    "from": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Result offset for pagination."
+    },
+    "size": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 1000,
+      "description": "Maximum number of hits to return."
+    },
+    "sort": {
+      "type": "array",
+      "description": "Sort clauses applied to the result set.",
+      "items": {
+        "type": "object"
+      }
+    },
+    "_source": {
+      "description": "Source filtering — boolean or array of field names.",
+      "oneOf": [
+        {"type": "boolean"},
+        {"type": "array", "items": {"type": "string"}},
+        {"type": "object"}
+      ]
+    },
+    "aggs": {
+      "type": "object",
+      "description": "Aggregations block, mirroring Elasticsearch _aggs semantics."
+    },
+    "accountIds": {
+      "type": "array",
+      "description": "Optional list of associated account IDs to scope the query across the multi-account hierarchy.",
+      "items": {"type": "integer"}
+    },
+    "accountIdsAndNames": {
+      "type": "array",
+      "description": "Optional list of accounts identified by both id and name.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "accountId": {"type": "integer"},
+          "accountName": {"type": "string"}
+        }
+      }
+    }
+  },
+  "required": ["query"]
+}

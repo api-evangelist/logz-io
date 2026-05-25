@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/logz-io/main/json-schema/logz-io-log-document-schema.json",
+  "title": "Logz.io Log Document",
+  "description": "Canonical shape of a log document returned by the Logz.io search API. Indexed by managed Elasticsearch / OpenSearch with the Logz.io system fields prefixed by `@` and `__` and customer fields nested under arbitrary keys.",
+  "type": "object",
+  "properties": {
+    "_index": {"type": "string", "description": "Underlying index the document was retrieved from."},
+    "_id": {"type": "string", "description": "Internal Elasticsearch document id."},
+    "_type": {"type": "string", "description": "Legacy mapping type — kept for compatibility."},
+    "_score": {"type": ["number", "null"], "description": "Relevance score, if scoring is requested."},
+    "@timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Event timestamp parsed by the Logz.io pipeline. Indexed for time-range queries."
+    },
+    "type": {"type": "string", "description": "Logz.io log type — used to route documents through Sawmill parsing pipelines."},
+    "message": {"type": "string", "description": "Free-form message payload of the log event."},
+    "level": {"type": "string", "description": "Log severity / level field (INFO, WARN, ERROR, DEBUG, etc.)."},
+    "logger": {"type": "string", "description": "Logger / source-code emitter identifier."},
+    "thread_name": {"type": "string", "description": "Thread identifier on the originating runtime."},
+    "host": {"type": "string", "description": "Hostname of the emitting node."},
+    "service": {"type": "string", "description": "Service / application name."},
+    "env": {"type": "string", "description": "Environment label (prod, staging, dev)."},
+    "trace_id": {"type": "string", "description": "Distributed-tracing trace identifier — used to join logs and spans."},
+    "span_id": {"type": "string", "description": "Distributed-tracing span identifier."},
+    "tags": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Pipeline-derived tags applied during ingest."
+    }
+  },
+  "required": ["@timestamp"],
+  "additionalProperties": true
+}
