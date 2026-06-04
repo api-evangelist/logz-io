@@ -1,0 +1,109 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Provision a Sub Account
+  summary: Create a time-based log sub account, read it back, and adjust its retention.
+  description: >-
+    Onboards a new logging sub account in a single pass. The workflow creates a
+    time-based sub account from the main account token, captures the new account
+    id, reads the account settings back to confirm creation, then updates the
+    account to tune its retention. Every step spells out its request inline so
+    the flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: provision-subaccount
+  summary: Create a time-based sub account, confirm it, and update its retention.
+  description: >-
+    Creates a time-based sub account, retrieves it by id, and updates its
+    retention days.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - accountName
+    - email
+    - retentionDays
+    - maxDailyGB
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io main-account API token sent in the X-API-TOKEN header.
+      accountName:
+        type: string
+        description: Name of the new sub account.
+      email:
+        type: string
+        description: Administrator email address for the sub account.
+      retentionDays:
+        type: integer
+        description: Number of days log data is retained and searchable.
+      maxDailyGB:
+        type: number
+        description: Maximum volume of data indexed per calendar day, in GB.
+  steps:
+  - stepId: createSubAccount
+    description: >-
+      Create a new time-based log sub account using the main account token. The
+      sharingObjectsAccounts array is required and is sent empty.
+    operationId: createTimeBasedAccount
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        accountName: $inputs.accountName
+        email: $inputs.email
+        retentionDays: $inputs.retentionDays
+        maxDailyGB: $inputs.maxDailyGB
+        sharingObjectsAccounts: []
+        searchable: false
+        accessible: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      accountId: $response.body#/accountId
+  - stepId: getSubAccount
+    description: >-
+      Retrieve the created sub account settings by id to confirm the account
+      exists and capture its retention.
+    operationId: get
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $steps.createSubAccount.outputs.accountId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: updateSubAccount
+    description: >-
+      Update the sub account to apply the requested retention and daily volume
+      now that it has been confirmed.
+    operationId: updateTimeBasedAccount
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $steps.createSubAccount.outputs.accountId
+    requestBody:
+      contentType: application/json
+      payload:
+        accountName: $inputs.accountName
+        retentionDays: $inputs.retentionDays
+        maxDailyGB: $inputs.maxDailyGB
+        sharingObjectsAccounts: []
+        searchable: false
+        accessible: false
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    accountId: $steps.createSubAccount.outputs.accountId

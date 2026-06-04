@@ -1,0 +1,86 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Grafana Contact Point Setup
+  summary: Create a Grafana contact point, confirm it by name, and list alert rules.
+  description: >-
+    Prepares Grafana alerting delivery. The workflow creates a webhook contact
+    point through the provisioning API, confirms it by listing contact points
+    filtered to that name, then lists the existing provisioned alert rules that
+    can route to it. Every step spells out its request inline so the flow can be
+    read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: setup-contact-point
+  summary: Create a webhook contact point, confirm it, and list alert rules.
+  description: >-
+    Creates a Grafana webhook contact point, lists contact points filtered by
+    name to confirm it, and lists provisioned alert rules.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - contactPointName
+    - webhookUrl
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      contactPointName:
+        type: string
+        description: Name of the Grafana contact point to create.
+      webhookUrl:
+        type: string
+        description: Webhook URL the contact point delivers notifications to.
+  steps:
+  - stepId: createContactPoint
+    description: >-
+      Create a webhook contact point through the Grafana provisioning API.
+    operationId: RoutePostContactpoints
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        name: $inputs.contactPointName
+        type: webhook
+        disableResolveMessage: false
+        settings:
+          url: $inputs.webhookUrl
+    successCriteria:
+    - condition: $statusCode == 202
+    outputs:
+      contactPointName: $response.body#/name
+  - stepId: confirmContactPoint
+    description: >-
+      List contact points filtered to the created name to confirm it now exists.
+    operationId: RouteGetContactpoints
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: name
+      in: query
+      value: $inputs.contactPointName
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstName: $response.body#/0/name
+  - stepId: listAlertRules
+    description: >-
+      List the provisioned alert rules that could route triggers to the new
+      contact point.
+    operationId: getAlertRules
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    successCriteria:
+    - condition: $statusCode == 200
+  outputs:
+    contactPointName: $steps.createContactPoint.outputs.contactPointName

@@ -1,0 +1,132 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Upsert an Alert
+  summary: Find an alert by title and update it if it exists, otherwise create it.
+  description: >-
+    Keeps a single alert definition in sync without creating duplicates. The
+    workflow lists all alerts, looks for one whose title matches the supplied
+    value, and then branches: when a match is found it updates that alert in
+    place, and when no match is found it creates a new alert. Every step spells
+    out its request inline so the flow can be read and executed without opening
+    the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: upsert-alert
+  summary: Upsert a single alert definition keyed by its title.
+  description: >-
+    Lists existing alerts, matches on title, and either updates the matched
+    alert or creates a new one.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - alertTitle
+    - query
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      alertTitle:
+        type: string
+        description: The alert title used to detect an existing alert.
+      query:
+        type: string
+        description: Lucene search query the alert evaluates against the logs.
+  steps:
+  - stepId: listAlerts
+    description: >-
+      Retrieve the complete list of alerts so an existing alert with the
+      supplied title can be detected.
+    operationId: getAllAlerts
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      matchedAlertId: $response.body#/0/id
+    onSuccess:
+    - name: alertExists
+      type: goto
+      stepId: updateExisting
+      criteria:
+      - context: $response.body
+        condition: $[?(@.title == '$inputs.alertTitle')]
+        type: jsonpath
+    - name: alertMissing
+      type: goto
+      stepId: createNew
+      criteria:
+      - context: $response.body
+        condition: $[?(@.title == '$inputs.alertTitle')].length == 0
+        type: jsonpath
+  - stepId: updateExisting
+    description: >-
+      Update the matched alert in place with the supplied title and query,
+      keeping it enabled.
+    operationId: updateAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: alertId
+      in: path
+      value: $steps.listAlerts.outputs.matchedAlertId
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert updated by the Arazzo upsert-alert workflow.
+        searchTimeFrameMinutes: 20
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              HIGH: 100
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+    onSuccess:
+    - name: done
+      type: end
+  - stepId: createNew
+    description: >-
+      Create a new alert with the supplied title and query when no existing
+      alert matched.
+    operationId: createAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert created by the Arazzo upsert-alert workflow.
+        searchTimeFrameMinutes: 20
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              HIGH: 100
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+  outputs:
+    updatedAlertId: $steps.updateExisting.outputs.alertId
+    createdAlertId: $steps.createNew.outputs.alertId

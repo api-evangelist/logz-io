@@ -1,0 +1,111 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Alert Enable/Disable Lifecycle
+  summary: Create an alert, disable it for a maintenance window, re-enable it, and verify.
+  description: >-
+    Models a maintenance-window pattern for a single alert. The workflow creates
+    a new alert, immediately disables it so it will not fire during a known
+    noisy period, re-enables it afterwards, and then reads the alert back to
+    confirm it is active again. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: alert-lifecycle
+  summary: Create an alert then toggle it disabled and enabled, confirming final state.
+  description: >-
+    Creates an alert, disables it, re-enables it, and retrieves it to confirm
+    the alert is active.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - alertTitle
+    - query
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      alertTitle:
+        type: string
+        description: Title for the new alert.
+      query:
+        type: string
+        description: Lucene search query the alert evaluates against the logs.
+  steps:
+  - stepId: createAlert
+    description: >-
+      Create the alert that will be cycled through disable and enable states.
+    operationId: createAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert created by the Arazzo alert-lifecycle workflow.
+        searchTimeFrameMinutes: 20
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              HIGH: 100
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+  - stepId: disableAlert
+    description: >-
+      Disable the alert by its id so it will not fire during the maintenance
+      window.
+    operationId: disableAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $steps.createAlert.outputs.alertId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: enableAlert
+    description: >-
+      Re-enable the alert by its id once the maintenance window is over.
+    operationId: enableAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $steps.createAlert.outputs.alertId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: getAlert
+    description: >-
+      Read the alert back to confirm it is enabled again after the cycle.
+    operationId: getAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: alertId
+      in: path
+      value: $steps.createAlert.outputs.alertId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      enabled: $response.body#/enabled
+  outputs:
+    alertId: $steps.createAlert.outputs.alertId
+    enabled: $steps.getAlert.outputs.enabled

@@ -1,0 +1,80 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Search Then Scroll Logs
+  summary: Run a log search, then open a scroll to page through the full result set.
+  description: >-
+    Retrieves a large set of matching logs in two stages. The workflow first
+    runs a bounded search to confirm the query returns hits, then opens a scroll
+    request with the same query to establish a scrollId and pull the first page
+    of paginated results that can be re-fetched until exhausted. Every step
+    spells out its request inline so the flow can be read and executed without
+    opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: search-then-scroll
+  summary: Validate a log query with search, then start a scroll for full pagination.
+  description: >-
+    Runs a log search to confirm hits, then opens a scroll with the same query
+    to page through all matching logs.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - query
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      query:
+        type: object
+        description: Elasticsearch DSL query object selecting the logs to retrieve.
+      size:
+        type: integer
+        description: Number of results to request per page.
+        default: 100
+  steps:
+  - stepId: searchLogs
+    description: >-
+      Run a bounded log search with the supplied query to confirm it matches
+      logs before scrolling through the full result set.
+    operationId: search
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        from: 0
+        size: $inputs.size
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      total: $response.body#/hits/total
+  - stepId: openScroll
+    description: >-
+      Open a scroll with the same query to establish a scrollId and fetch the
+      first page of paginated results.
+    operationId: scroll
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        query: $inputs.query
+        size: $inputs.size
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      scrollId: $response.body#/scrollId
+      hits: $response.body#/hits
+  outputs:
+    total: $steps.searchLogs.outputs.total
+    scrollId: $steps.openScroll.outputs.scrollId

@@ -413,6 +413,48 @@ kind: contract
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
+- type: ArazzoWorkflows
+  url: arazzo/
+  workflows:
+  - url: arazzo/logz-io-account-verify-workflow.yml
+    name: Logz.io Verify Token And Discover Accounts
+    summary: Confirm which account a token belongs to, then list its associated accounts.
+  - url: arazzo/logz-io-alert-create-update-list-workflow.yml
+    name: Logz.io Alert Create, Update, And List
+    summary: Create an alert, refine its threshold, then list all alerts to confirm it.
+  - url: arazzo/logz-io-alert-lifecycle-workflow.yml
+    name: Logz.io Alert Enable/Disable Lifecycle
+    summary: Create an alert, disable it for a maintenance window, re-enable it, and verify.
+  - url: arazzo/logz-io-custom-endpoint-then-alert-workflow.yml
+    name: Logz.io Custom Webhook Endpoint Then Alert
+    summary: Create a custom webhook notification endpoint and an alert that routes to it.
+  - url: arazzo/logz-io-dashboard-in-folder-workflow.yml
+    name: Logz.io Grafana Dashboard In New Folder
+    summary: Create a Grafana folder, save a dashboard into it, and read it back by uid.
+  - url: arazzo/logz-io-endpoint-cleanup-workflow.yml
+    name: Logz.io Notification Endpoint Cleanup
+    summary: List notification endpoints, confirm one by id, and delete it.
+  - url: arazzo/logz-io-endpoint-then-alert-workflow.yml
+    name: Logz.io Notification Endpoint Then Alert
+    summary: Create a Slack notification endpoint, then wire a new alert to notify it.
+  - url: arazzo/logz-io-grafana-contact-point-workflow.yml
+    name: Logz.io Grafana Contact Point Setup
+    summary: Create a Grafana contact point, confirm it by name, and list alert rules.
+  - url: arazzo/logz-io-metrics-explore-workflow.yml
+    name: Logz.io Metrics Explore And Query
+    summary: Discover label names, list matching series, then run an instant PromQL query.
+  - url: arazzo/logz-io-search-then-scroll-workflow.yml
+    name: Logz.io Search Then Scroll Logs
+    summary: Run a log search, then open a scroll to page through the full result set.
+  - url: arazzo/logz-io-subaccount-cleanup-workflow.yml
+    name: Logz.io Sub Account Cleanup
+    summary: List sub accounts, fetch one by id to confirm, and delete it.
+  - url: arazzo/logz-io-subaccount-provision-workflow.yml
+    name: Logz.io Provision a Sub Account
+    summary: Create a time-based log sub account, read it back, and adjust its retention.
+  - url: arazzo/logz-io-upsert-alert-workflow.yml
+    name: Logz.io Upsert an Alert
+    summary: Find an alert by title and update it if it exists, otherwise create it.
 - url: https://logz.io/
   name: Logz.io
   type: Portal

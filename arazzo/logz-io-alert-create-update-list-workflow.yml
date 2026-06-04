@@ -1,0 +1,115 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Alert Create, Update, And List
+  summary: Create an alert, refine its threshold, then list all alerts to confirm it.
+  description: >-
+    Iterates on a single alert definition end to end. The workflow creates a new
+    alert, immediately updates it to refine the trigger threshold and time
+    frame, then lists all alerts so the refined definition can be confirmed in
+    the account inventory. Every step spells out its request inline so the flow
+    can be read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: alert-create-update-list
+  summary: Create an alert, update its threshold, and list all alerts.
+  description: >-
+    Creates an alert, updates it with a refined threshold, and retrieves the
+    full alert list to confirm.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - alertTitle
+    - query
+    - refinedThreshold
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      alertTitle:
+        type: string
+        description: Title for the alert.
+      query:
+        type: string
+        description: Lucene search query the alert evaluates against the logs.
+      refinedThreshold:
+        type: number
+        description: Refined HIGH severity trigger threshold applied on update.
+  steps:
+  - stepId: createAlert
+    description: >-
+      Create the alert with an initial threshold.
+    operationId: createAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert created by the Arazzo alert-create-update-list workflow.
+        searchTimeFrameMinutes: 15
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              HIGH: 50
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+  - stepId: updateAlert
+    description: >-
+      Update the alert to apply the refined threshold and a longer evaluation
+      time frame.
+    operationId: updateAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: alertId
+      in: path
+      value: $steps.createAlert.outputs.alertId
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert refined by the Arazzo alert-create-update-list workflow.
+        searchTimeFrameMinutes: 30
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              HIGH: $inputs.refinedThreshold
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+  - stepId: listAlerts
+    description: >-
+      List all alerts to confirm the refined alert is present in the account
+      inventory.
+    operationId: getAllAlerts
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      firstAlertTitle: $response.body#/0/title
+  outputs:
+    alertId: $steps.updateAlert.outputs.alertId

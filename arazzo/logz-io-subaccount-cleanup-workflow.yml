@@ -1,0 +1,74 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Sub Account Cleanup
+  summary: List sub accounts, fetch one by id to confirm, and delete it.
+  description: >-
+    Safely decommissions a logging sub account. The workflow lists all
+    time-based accounts from the main account token, reads the targeted account
+    by id to confirm it exists before any destructive action, then deletes the
+    sub account. Every step spells out its request inline so the flow can be
+    read and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: cleanup-subaccount
+  summary: Confirm a sub account exists and then delete it.
+  description: >-
+    Lists time-based accounts, retrieves the target account by id, and deletes
+    it.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - accountId
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io main-account API token sent in the X-API-TOKEN header.
+      accountId:
+        type: integer
+        description: ID of the sub account to delete.
+  steps:
+  - stepId: listAccounts
+    description: >-
+      Retrieve settings for the main account and all of its sub accounts so the
+      target account can be confirmed to exist.
+    operationId: getAll
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: getAccount
+    description: >-
+      Read the targeted sub account by id to confirm it exists before deleting
+      it.
+    operationId: get
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $inputs.accountId
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: deleteAccount
+    description: >-
+      Delete the confirmed sub account by its id.
+    operationId: deleteTimeBasedAccount
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $inputs.accountId
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    deletedAccountId: $inputs.accountId

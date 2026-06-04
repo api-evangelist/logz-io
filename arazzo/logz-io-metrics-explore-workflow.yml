@@ -1,0 +1,107 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Metrics Explore And Query
+  summary: Discover label names, list matching series, then run an instant PromQL query.
+  description: >-
+    Explores a metrics account from the top down before querying. The workflow
+    lists available label names over a time window, lists the time series that
+    match a supplied selector, then evaluates an instant Prometheus expression
+    query at a point in time. Every step spells out its request inline so the
+    flow can be read and executed without opening the underlying OpenAPI
+    description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: explore-metrics
+  summary: List label names, list matching series, then run an instant query.
+  description: >-
+    Retrieves label names, lists series matching a selector, and evaluates an
+    instant PromQL query.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - start
+    - end
+    - matchSelector
+    - promQuery
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      start:
+        type: string
+        description: Start timestamp (RFC3339 or Unix) for label and series lookups.
+      end:
+        type: string
+        description: End timestamp (RFC3339 or Unix) for label and series lookups.
+      matchSelector:
+        type: string
+        description: Prometheus series selector, e.g. up or {job="api"}.
+      promQuery:
+        type: string
+        description: Prometheus expression query string to evaluate at an instant.
+  steps:
+  - stepId: listLabelNames
+    description: >-
+      Retrieve all label names over the supplied time window to discover what
+      can be queried.
+    operationId: GetLabelNames
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: start
+      in: query
+      value: $inputs.start
+    - name: end
+      in: query
+      value: $inputs.end
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      labelStatus: $response.body#/status
+  - stepId: listSeries
+    description: >-
+      List the time series that match the supplied selector within the time
+      window.
+    operationId: GetSeriesByLabels
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: match[]
+      in: query
+      value: $inputs.matchSelector
+    - name: start
+      in: query
+      value: $inputs.start
+    - name: end
+      in: query
+      value: $inputs.end
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      seriesData: $response.body#/data
+  - stepId: instantQuery
+    description: >-
+      Evaluate the supplied Prometheus expression query at a single point in
+      time.
+    operationId: GetInstantQuery
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: query
+      in: query
+      value: $inputs.promQuery
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      result: $response.body#/data/result
+  outputs:
+    seriesData: $steps.listSeries.outputs.seriesData
+    result: $steps.instantQuery.outputs.result

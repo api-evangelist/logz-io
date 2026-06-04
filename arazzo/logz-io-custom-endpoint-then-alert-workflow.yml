@@ -1,0 +1,124 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Custom Webhook Endpoint Then Alert
+  summary: Create a custom webhook notification endpoint and an alert that routes to it.
+  description: >-
+    Wires an alert to a custom HTTP integration. The workflow creates a custom
+    notification endpoint with a webhook URL, method, and body template,
+    captures its id, then creates a log alert whose notification recipients
+    reference that endpoint id, and finally reads the alert back to confirm it
+    persisted. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: custom-endpoint-then-alert
+  summary: Provision a custom webhook endpoint and an alert that notifies it.
+  description: >-
+    Creates a custom notification endpoint, creates an alert referencing it, and
+    retrieves the created alert.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - endpointTitle
+    - webhookUrl
+    - alertTitle
+    - query
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      endpointTitle:
+        type: string
+        description: Display name for the custom notification endpoint.
+      webhookUrl:
+        type: string
+        description: URL the custom notification is sent to.
+      alertTitle:
+        type: string
+        description: Title for the new alert.
+      query:
+        type: string
+        description: Lucene search query the alert evaluates against the logs.
+  steps:
+  - stepId: createEndpoint
+    description: >-
+      Create a custom webhook notification endpoint. The test query parameter is
+      false so the endpoint is actually persisted.
+    operationId: createCustom
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: test
+      in: query
+      value: false
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.endpointTitle
+        description: Custom endpoint created by the Arazzo custom-endpoint-then-alert workflow.
+        url: $inputs.webhookUrl
+        method: POST
+        bodyTemplate:
+          subject: Alert from Logz.io
+          message: Check Logz.io for log activity
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      endpointId: $response.body#/id
+  - stepId: createAlert
+    description: >-
+      Create a log alert whose notification recipients include the custom
+      endpoint id created in the previous step.
+    operationId: createAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.alertTitle
+        description: Alert created by the Arazzo custom-endpoint-then-alert workflow.
+        searchTimeFrameMinutes: 20
+        output:
+          type: JSON
+          recipients:
+            notificationEndpointIds:
+            - $steps.createEndpoint.outputs.endpointId
+        subComponents:
+        - queryDefinition:
+            query: $inputs.query
+            shouldQueryOnAllAccounts: true
+          trigger:
+            operator: GREATER_THAN_OR_EQUALS
+            severityThresholdTiers:
+              SEVERE: 300
+        enabled: true
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertId: $response.body#/id
+  - stepId: getAlert
+    description: >-
+      Read the created alert back by its id to confirm it persisted.
+    operationId: getAlert
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: alertId
+      in: path
+      value: $steps.createAlert.outputs.alertId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      alertTitle: $response.body#/title
+  outputs:
+    endpointId: $steps.createEndpoint.outputs.endpointId
+    alertId: $steps.createAlert.outputs.alertId

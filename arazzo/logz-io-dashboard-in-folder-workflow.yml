@@ -1,0 +1,101 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Grafana Dashboard In New Folder
+  summary: Create a Grafana folder, save a dashboard into it, and read it back by uid.
+  description: >-
+    Organizes a new Grafana dashboard under a freshly created folder. The
+    workflow creates a folder, captures its id and uid, saves a dashboard into
+    that folder, then retrieves the dashboard by its uid to confirm it
+    persisted. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: dashboard-in-folder
+  summary: Create a folder, create a dashboard in it, and fetch the dashboard.
+  description: >-
+    Creates a Grafana folder, saves a dashboard into that folder, and retrieves
+    the dashboard by uid.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - folderTitle
+    - dashboardTitle
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      folderTitle:
+        type: string
+        description: Title for the new Grafana folder.
+      dashboardTitle:
+        type: string
+        description: Title for the new Grafana dashboard.
+  steps:
+  - stepId: createFolder
+    description: >-
+      Create a Grafana folder to hold the new dashboard, capturing the folder id
+      and uid.
+    operationId: createNewGrafanaFolder
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        title: $inputs.folderTitle
+        overwrite: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      folderId: $response.body#/id
+      folderUid: $response.body#/uid
+  - stepId: createDashboard
+    description: >-
+      Save a new dashboard into the folder created above. The dashboard id is
+      null so a new dashboard is created, and folderUid targets the new folder.
+    operationId: createDashboard
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    requestBody:
+      contentType: application/json
+      payload:
+        dashboard:
+          id: null
+          title: $inputs.dashboardTitle
+          schemaVersion: 1
+          version: 0
+        folderUid: $steps.createFolder.outputs.folderUid
+        message: Created by the Arazzo dashboard-in-folder workflow.
+        overwrite: false
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      dashboardUid: $response.body#/uid
+      dashboardUrl: $response.body#/url
+  - stepId: getDashboard
+    description: >-
+      Retrieve the saved dashboard by its uid to confirm it persisted in the new
+      folder.
+    operationId: getDashboarById
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: uid
+      in: path
+      value: $steps.createDashboard.outputs.dashboardUid
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      folderUid: $response.body#/meta/folderUid
+  outputs:
+    folderUid: $steps.createFolder.outputs.folderUid
+    dashboardUid: $steps.createDashboard.outputs.dashboardUid

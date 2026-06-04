@@ -1,0 +1,78 @@
+arazzo: 1.0.1
+info:
+  title: Logz.io Notification Endpoint Cleanup
+  summary: List notification endpoints, confirm one by id, and delete it.
+  description: >-
+    Safely removes a notification endpoint. The workflow lists all notification
+    endpoints configured in the account, reads the targeted endpoint by id to
+    confirm its type and title before any destructive action, then deletes the
+    endpoint. Every step spells out its request inline so the flow can be read
+    and executed without opening the underlying OpenAPI description.
+  version: 1.0.0
+sourceDescriptions:
+- name: logzioApi
+  url: ../openapi/logz-io-api-openapi.yml
+  type: openapi
+workflows:
+- workflowId: cleanup-endpoint
+  summary: Confirm a notification endpoint exists and then delete it.
+  description: >-
+    Lists notification endpoints, retrieves the target endpoint by id, and
+    deletes it.
+  inputs:
+    type: object
+    required:
+    - apiToken
+    - endpointId
+    properties:
+      apiToken:
+        type: string
+        description: Logz.io API token sent in the X-API-TOKEN header.
+      endpointId:
+        type: integer
+        description: ID of the notification endpoint to delete.
+  steps:
+  - stepId: listEndpoints
+    description: >-
+      Retrieve all notification endpoints configured in the account so the
+      target endpoint can be confirmed.
+    operationId: getAllEndpoints
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    successCriteria:
+    - condition: $statusCode == 200
+  - stepId: getEndpoint
+    description: >-
+      Read the targeted endpoint by id to confirm its type and title before
+      deleting it.
+    operationId: getEndpointById
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $inputs.endpointId
+    successCriteria:
+    - condition: $statusCode == 200
+    outputs:
+      endpointType: $response.body#/endpointType
+      title: $response.body#/title
+  - stepId: deleteEndpoint
+    description: >-
+      Delete the confirmed notification endpoint by its id.
+    operationId: deleteEndpoint
+    parameters:
+    - name: X-API-TOKEN
+      in: header
+      value: $inputs.apiToken
+    - name: id
+      in: path
+      value: $inputs.endpointId
+    successCriteria:
+    - condition: $statusCode == 204
+  outputs:
+    deletedEndpointId: $inputs.endpointId
+    deletedEndpointType: $steps.getEndpoint.outputs.endpointType
