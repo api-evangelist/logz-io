@@ -1,0 +1,1040 @@
+"""
+Logz.io GraphQL Schema
+Conceptual schema derived from the Logz.io REST API surface covering
+log management, alerting, accounts, tokens, metrics, tracing, SIEM,
+archive/restore, dashboards, and notification endpoints.
+"""
+
+# ─── Scalars ───────────────────────────────────────────────────────────────────
+
+scalar DateTime
+scalar JSON
+scalar Long
+
+# ─── Enums ─────────────────────────────────────────────────────────────────────
+
+enum AccountType {
+  LOG_ACCOUNT
+  METRICS_ACCOUNT
+  TRACING_ACCOUNT
+  SIEM_ACCOUNT
+  FLEX_ACCOUNT
+}
+
+enum AlertSeverity {
+  INFO
+  LOW
+  MEDIUM
+  HIGH
+  SEVERE
+}
+
+enum AlertStatus {
+  ENABLED
+  DISABLED
+  TRIGGERED
+}
+
+enum TokenType {
+  API_TOKEN
+  LOG_SHIPPING_TOKEN
+  SHARED_TOKEN
+  ALERT_TOKEN
+}
+
+enum OutputType {
+  SLACK
+  PAGERDUTY
+  EMAIL
+  OPSGENIE
+  JIRA
+  SERVICENOW
+  CUSTOM_WEBHOOK
+  VICTOROPS
+  BIGPANDA
+  MICROSOFT_TEAMS
+}
+
+enum DropRuleOperator {
+  EQUALS
+  NOT_EQUALS
+  CONTAINS
+  NOT_CONTAINS
+  STARTS_WITH
+  ENDS_WITH
+  REGEX
+}
+
+enum DropRuleFieldType {
+  STRING
+  NUMBER
+  BOOLEAN
+}
+
+enum ArchiveStorageType {
+  S3
+  ADLS
+  GCS
+}
+
+enum ArchiveStatus {
+  ACTIVE
+  INACTIVE
+  PENDING
+  FAILED
+}
+
+enum TraceStatus {
+  OK
+  ERROR
+  UNSET
+}
+
+enum SpanKind {
+  CLIENT
+  SERVER
+  PRODUCER
+  CONSUMER
+  INTERNAL
+}
+
+enum InsightType {
+  EXCEPTION
+  SLOW_TRANSACTION
+  CRITICAL_EVENT
+  ANOMALY
+}
+
+enum InsightSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ServiceStatus {
+  HEALTHY
+  DEGRADED
+  DOWN
+  UNKNOWN
+}
+
+enum CloudEventSource {
+  AWS_CLOUDTRAIL
+  AZURE_ACTIVITY
+  GCP_AUDIT
+  K8S_AUDIT
+  CUSTOM
+}
+
+# ─── Account & Sub-Account ─────────────────────────────────────────────────────
+
+type Account {
+  id: ID!
+  name: String!
+  type: AccountType!
+  region: String!
+  status: String
+  createdAt: DateTime
+  modifiedAt: DateTime
+  details: AccountDetails
+  subAccounts: [SubAccount!]
+  tokens: [Token!]
+  dailyGB: Float
+  retentionDays: Int
+  isActive: Boolean
+}
+
+type AccountDetails {
+  accountId: ID!
+  accountName: String!
+  email: String
+  plan: String
+  region: String
+  maxDailyGB: Float
+  reservedDailyGB: Float
+  retentionDays: Int
+  isFlexible: Boolean
+  accessible: Boolean
+  sharingObjectsAccounts: [ID!]
+  utilizationSettings: UtilizationSettings
+}
+
+type UtilizationSettings {
+  utilizationEnabled: Boolean
+  frequencyMinutes: Int
+  utilizationPercentage: Float
+}
+
+type SubAccount {
+  id: ID!
+  name: String!
+  type: AccountType
+  accountToken: String
+  dailyGB: Float
+  retentionDays: Int
+  isFlexible: Boolean
+  isActive: Boolean
+  createdAt: DateTime
+  details: SubAccountDetails
+}
+
+type SubAccountDetails {
+  accountId: ID!
+  accountName: String!
+  maxDailyGB: Float
+  reservedDailyGB: Float
+  retentionDays: Int
+  isFlexible: Boolean
+  accessible: Boolean
+  searchable: Boolean
+  sharingObjectsAccounts: [ID!]
+  utilizationSettings: UtilizationSettings
+}
+
+# ─── Tokens ───────────────────────────────────────────────────────────────────
+
+type Token {
+  id: ID!
+  name: String!
+  type: TokenType!
+  token: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  isEnabled: Boolean
+  description: String
+}
+
+type APIToken {
+  id: ID!
+  name: String!
+  token: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  isEnabled: Boolean
+  permissions: [String!]
+}
+
+type AlertToken {
+  id: ID!
+  name: String!
+  token: String
+  createdAt: DateTime
+  isEnabled: Boolean
+}
+
+type DifferentToken {
+  tokenId: ID!
+  accountId: ID!
+  tokenType: TokenType!
+  label: String
+  createdAt: DateTime
+}
+
+# ─── Search & Logs ────────────────────────────────────────────────────────────
+
+type Query {
+  query: String
+  size: Int
+  from: Int
+  sort: JSON
+  aggs: JSON
+  scrollId: String
+  timeout: String
+}
+
+type SearchQuery {
+  queryString: String!
+  fromDate: DateTime
+  toDate: DateTime
+  accountIds: [ID!]
+  size: Int
+  from: Int
+  filters: [LogField!]
+  sort: [SortField!]
+}
+
+type SortField {
+  field: String!
+  order: String!
+}
+
+type SearchResult {
+  total: Long
+  maxScore: Float
+  hits: [LogMessage!]!
+  aggregations: JSON
+  scrollId: String
+  took: Int
+  timedOut: Boolean
+  shards: ShardInfo
+}
+
+type ShardInfo {
+  total: Int
+  successful: Int
+  skipped: Int
+  failed: Int
+}
+
+type LogMessage {
+  id: ID!
+  index: String
+  score: Float
+  source: JSON
+  timestamp: DateTime
+  message: String
+  logType: String
+  host: String
+  level: String
+  fields: [LogField!]
+}
+
+type LogField {
+  name: String!
+  value: String
+  type: DropRuleFieldType
+}
+
+# ─── Alerts ───────────────────────────────────────────────────────────────────
+
+type Alert {
+  id: ID!
+  title: String!
+  description: String
+  severity: AlertSeverity!
+  status: AlertStatus!
+  isEnabled: Boolean!
+  createdAt: DateTime
+  updatedAt: DateTime
+  lastTriggeredAt: DateTime
+  condition: AlertCondition
+  notifications: [AlertNotification!]
+  output: AlertOutput
+  tags: [String!]
+}
+
+type AlertDetails {
+  alertId: ID!
+  title: String!
+  description: String
+  severity: AlertSeverity!
+  isEnabled: Boolean!
+  queryString: String
+  groupBy: [String!]
+  searchTimeFrameMinutes: Int
+  notificationEmails: [String!]
+  suppressNotificationsMinutes: Int
+  valueAggregationType: String
+  valueAggregationField: String
+  accountIdsToQueryOn: [ID!]
+  tags: [String!]
+  output: AlertOutput
+  condition: AlertCondition
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type AlertCondition {
+  operator: String!
+  threshold: Float!
+  timeframeMinutes: Int
+  groupBy: [String!]
+  aggregationType: String
+  aggregationField: String
+}
+
+type AlertNotification {
+  alertId: ID!
+  notifiedAt: DateTime!
+  severity: AlertSeverity!
+  title: String!
+  message: String
+  recipients: [String!]
+}
+
+type AlertOutput {
+  type: OutputType!
+  recipients: [String!]
+  endpointIds: [ID!]
+}
+
+# ─── Notification Outputs / Endpoints ─────────────────────────────────────────
+
+type Output {
+  id: ID!
+  title: String!
+  type: OutputType!
+  isEnabled: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type SlackOutput {
+  id: ID!
+  title: String!
+  url: String!
+  channel: String
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type PagerdutyOutput {
+  id: ID!
+  title: String!
+  serviceKey: String!
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type EmailOutput {
+  id: ID!
+  title: String!
+  recipients: [String!]!
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type OpsgenieOutput {
+  id: ID!
+  title: String!
+  apiKey: String
+  region: String
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type JiraOutput {
+  id: ID!
+  title: String!
+  url: String!
+  username: String!
+  projectKey: String!
+  issueType: String
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type ServiceNowOutput {
+  id: ID!
+  title: String!
+  url: String!
+  username: String!
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type CustomWebhook {
+  id: ID!
+  title: String!
+  url: String!
+  method: String!
+  headers: [WebhookHeader!]
+  bodyTemplate: String
+  notifyAbout: [AlertSeverity!]
+  isEnabled: Boolean
+  createdAt: DateTime
+}
+
+type WebhookHeader {
+  name: String!
+  value: String!
+}
+
+type Notification {
+  id: ID!
+  alertId: ID!
+  title: String!
+  message: String
+  severity: AlertSeverity!
+  triggeredAt: DateTime!
+  endpointIds: [ID!]
+  recipients: [String!]
+}
+
+# ─── Saved Searches ───────────────────────────────────────────────────────────
+
+type SavedSearch {
+  id: ID!
+  name: String!
+  description: String
+  isStarred: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+  details: SavedSearchDetails
+}
+
+type SavedSearchDetails {
+  searchId: ID!
+  name: String!
+  description: String
+  queryString: String!
+  fromDate: DateTime
+  toDate: DateTime
+  filters: JSON
+  columns: [String!]
+  sort: [SortField!]
+  accountIds: [ID!]
+}
+
+# ─── Dashboards & Kibana ──────────────────────────────────────────────────────
+
+type Dashboard {
+  id: ID!
+  uid: String
+  title: String!
+  description: String
+  folderId: ID
+  folderTitle: String
+  tags: [String!]
+  version: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  panels: [Panel!]
+}
+
+type Panel {
+  id: ID!
+  title: String!
+  type: String!
+  gridPos: GridPosition
+  datasource: String
+  targets: [JSON!]
+  options: JSON
+  visualization: VisualizationDetails
+}
+
+type GridPosition {
+  x: Int!
+  y: Int!
+  w: Int!
+  h: Int!
+}
+
+type VisualizationDetails {
+  type: String!
+  config: JSON
+  fieldConfig: JSON
+  transformations: [JSON!]
+}
+
+type Kibana {
+  version: String
+  indexPatterns: [IndexPattern!]
+  savedSearches: [SavedSearch!]
+  visualizations: [Visualization!]
+}
+
+type KibanaVersion {
+  version: String!
+  buildNumber: String
+  branch: String
+}
+
+type IndexPattern {
+  id: ID!
+  title: String!
+  timeFieldName: String
+  fields: [LogField!]
+  sourceFilters: [JSON!]
+  fieldFormatMap: JSON
+  type: String
+}
+
+type Visualization {
+  id: ID!
+  type: String!
+  title: String!
+  description: String
+  visState: JSON
+  uiStateJSON: JSON
+  savedSearchId: ID
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+# ─── Index Policies ───────────────────────────────────────────────────────────
+
+type IndexPolicies {
+  id: ID!
+  accountId: ID!
+  hotRetentionDays: Int!
+  warmRetentionDays: Int
+  coldRetentionDays: Int
+  totalRetentionDays: Int
+  isFlexible: Boolean
+  updatedAt: DateTime
+}
+
+# ─── Archive & Restore ────────────────────────────────────────────────────────
+
+type ArchiveConfig {
+  id: ID!
+  storageType: ArchiveStorageType!
+  status: ArchiveStatus!
+  bucketName: String
+  prefix: String
+  region: String
+  iamRoleArn: String
+  accountId: ID
+  containerName: String
+  storageAccountName: String
+  tenantId: String
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type ArchiveLogs {
+  taskId: ID!
+  archiveId: ID!
+  fromDate: DateTime!
+  toDate: DateTime!
+  status: String!
+  startedAt: DateTime
+  completedAt: DateTime
+  indexName: String
+  accountId: ID
+}
+
+type LogPath {
+  path: String!
+  startDate: DateTime
+  endDate: DateTime
+  sizeBytes: Long
+  fileCount: Int
+}
+
+# ─── Drop Filters ─────────────────────────────────────────────────────────────
+
+type DropFilter {
+  id: ID!
+  name: String
+  description: String
+  isEnabled: Boolean!
+  createdAt: DateTime
+  updatedAt: DateTime
+  rules: [DropRule!]!
+}
+
+type DropRule {
+  id: ID!
+  filterId: ID!
+  fieldName: String!
+  operator: DropRuleOperator!
+  value: String!
+  fieldType: DropRuleFieldType
+  isEnabled: Boolean
+}
+
+type DropRuleCondition {
+  field: String!
+  operator: DropRuleOperator!
+  value: String!
+  fieldType: DropRuleFieldType
+}
+
+# ─── Metrics & Prometheus ─────────────────────────────────────────────────────
+
+type MetricsMonitor {
+  id: ID!
+  name: String!
+  description: String
+  promql: String!
+  datasource: String
+  interval: String
+  alertRules: [JSON!]
+  annotations: [JSON!]
+  labels: [MetricLabel!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type MetricLabel {
+  name: String!
+  value: String!
+}
+
+# ─── Tracing ──────────────────────────────────────────────────────────────────
+
+type Trace {
+  traceId: ID!
+  rootSpan: SpanDetails
+  spans: [SpanDetails!]!
+  duration: Long
+  startTime: DateTime
+  endTime: DateTime
+  services: [String!]
+  status: TraceStatus
+  hasError: Boolean
+}
+
+type TraceDetails {
+  traceId: ID!
+  rootOperationName: String
+  rootServiceName: String
+  duration: Long
+  startTime: DateTime
+  spanCount: Int
+  errorCount: Int
+  services: [String!]
+  spans: [SpanDetails!]
+}
+
+type SpanDetails {
+  spanId: ID!
+  traceId: ID!
+  parentSpanId: ID
+  operationName: String!
+  serviceName: String!
+  kind: SpanKind
+  startTime: DateTime!
+  duration: Long!
+  status: TraceStatus
+  tags: [SpanTag!]
+  logs: [SpanLog!]
+  references: [SpanReference!]
+  hasError: Boolean
+}
+
+type SpanTag {
+  key: String!
+  type: String!
+  value: String!
+}
+
+type SpanLog {
+  timestamp: DateTime!
+  fields: [SpanTag!]!
+}
+
+type SpanReference {
+  refType: String!
+  traceId: ID!
+  spanId: ID!
+}
+
+# ─── Services ─────────────────────────────────────────────────────────────────
+
+type Service {
+  name: String!
+  status: ServiceStatus!
+  environment: String
+  version: String
+  latencyP50: Float
+  latencyP95: Float
+  latencyP99: Float
+  errorRate: Float
+  requestRate: Float
+  dependencies: [String!]
+  endpoints: [String!]
+  lastSeen: DateTime
+}
+
+type DiscoveredService {
+  name: String!
+  language: String
+  framework: String
+  instrumentationType: String
+  firstSeen: DateTime
+  lastSeen: DateTime
+  spanCount: Long
+  operationCount: Int
+  environment: String
+}
+
+# ─── Infrastructure Monitoring ────────────────────────────────────────────────
+
+type InfraMonitor {
+  id: ID!
+  name: String!
+  type: String
+  query: String
+  interval: String
+  labels: [MetricLabel!]
+  annotations: JSON
+  thresholds: JSON
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+# ─── Cloud & K8s Events ───────────────────────────────────────────────────────
+
+type CloudEvent {
+  id: ID!
+  source: CloudEventSource!
+  eventType: String!
+  timestamp: DateTime!
+  accountId: String
+  region: String
+  principal: String
+  resource: String
+  action: String
+  status: String
+  sourceIPAddress: String
+  userAgent: String
+  requestParameters: JSON
+  responseElements: JSON
+  raw: JSON
+}
+
+type K8sEvent {
+  uid: ID!
+  namespace: String!
+  name: String!
+  reason: String!
+  message: String!
+  type: String
+  involvedObjectKind: String
+  involvedObjectName: String
+  involvedObjectNamespace: String
+  count: Int
+  firstTimestamp: DateTime
+  lastTimestamp: DateTime
+  source: K8sEventSource
+}
+
+type K8sEventSource {
+  component: String
+  host: String
+}
+
+# ─── API Key ──────────────────────────────────────────────────────────────────
+
+type APIKey {
+  id: ID!
+  name: String!
+  key: String
+  accountId: ID!
+  permissions: [String!]
+  createdAt: DateTime
+  expiresAt: DateTime
+  isActive: Boolean
+}
+
+# ─── AIOps Insights ──────────────────────────────────────────────────────────
+
+type Insight {
+  id: ID!
+  type: InsightType!
+  severity: InsightSeverity!
+  title: String!
+  description: String
+  count: Int
+  firstSeen: DateTime
+  lastSeen: DateTime
+  affectedServices: [String!]
+  relatedLogs: [LogMessage!]
+  tags: [String!]
+}
+
+# ─── Audit Trail ─────────────────────────────────────────────────────────────
+
+type AuditEvent {
+  id: ID!
+  eventType: String!
+  accountId: ID!
+  userId: ID
+  userEmail: String
+  performedAt: DateTime!
+  ipAddress: String
+  userAgent: String
+  resourceType: String
+  resourceId: String
+  details: JSON
+}
+
+# ─── Deployment Markers ──────────────────────────────────────────────────────
+
+type DeploymentMarker {
+  id: ID!
+  title: String!
+  description: String
+  deployedAt: DateTime!
+  service: String
+  version: String
+  environment: String
+  tags: [String!]
+  accountIds: [ID!]
+}
+
+# ─── Lookup Lists ────────────────────────────────────────────────────────────
+
+type LookupList {
+  id: ID!
+  name: String!
+  description: String
+  searchableValues: Boolean
+  fields: [LookupField!]!
+  rows: [[String!]!]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+type LookupField {
+  fieldName: String!
+  fieldIndex: Int!
+}
+
+# ─── Parsing Pipelines (Sawmill) ─────────────────────────────────────────────
+
+type ParsingPipeline {
+  id: ID!
+  name: String!
+  logType: String!
+  steps: [JSON!]!
+  isEnabled: Boolean
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+# ─── GraphQL Query Root ───────────────────────────────────────────────────────
+
+type QueryRoot {
+  # Accounts
+  account(id: ID!): Account
+  accounts: [Account!]!
+  subAccount(id: ID!): SubAccount
+  subAccounts: [SubAccount!]!
+  accountDetails(id: ID!): AccountDetails
+
+  # Tokens
+  apiTokens: [APIToken!]!
+  apiToken(id: ID!): APIToken
+  logShippingTokens: [Token!]!
+  sharedTokens: [Token!]!
+
+  # Logs & Search
+  search(query: SearchQuery!): SearchResult
+  savedSearch(id: ID!): SavedSearch
+  savedSearches: [SavedSearch!]!
+
+  # Alerts
+  alert(id: ID!): Alert
+  alerts: [Alert!]!
+  alertDetails(id: ID!): AlertDetails
+  triggeredAlerts: [AlertNotification!]!
+
+  # Notification Endpoints
+  outputs: [Output!]!
+  output(id: ID!): Output
+
+  # Drop Filters
+  dropFilter(id: ID!): DropFilter
+  dropFilters: [DropFilter!]!
+
+  # Dashboards & Kibana
+  dashboard(uid: String!): Dashboard
+  dashboards: [Dashboard!]!
+  indexPattern(id: ID!): IndexPattern
+  indexPatterns: [IndexPattern!]!
+  visualizations: [Visualization!]!
+
+  # Archive
+  archiveConfigs: [ArchiveConfig!]!
+  archiveConfig(id: ID!): ArchiveConfig
+  archiveLogs: [ArchiveLogs!]!
+
+  # Metrics
+  metricsMonitors: [MetricsMonitor!]!
+
+  # Tracing
+  trace(traceId: ID!): TraceDetails
+  services: [Service!]!
+  discoveredServices: [DiscoveredService!]!
+
+  # Insights
+  insights: [Insight!]!
+
+  # Cloud Events
+  cloudEvents(source: CloudEventSource, fromDate: DateTime, toDate: DateTime): [CloudEvent!]!
+  k8sEvents(namespace: String, fromDate: DateTime, toDate: DateTime): [K8sEvent!]!
+
+  # Audit
+  auditEvents(fromDate: DateTime!, toDate: DateTime!): [AuditEvent!]!
+
+  # Deployments
+  deploymentMarkers: [DeploymentMarker!]!
+
+  # Lookup Lists
+  lookupLists: [LookupList!]!
+  lookupList(id: ID!): LookupList
+
+  # Parsing
+  parsingPipelines: [ParsingPipeline!]!
+
+  # Index Policies
+  indexPolicies(accountId: ID!): IndexPolicies
+
+  # API Keys
+  apiKeys: [APIKey!]!
+  apiKey(id: ID!): APIKey
+}
+
+# ─── GraphQL Mutation Root ────────────────────────────────────────────────────
+
+type MutationRoot {
+  # Accounts
+  createSubAccount(name: String!, dailyGB: Float!, retentionDays: Int!): SubAccount
+  updateSubAccount(id: ID!, dailyGB: Float, retentionDays: Int): SubAccount
+  deleteSubAccount(id: ID!): Boolean
+
+  # Tokens
+  createAPIToken(name: String!): APIToken
+  deleteAPIToken(id: ID!): Boolean
+  createLogShippingToken(name: String!): Token
+  deleteLogShippingToken(id: ID!): Boolean
+
+  # Alerts
+  createAlert(title: String!, severity: AlertSeverity!, condition: JSON!, output: JSON): Alert
+  updateAlert(id: ID!, title: String, severity: AlertSeverity, condition: JSON): Alert
+  enableAlert(id: ID!): Alert
+  disableAlert(id: ID!): Alert
+  deleteAlert(id: ID!): Boolean
+
+  # Notification Endpoints
+  createSlackOutput(title: String!, url: String!, channel: String): SlackOutput
+  createPagerdutyOutput(title: String!, serviceKey: String!): PagerdutyOutput
+  createEmailOutput(title: String!, recipients: [String!]!): EmailOutput
+  createOpsgenieOutput(title: String!, apiKey: String!, region: String): OpsgenieOutput
+  createCustomWebhook(title: String!, url: String!, method: String!): CustomWebhook
+  deleteOutput(id: ID!): Boolean
+
+  # Drop Filters
+  createDropFilter(rules: [JSON!]!): DropFilter
+  enableDropFilter(id: ID!): DropFilter
+  disableDropFilter(id: ID!): DropFilter
+  deleteDropFilter(id: ID!): Boolean
+
+  # Archive
+  createArchiveConfig(storageType: ArchiveStorageType!, bucketName: String!, region: String, iamRoleArn: String): ArchiveConfig
+  deleteArchiveConfig(id: ID!): Boolean
+  restoreArchiveLogs(archiveId: ID!, fromDate: DateTime!, toDate: DateTime!): ArchiveLogs
+
+  # Deployment Markers
+  createDeploymentMarker(title: String!, deployedAt: DateTime!, service: String, version: String): DeploymentMarker
+
+  # Lookup Lists
+  createLookupList(name: String!, fields: [JSON!]!): LookupList
+  updateLookupList(id: ID!, rows: [[String!]!]): LookupList
+  deleteLookupList(id: ID!): Boolean
+
+  # Parsing Pipelines
+  createParsingPipeline(name: String!, logType: String!, steps: [JSON!]!): ParsingPipeline
+  updateParsingPipeline(id: ID!, steps: [JSON!]): ParsingPipeline
+  deleteParsingPipeline(id: ID!): Boolean
+
+  # API Keys
+  createAPIKey(name: String!, permissions: [String!]): APIKey
+  deleteAPIKey(id: ID!): Boolean
+}
+
+schema {
+  query: QueryRoot
+  mutation: MutationRoot
+}

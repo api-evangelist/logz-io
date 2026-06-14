@@ -17,17 +17,18 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/search-logs.yaml
   - url: json-schema/logz-io-search-request-schema.json
     type: JSONSchema
   - url: json-schema/logz-io-log-document-schema.json
     type: JSONSchema
   - url: json-ld/logz-io-context.jsonld
     type: JSONLD
-  description: Query indexed logs against the Logz.io managed Elasticsearch / OpenSearch cluster using a request body
-    that mirrors the upstream Elasticsearch Search API. Includes `/v1/search` for ad-hoc queries and `/v1/scroll`
-    for iterating large result sets. Returns full Lucene-style hits, aggregations, and Elasticsearch metadata,
+  - url: graphql/logz-io-graphql.md
+    type: GraphQL
+  description: Query indexed logs against the Logz.io managed Elasticsearch / OpenSearch
+    cluster using a request body that mirrors the upstream Elasticsearch Search API.
+    Includes `/v1/search` for ad-hoc queries and `/v1/scroll` for iterating large
+    result sets. Returns full Lucene-style hits, aggregations, and Elasticsearch metadata,
     enabling Kibana-equivalent search semantics over Logz.io-hosted indices.
 - aid: logz-io:logz-io-archive-restore-api
   name: Logz.io Archive and Restore API
@@ -43,12 +44,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/archive-restore.yaml
-  description: Configure long-term archive destinations (S3, ADLS, Google Cloud Storage), test connectivity, list
-    and delete archive settings, then restore archived logs back into Logz.io for replay or compliance review.
-    Backs Logz.io's tiered retention strategy of moving cold logs out of hot indices into customer-owned object
-    storage.
+  description: Configure long-term archive destinations (S3, ADLS, Google Cloud Storage),
+    test connectivity, list and delete archive settings, then restore archived logs
+    back into Logz.io for replay or compliance review. Backs Logz.io's tiered retention
+    strategy of moving cold logs out of hot indices into customer-owned object storage.
 - aid: logz-io:logz-io-drop-filters-api
   name: Logz.io Drop Filters API
   tags:
@@ -63,11 +62,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/drop-filters.yaml
-  description: Create, list, activate, deactivate, and delete drop filters that discard matching events before they
-    enter Logz.io's hot index. The primary tool for trimming ingest volume and managing observability cost at
-    the platform edge without changing customer shippers.
+  description: Create, list, activate, deactivate, and delete drop filters that discard
+    matching events before they enter Logz.io's hot index. The primary tool for trimming
+    ingest volume and managing observability cost at the platform edge without changing
+    customer shippers.
 - aid: logz-io:logz-io-alerts-api
   name: Logz.io Alerts API
   tags:
@@ -81,15 +79,12 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/alerts.yaml
-  - type: NaftikoCapability
-    url: capabilities/triggered-alerts.yaml
   - url: json-schema/logz-io-alert-rule-schema.json
     type: JSONSchema
-  description: Manage Logz.io alert rules — create, retrieve, update, enable, disable, and delete log-based and
-    multi-account alerts via `/v2/alerts`, list currently triggered alerts via `/v1/alerts/triggered-alerts`, and
-    publish event markers. Powers the unified alerting experience across log, metric, and security signals.
+  description: Manage Logz.io alert rules — create, retrieve, update, enable, disable,
+    and delete log-based and multi-account alerts via `/v2/alerts`, list currently
+    triggered alerts via `/v1/alerts/triggered-alerts`, and publish event markers.
+    Powers the unified alerting experience across log, metric, and security signals.
 - aid: logz-io:logz-io-notification-endpoints-api
   name: Logz.io Notification Endpoints API
   tags:
@@ -104,11 +99,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/notification-endpoints.yaml
-  description: Manage downstream notification destinations attached to alerts. Supports Slack, PagerDuty, Microsoft
-    Teams, BigPanda, OpsGenie, ServiceNow, VictorOps, custom HTTPS webhooks, and email endpoints. Endpoints are
-    decoupled from alert rules so a single destination can be reused across many alerts.
+  description: Manage downstream notification destinations attached to alerts. Supports
+    Slack, PagerDuty, Microsoft Teams, BigPanda, OpsGenie, ServiceNow, VictorOps,
+    custom HTTPS webhooks, and email endpoints. Endpoints are decoupled from alert
+    rules so a single destination can be reused across many alerts.
 - aid: logz-io:logz-io-users-api
   name: Logz.io Users API
   tags:
@@ -122,13 +116,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/users.yaml
-  - type: NaftikoCapability
-    url: capabilities/authentication-groups.yaml
-  description: List, create, update, suspend, and delete users in the main account and across all associated sub-accounts.
-    Includes authentication groups (SSO group-to-role mappings), the `whoami` introspection endpoint, and `associated-accounts`
-    for navigating the multi-account hierarchy.
+  description: List, create, update, suspend, and delete users in the main account
+    and across all associated sub-accounts. Includes authentication groups (SSO group-to-role
+    mappings), the `whoami` introspection endpoint, and `associated-accounts` for
+    navigating the multi-account hierarchy.
 - aid: logz-io:logz-io-tokens-api
   name: Logz.io Tokens API
   tags:
@@ -142,15 +133,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/api-tokens.yaml
-  - type: NaftikoCapability
-    url: capabilities/log-shipping-tokens.yaml
-  - type: NaftikoCapability
-    url: capabilities/shared-tokens.yaml
-  description: Manage the three Logz.io credential types — API tokens (account control plane), log-shipping tokens
-    (ingest authentication for shippers like Filebeat, Fluentd, OpenTelemetry, and the Logz.io agents), and shared
-    tokens (cross-account read access). Returns token IDs only; secret values are emitted once at creation.
+  description: Manage the three Logz.io credential types — API tokens (account control
+    plane), log-shipping tokens (ingest authentication for shippers like Filebeat,
+    Fluentd, OpenTelemetry, and the Logz.io agents), and shared tokens (cross-account
+    read access). Returns token IDs only; secret values are emitted once at creation.
 - aid: logz-io:logz-io-accounts-api
   name: Logz.io Accounts API
   tags:
@@ -164,13 +150,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/time-based-accounts.yaml
-  - type: NaftikoCapability
-    url: capabilities/metrics-accounts.yaml
-  description: Provision and resize time-based log sub-accounts and metrics accounts. Lets owners split daily ingest
-    quotas across environments, teams, or customers and reshape retention without re-shipping data. Includes the
-    detailed view for time-based accounts with usage and quota.
+  description: Provision and resize time-based log sub-accounts and metrics accounts.
+    Lets owners split daily ingest quotas across environments, teams, or customers
+    and reshape retention without re-shipping data. Includes the detailed view for
+    time-based accounts with usage and quota.
 - aid: logz-io:logz-io-metrics-prometheus-api
   name: Logz.io Metrics Prometheus API
   tags:
@@ -185,13 +168,13 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/metrics-prometheus.yaml
   - url: json-schema/logz-io-metric-sample-schema.json
     type: JSONSchema
-  description: Prometheus-compatible read path against the Logz.io Infrastructure Monitoring backend. Implements
-    `query`, `query_range`, `series`, `labels`, and `label/{name}/values` exactly as upstream Prometheus, so existing
-    Grafana data sources, alertmanagers, and PromQL tooling work unmodified against Logz.io-hosted metrics.
+  description: Prometheus-compatible read path against the Logz.io Infrastructure
+    Monitoring backend. Implements `query`, `query_range`, `series`, `labels`, and
+    `label/{name}/values` exactly as upstream Prometheus, so existing Grafana data
+    sources, alertmanagers, and PromQL tooling work unmodified against Logz.io-hosted
+    metrics.
 - aid: logz-io:logz-io-grafana-api
   name: Logz.io Grafana API
   tags:
@@ -206,16 +189,11 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/grafana-dashboards.yaml
-  - type: NaftikoCapability
-    url: capabilities/grafana-alerting.yaml
-  - type: NaftikoCapability
-    url: capabilities/grafana-folders.yaml
-  description: Pass-through API to the Logz.io fork of Grafana plus a subset of upstream Grafana endpoints. Covers
-    dashboards (`/api/dashboards`), folders, alert rules and silences (`/api/v1/provisioning/alert-rules`, `/api/alertmanager/grafana/api/v2/silences`),
-    annotations, contact points, notification policies, datasource summaries, and dashboard snapshots. The portable
-    way to manage Logz.io's metrics UI as code.
+  description: Pass-through API to the Logz.io fork of Grafana plus a subset of upstream
+    Grafana endpoints. Covers dashboards (`/api/dashboards`), folders, alert rules
+    and silences (`/api/v1/provisioning/alert-rules`, `/api/alertmanager/grafana/api/v2/silences`),
+    annotations, contact points, notification policies, datasource summaries, and
+    dashboard snapshots. The portable way to manage Logz.io's metrics UI as code.
 - aid: logz-io:logz-io-perses-api
   name: Logz.io Perses API
   tags:
@@ -230,12 +208,11 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/perses-dashboards.yaml
-  description: Logz.io's Perses-compatible dashboard API (Perses is the CNCF observability dashboard project Logz.io
-    helps maintain). Manages projects, dashboards, global datasources, and the Perses-flavored dashboard search/move
-    operations alongside the Grafana surface — a forward-looking alternative for organizations standardizing on
-    Perses-as-code.
+  description: Logz.io's Perses-compatible dashboard API (Perses is the CNCF observability
+    dashboard project Logz.io helps maintain). Manages projects, dashboards, global
+    datasources, and the Perses-flavored dashboard search/move operations alongside
+    the Grafana surface — a forward-looking alternative for organizations standardizing
+    on Perses-as-code.
 - aid: logz-io:logz-io-cloud-siem-api
   name: Logz.io Cloud SIEM API
   tags:
@@ -250,15 +227,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/security-rules.yaml
-  - type: NaftikoCapability
-    url: capabilities/security-events.yaml
-  - type: NaftikoCapability
-    url: capabilities/security-account.yaml
-  description: Logz.io Cloud SIEM control plane — manage detection rules (correlation and threshold), retrieve
-    raised security events, and administer the SIEM sub-account. Backs the detect → triage → respond workflow
-    of Logz.io's MITRE ATT&CK-aligned managed SIEM offering, including pre-built rule packs and analyst worklists.
+  description: Logz.io Cloud SIEM control plane — manage detection rules (correlation
+    and threshold), retrieve raised security events, and administer the SIEM sub-account.
+    Backs the detect → triage → respond workflow of Logz.io's MITRE ATT&CK-aligned
+    managed SIEM offering, including pre-built rule packs and analyst worklists.
 - aid: logz-io:logz-io-log-shipping-api
   name: Logz.io Log Shipping API
   tags:
@@ -274,13 +246,9 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/log-shipping-cloudtrail.yaml
-  - type: NaftikoCapability
-    url: capabilities/log-shipping-s3.yaml
-  description: Provision the Logz.io managed pull-side log shippers. Connect AWS CloudTrail streams and S3 buckets
-    (with IAM assume-role) directly from the API so customers can stand up log collection without deploying agents
-    on their AWS side.
+  description: Provision the Logz.io managed pull-side log shippers. Connect AWS CloudTrail
+    streams and S3 buckets (with IAM assume-role) directly from the API so customers
+    can stand up log collection without deploying agents on their AWS side.
 - aid: logz-io:logz-io-parsing-pipelines-api
   name: Logz.io Parsing Pipelines API
   tags:
@@ -295,11 +263,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/parsing-pipelines.yaml
-  description: Manage Sawmill log-type pipelines and external mapping uploads. Sawmill is Logz.io's open-source
-    JSON transformation engine; this API lets customers attach declarative parsing pipelines per log-type and inject
-    field-mapping overrides before logs hit the index.
+  description: Manage Sawmill log-type pipelines and external mapping uploads. Sawmill
+    is Logz.io's open-source JSON transformation engine; this API lets customers attach
+    declarative parsing pipelines per log-type and inject field-mapping overrides
+    before logs hit the index.
 - aid: logz-io:logz-io-lookup-lists-api
   name: Logz.io Lookup Lists API
   tags:
@@ -314,11 +281,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/lookup-lists.yaml
-  description: CRUD for reference data used to enrich and filter logs and alerts. Customers upload lookup lists
-    of IPs, hostnames, user IDs, or business identifiers and reference them by name in alerts and queries, keeping
-    SIEM and operational rules data-driven.
+  description: CRUD for reference data used to enrich and filter logs and alerts.
+    Customers upload lookup lists of IPs, hostnames, user IDs, or business identifiers
+    and reference them by name in alerts and queries, keeping SIEM and operational
+    rules data-driven.
 - aid: logz-io:logz-io-insights-api
   name: Logz.io Insights API
   tags:
@@ -332,11 +298,9 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/insights.yaml
-  description: Retrieve the cognitive-insights and anomaly findings surfaced by Logz.io's AI observability layer.
-    Returns ranked operational insights — Exceptions, Slow Transactions, Critical Events — for downstream automation
-    and ticketing.
+  description: Retrieve the cognitive-insights and anomaly findings surfaced by Logz.io's
+    AI observability layer. Returns ranked operational insights — Exceptions, Slow
+    Transactions, Critical Events — for downstream automation and ticketing.
 - aid: logz-io:logz-io-deployments-api
   name: Logz.io Deployment Markers API
   tags:
@@ -350,11 +314,9 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/deployments-markers.yaml
-  description: Post deployment events into Logz.io as markers so they overlay on dashboards and contextual searches.
-    The mechanism release pipelines use to correlate spikes in error logs or latency with the deployment that caused
-    them.
+  description: Post deployment events into Logz.io as markers so they overlay on dashboards
+    and contextual searches. The mechanism release pipelines use to correlate spikes
+    in error logs or latency with the deployment that caused them.
 - aid: logz-io:logz-io-snapshots-api
   name: Logz.io OpenSearch Snapshots API
   tags:
@@ -369,11 +331,10 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/snapshots.yaml
-  description: Drive the OpenSearch / Kibana saved-object snapshot lifecycle inside Logz.io — import and export
-    visualizations, searches, and dashboard objects programmatically. The promotion-path used to ship Kibana content
-    between Logz.io sub-accounts via CI.
+  description: Drive the OpenSearch / Kibana saved-object snapshot lifecycle inside
+    Logz.io — import and export visualizations, searches, and dashboard objects programmatically.
+    The promotion-path used to ship Kibana content between Logz.io sub-accounts via
+    CI.
 - aid: logz-io:logz-io-audit-trail-api
   name: Logz.io Audit Trail API
   tags:
@@ -387,11 +348,9 @@ apis:
     type: Documentation
   - url: openapi/logz-io-api-openapi.yml
     type: OpenAPI
-  - type: NaftikoCapability
-    url: capabilities/audit-trail.yaml
-  description: Query the Logz.io account-level audit trail and list the event types it emits. Customers wire this
-    into their own SIEM or governance pipelines for ISO 27001 / SOC 2-style activity tracking over Logz.io platform
-    actions.
+  description: Query the Logz.io account-level audit trail and list the event types
+    it emits. Customers wire this into their own SIEM or governance pipelines for
+    ISO 27001 / SOC 2-style activity tracking over Logz.io platform actions.
 name: Logz.io
 tags:
 - Observability
@@ -413,6 +372,8 @@ kind: contract
 image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 access: 3rd-Party
 common:
+- type: PostmanWorkspace
+  url: https://www.postman.com/kinlaneapi/logzio/overview
 - type: ArazzoWorkflows
   url: arazzo/
   workflows:
@@ -421,31 +382,38 @@ common:
     summary: Confirm which account a token belongs to, then list its associated accounts.
   - url: arazzo/logz-io-alert-create-update-list-workflow.yml
     name: Logz.io Alert Create, Update, And List
-    summary: Create an alert, refine its threshold, then list all alerts to confirm it.
+    summary: Create an alert, refine its threshold, then list all alerts to confirm
+      it.
   - url: arazzo/logz-io-alert-lifecycle-workflow.yml
     name: Logz.io Alert Enable/Disable Lifecycle
-    summary: Create an alert, disable it for a maintenance window, re-enable it, and verify.
+    summary: Create an alert, disable it for a maintenance window, re-enable it, and
+      verify.
   - url: arazzo/logz-io-custom-endpoint-then-alert-workflow.yml
     name: Logz.io Custom Webhook Endpoint Then Alert
-    summary: Create a custom webhook notification endpoint and an alert that routes to it.
+    summary: Create a custom webhook notification endpoint and an alert that routes
+      to it.
   - url: arazzo/logz-io-dashboard-in-folder-workflow.yml
     name: Logz.io Grafana Dashboard In New Folder
-    summary: Create a Grafana folder, save a dashboard into it, and read it back by uid.
+    summary: Create a Grafana folder, save a dashboard into it, and read it back by
+      uid.
   - url: arazzo/logz-io-endpoint-cleanup-workflow.yml
     name: Logz.io Notification Endpoint Cleanup
     summary: List notification endpoints, confirm one by id, and delete it.
   - url: arazzo/logz-io-endpoint-then-alert-workflow.yml
     name: Logz.io Notification Endpoint Then Alert
-    summary: Create a Slack notification endpoint, then wire a new alert to notify it.
+    summary: Create a Slack notification endpoint, then wire a new alert to notify
+      it.
   - url: arazzo/logz-io-grafana-contact-point-workflow.yml
     name: Logz.io Grafana Contact Point Setup
     summary: Create a Grafana contact point, confirm it by name, and list alert rules.
   - url: arazzo/logz-io-metrics-explore-workflow.yml
     name: Logz.io Metrics Explore And Query
-    summary: Discover label names, list matching series, then run an instant PromQL query.
+    summary: Discover label names, list matching series, then run an instant PromQL
+      query.
   - url: arazzo/logz-io-search-then-scroll-workflow.yml
     name: Logz.io Search Then Scroll Logs
-    summary: Run a log search, then open a scroll to page through the full result set.
+    summary: Run a log search, then open a scroll to page through the full result
+      set.
   - url: arazzo/logz-io-subaccount-cleanup-workflow.yml
     name: Logz.io Sub Account Cleanup
     summary: List sub accounts, fetch one by id to confirm, and delete it.
@@ -644,14 +612,16 @@ common:
       price: 0.92
       metric: gigabyte
       timeFrame: day
-      description: Per-GB per-day ingest pricing for hot index storage with 3/7/14/30-day retention options.
+      description: Per-GB per-day ingest pricing for hot index storage with 3/7/14/30-day
+        retention options.
     - geo: global
       unit: 1
       label: Hot tier retention extension
       price: 0.03
       metric: gigabyte
       timeFrame: day
-      description: Per-GB per-day price to extend hot-tier retention beyond the base plan retention window.
+      description: Per-GB per-day price to extend hot-tier retention beyond the base
+        plan retention window.
     - geo: global
       unit: 1
       label: Warm tier retention extension
@@ -680,7 +650,7 @@ common:
     - geo: global
       unit: 1000
       label: Time series / day
-      price: 0.40
+      price: 0.4
       metric: timeseries
       timeFrame: day
       description: Per-1,000 time series per-day pricing at 6 data-points-per-minute.
@@ -701,13 +671,15 @@ common:
       price: 0.16
       metric: span
       timeFrame: day
-      description: Per-million spans per-day pricing for distributed tracing storage and query.
+      description: Per-million spans per-day pricing for distributed tracing storage
+        and query.
     elements:
     - name: 10 days retention
     - name: OpenTelemetry-native ingest
     - name: Jaeger and Zipkin compatible storage
     - name: AI-driven trace anomaly detection
-    description: Managed distributed tracing for OpenTelemetry, Jaeger, and Zipkin pipelines.
+    description: Managed distributed tracing for OpenTelemetry, Jaeger, and Zipkin
+      pipelines.
   - id: cloud-siem
     name: Cloud SIEM
     type: Product
@@ -735,8 +707,8 @@ common:
       price: 10
       metric: token
       timeFrame: usage
-      description: Per-million-token usage-based pricing for the Logz.io AI Agent's root-cause analysis and workflow
-        actions.
+      description: Per-million-token usage-based pricing for the Logz.io AI Agent's
+        root-cause analysis and workflow actions.
     elements:
     - name: AI-driven root cause analysis
     - name: Automated runbook generation
@@ -768,7 +740,8 @@ common:
       price: Call
       metric: account
       timeFrame: month
-      description: Enterprise-tier subscription with custom commitments, dedicated CSM, and premium SLAs.
+      description: Enterprise-tier subscription with custom commitments, dedicated
+        CSM, and premium SLAs.
     elements:
     - name: Custom commitment-based pricing
     - name: Premium SLAs and 24/7 support
@@ -789,7 +762,8 @@ common:
       price: 1.4
       metric: multiplier
       timeFrame: usage
-      description: Usage above the committed plan is billed at 1.4x the subscription unit rate.
+      description: Usage above the committed plan is billed at 1.4x the subscription
+        unit rate.
   - id: monthly-billing-uplift
     name: Monthly Billing Uplift
     type: Modifier
@@ -825,9 +799,12 @@ maintainers:
 created: '2026-05-25'
 modified: '2026-05-25'
 specificationVersion: '0.16'
-description: Logz.io is a managed cloud observability platform built on the ELK Stack (Elasticsearch / Logstash
-  / Kibana, plus OpenSearch and Grafana) that unifies log management, infrastructure monitoring, distributed
-  tracing, and Cloud SIEM behind a consumption-based pricing model. The platform pairs an AI Agent layer for root-cause
-  analysis with native OpenTelemetry, Prometheus, Grafana, and Perses compatibility, and exposes its entire control
-  plane through a single OpenAPI 2.0-described public API covering search, alerting, sub-account management, security
-  rules, parsing pipelines, archive / restore, and visualization-as-code via the Logz.io fork of Grafana and Perses.
+description: Logz.io is a managed cloud observability platform built on the ELK Stack
+  (Elasticsearch / Logstash / Kibana, plus OpenSearch and Grafana) that unifies log
+  management, infrastructure monitoring, distributed tracing, and Cloud SIEM behind
+  a consumption-based pricing model. The platform pairs an AI Agent layer for root-cause
+  analysis with native OpenTelemetry, Prometheus, Grafana, and Perses compatibility,
+  and exposes its entire control plane through a single OpenAPI 2.0-described public
+  API covering search, alerting, sub-account management, security rules, parsing pipelines,
+  archive / restore, and visualization-as-code via the Logz.io fork of Grafana and
+  Perses.
