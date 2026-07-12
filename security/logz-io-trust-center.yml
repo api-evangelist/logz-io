@@ -1,0 +1,15 @@
+generated: '2026-07-11'
+method: searched
+probe: true
+source: https://logz.io/blog/security/
+url: https://logz.io/blog/security/
+certifications:
+- SOC 2
+- HIPAA
+- FedRAMP
+evidence:
+- source: https://logz.io/blog/security/
+  keywords:
+  - soc 2
+  - hipaa
+  - fedramp
