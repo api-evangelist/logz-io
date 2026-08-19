@@ -804,7 +804,7 @@ maintainers:
   email: info@apievangelist.com
 created: '2026-05-25'
 modified: '2026-05-25'
-specificationVersion: '0.16'
+specificationVersion: '0.23'
 description: Logz.io is a managed cloud observability platform built on the ELK Stack
   (Elasticsearch / Logstash / Kibana, plus OpenSearch and Grafana) that unifies log
   management, infrastructure monitoring, distributed tracing, and Cloud SIEM behind
