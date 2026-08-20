@@ -90,6 +90,11 @@ apis:
   tags:
   - Observability
   - Alerting
+  - Notification
+  - Webhook
+  tags_raw:
+  - Observability
+  - Alerting
   - Notifications
   - Webhooks
   humanURL: https://api-docs.logz.io/docs/logz/endpoints/
@@ -106,6 +111,10 @@ apis:
 - aid: logz-io:logz-io-users-api
   name: Logz.io Users API
   tags:
+  - Account Management
+  - User
+  - Identity
+  tags_raw:
   - Account Management
   - Users
   - Identity
@@ -140,6 +149,10 @@ apis:
 - aid: logz-io:logz-io-accounts-api
   name: Logz.io Accounts API
   tags:
+  - Account Management
+  - Subaccounts
+  - Multi-Tenant
+  tags_raw:
   - Account Management
   - Sub-Accounts
   - Multi-Tenant
@@ -304,6 +317,10 @@ apis:
 - aid: logz-io:logz-io-deployments-api
   name: Logz.io Deployment Markers API
   tags:
+  - Observability
+  - Deployment
+  - DevOps
+  tags_raw:
   - Observability
   - Deployments
   - DevOps
