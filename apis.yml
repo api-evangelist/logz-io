@@ -150,7 +150,7 @@ apis:
   name: Logz.io Accounts API
   tags:
   - Account Management
-  - Sub-Accounts
+  - Subaccounts
   - Multi-Tenant
   tags_raw:
   - Account Management
