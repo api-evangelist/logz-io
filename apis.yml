@@ -415,6 +415,8 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/logz-io.png
 access: 3rd-Party
 common:
+- type: Website
+  url: https://www.logz.io/
 - type: TrustCenter
   url: security/logz-io-trust-center.yml
 - type: DomainSecurity
