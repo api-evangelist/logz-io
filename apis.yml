@@ -3,9 +3,10 @@ url: https://raw.githubusercontent.com/api-evangelist/logz-io/refs/heads/main/ap
 apis:
 - aid: logz-io:logz-io-alerts-api
   name: Logz.io Alerts API
-  description: 'Logz.io alerts use a Kibana search query to continuously scan your logs and alert you
-    when a certain set of conditions is met. The simplest alerts can use a simple search query or a particular
-    filter, but others can be quite complex and involve several conditions with varying thresholds.
+  description: >-
+    Logz.io alerts use a Kibana search query to continuously scan your logs and alert you when a certain
+    set of conditions is met. The simplest alerts can use a simple search query or a particular filter,
+    but others can be quite complex and involve several conditions with varying thresholds.
 
 
     When alerts trigger, they write event logs. Event logs of triggered alerts are always available and
@@ -13,7 +14,7 @@ apis:
     notifications, and control their contents, format, and who they are sent to.
 
 
-    For the deprecated alerting version, please see our [public GitHub project](https://github.com/logzio/public-api/tree/master/alerts).'
+    For the deprecated alerting version, please see our [public GitHub project](https://github.com/logzio/public-api/tree/master/alerts).
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -75,15 +76,16 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-archive-logs-api
   name: Logz.io Archive logs API
-  description: 'You can archive logs to an AWS S3 bucket or Azure Blob Storage. Archiving gives you the
-    option to restore logs and query them after they have expired from your time-based account.
+  description: >-
+    You can archive logs to an AWS S3 bucket or Azure Blob Storage. Archiving gives you the option to
+    restore logs and query them after they have expired from your time-based account.
 
 
-    You can use the following endpoints to retrieve, set up, test, and update an account''s archive settings.
+    You can use the following endpoints to retrieve, set up, test, and update an account's archive settings.
 
 
     Note: Logs are archived before they are indexed and analyzed by Logz.io. If you are using drop filters,
-    note that dropped logs will still be archived.'
+    note that dropped logs will still be archived.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -207,7 +209,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-authentication-groups-api
   name: Logz.io Authentication groups API
-  description: Before you can use Authentication Groups API, Logz.io support will need to enable [SSO](https://docs.logz.io/user-guide/users/single-sign-on/)
+  description: >-
+    Before you can use Authentication Groups API, Logz.io support will need to enable [SSO](https://docs.logz.io/user-guide/users/single-sign-on/)
     for your account.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
@@ -270,8 +273,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-connect-to-cloudtrail-api
   name: Logz.io Connect to CloudTrail API
-  description: Establish a connection to ship logs to the Logz.io observability platform via an S3 bucket.
-    Supports CloudTrail logs.
+  description: >-
+    Establish a connection to ship logs to the Logz.io observability platform via an S3 bucket. Supports
+    CloudTrail logs.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -333,16 +337,17 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-connect-to-s3-buckets-api
   name: Logz.io Connect to S3 Buckets API
-  description: 'Establish a connection for the Logz.io fetcher to fetch logs to the Logz.io observability
-    platform via an S3 bucket. Supports ELB, S3 Access, CloudFront, VPC Flow logs.
+  description: >-
+    Establish a connection for the Logz.io fetcher to fetch logs to the Logz.io observability platform
+    via an S3 bucket. Supports ELB, S3 Access, CloudFront, VPC Flow logs.
 
 
-    If you''re looking to fetch CloudTrail logs, use the designated endpoints.
+    If you're looking to fetch CloudTrail logs, use the designated endpoints.
 
 
     Authentication can be established with either S3 secret credentials or ARNs (for AWS IAM Roles). Authentication
     with S3 Secret Credentials is supported for backward compatibility. Authentication with ARNs (for
-    IAM Roles) is strongly recommended.'
+    IAM Roles) is strongly recommended.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -466,8 +471,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-create-new-folder-api
   name: Logz.io Dashboards create new folder API
-  description: The Dashboards create new folder API from Logz.io — 1 operation(s) for dashboards create
-    new folder.
+  description: >-
+    The Dashboards create new folder API from Logz.io — 1 operation(s) for dashboards create new folder.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -591,7 +596,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-delete-folder-api
   name: Logz.io Dashboards delete folder API
-  description: The Dashboards delete folder API from Logz.io — 1 operation(s) for dashboards delete folder.
+  description: >-
+    The Dashboards delete folder API from Logz.io — 1 operation(s) for dashboards delete folder.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -715,8 +721,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-get-all-folders-api
   name: Logz.io Dashboards get all folders API
-  description: The Dashboards get all folders API from Logz.io — 1 operation(s) for dashboards get all
-    folders.
+  description: >-
+    The Dashboards get all folders API from Logz.io — 1 operation(s) for dashboards get all folders.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -778,8 +784,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-get-all-global-data-sources-api
   name: Logz.io Dashboards get all global data sources API
-  description: The Dashboards get all global data sources API from Logz.io — 1 operation(s) for dashboards
-    get all global data sources.
+  description: >-
+    The Dashboards get all global data sources API from Logz.io — 1 operation(s) for dashboards get all
+    global data sources.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -965,8 +972,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-get-folder-by-name-api
   name: Logz.io Dashboards get folder by name API
-  description: The Dashboards get folder by name API from Logz.io — 1 operation(s) for dashboards get
-    folder by name.
+  description: >-
+    The Dashboards get folder by name API from Logz.io — 1 operation(s) for dashboards get folder by name.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1090,7 +1097,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-rename-folder-api
   name: Logz.io Dashboards rename folder API
-  description: The Dashboards rename folder API from Logz.io — 1 operation(s) for dashboards rename folder.
+  description: >-
+    The Dashboards rename folder API from Logz.io — 1 operation(s) for dashboards rename folder.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1152,7 +1160,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-search-folder-api
   name: Logz.io Dashboards search folder API
-  description: The Dashboards search folder API from Logz.io — 1 operation(s) for dashboards search folder.
+  description: >-
+    The Dashboards search folder API from Logz.io — 1 operation(s) for dashboards search folder.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1276,7 +1285,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-dashboards-update-folder-api
   name: Logz.io Dashboards update folder API
-  description: The Dashboards update folder API from Logz.io — 1 operation(s) for dashboards update folder.
+  description: >-
+    The Dashboards update folder API from Logz.io — 1 operation(s) for dashboards update folder.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1400,8 +1410,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-deployments-api
   name: Logz.io Deployments API
-  description: Send deployment logs by API to automatically correlate exceptions with service deployments
-    directly in your Logz.io Exceptions tab.
+  description: >-
+    Send deployment logs by API to automatically correlate exceptions with service deployments directly
+    in your Logz.io Exceptions tab.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1463,8 +1474,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-drop-filters-api
   name: Logz.io Drop filters API
-  description: 'Drop filters provide a solution for filtering out logs before they are indexed in your
-    account to help lower costs and reduce account volume.
+  description: >-
+    Drop filters provide a solution for filtering out logs before they are indexed in your account to
+    help lower costs and reduce account volume.
 
 
     Drop filters evaluate logs for exact field:value matches. Any log results that match active drop filters
@@ -1474,7 +1486,7 @@ apis:
 
     Archiving is not affected by drop filters. Logs dropped by drop filters will still be archived, if
     archiving is configured for the account. With archiving configured, you can readily use drop filters
-    to reduce logging bulk and restore the logs in the event that they become relevant.'
+    to reduce logging bulk and restore the logs in the event that they become relevant.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1536,8 +1548,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-grafana-alerting-provisioning-api
   name: Logz.io Grafana alerting provisioning API
-  description: The Grafana alerting provisioning API from Logz.io — 2 operation(s) for grafana alerting
-    provisioning.
+  description: >-
+    The Grafana alerting provisioning API from Logz.io — 2 operation(s) for grafana alerting provisioning.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1723,7 +1735,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-grafana-dashboard-search-api
   name: Logz.io Grafana dashboard search API
-  description: The Grafana dashboard search API from Logz.io — 1 operation(s) for grafana dashboard search.
+  description: >-
+    The Grafana dashboard search API from Logz.io — 1 operation(s) for grafana dashboard search.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -1971,7 +1984,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-grafana-silence-management-api
   name: Logz.io Grafana silence management API
-  description: The Grafana silence management API from Logz.io — 3 operation(s) for grafana silence management.
+  description: >-
+    The Grafana silence management API from Logz.io — 3 operation(s) for grafana silence management.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -2095,8 +2109,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-import-or-export-kibana-objects-api
   name: Logz.io Import or export Kibana objects API
-  description: The Import or export Kibana objects API from Logz.io — 2 operation(s) for import or export
-    kibana objects.
+  description: >-
+    The Import or export Kibana objects API from Logz.io — 2 operation(s) for import or export kibana
+    objects.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -2158,8 +2173,8 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-insights-api
   name: Logz.io Insights API
-  description: 'Logz.io monitors your logs for Insights to help you preempt issues and alert you of potential
-    problems.
+  description: >-
+    Logz.io monitors your logs for Insights to help you preempt issues and alert you of potential problems.
 
 
     There are two types of Insights:
@@ -2175,7 +2190,7 @@ apis:
 
 
     **Note:** This endpoint requires permissions that must be set by our Support team. Please email [help@logz.io](mailto:help@logz.io)
-    for assistance.'
+    for assistance.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -2671,8 +2686,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-manage-notification-endpoints-api
   name: Logz.io Manage notification endpoints API
-  description: 'Logz.io can send notifications to your preferred workspaces, such as Opsgenie, BigPanda,
-    PagerDuty, and Slack.
+  description: >-
+    Logz.io can send notifications to your preferred workspaces, such as Opsgenie, BigPanda, PagerDuty,
+    and Slack.
 
 
     Notifications are typically sent when alerts are triggered, when a user shares a Kibana object, or
@@ -2681,7 +2697,7 @@ apis:
 
     Use these API endpoints to create, update, or delete notification endpoints. If you configure a custom
     endpoint, you can configure the notification message body. Otherwise, you can use any of the available
-    preconfigured endpoints.'
+    preconfigured endpoints.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -2743,13 +2759,14 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-manage-shared-tokens-api
   name: Logz.io Manage shared tokens API
-  description: 'You can share Kibana visualization and dashboard snapshots using shared tokens. Snapshots
-    are stored for 30 days and automatically deleted afterwards. Token filters are available to help you
-    control what data to expose.
+  description: >-
+    You can share Kibana visualization and dashboard snapshots using shared tokens. Snapshots are stored
+    for 30 days and automatically deleted afterwards. Token filters are available to help you control
+    what data to expose.
 
 
     **Note:** Shared token endpoints require permissions that must be set by our Support team. Please
-    email help@logz.io for assistance.'
+    email help@logz.io for assistance.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3130,17 +3147,17 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-restore-logs-api
   name: Logz.io Restore logs API
-  description: 'You can restore data from your active archiving account, whether an AWS S3 bucket or Azure
-    Blob Storage. Restoring data gives you the option to query logs after they have expired from your
-    time-based account.
+  description: >-
+    You can restore data from your active archiving account, whether an AWS S3 bucket or Azure Blob Storage.
+    Restoring data gives you the option to query logs after they have expired from your time-based account.
 
 
     You can use the following endpoints to initiate a new restore process, retrieve, set up, test, and
-    update an account''s archive settings.
+    update an account's archive settings.
 
 
     Note: Logs that are dropped by drop filters are still archived and can be restored. You can temporarily
-    disable drop filters to restore the data.'
+    disable drop filters to restore the data.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3264,11 +3281,12 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-search-logs-api
   name: Logz.io Search logs API
-  description: 'Use the Elasticsearch Search API DSL query language to search your Logz.io data.
+  description: >-
+    Use the Elasticsearch Search API DSL query language to search your Logz.io data.
 
 
-    To ensure system performance and data availability, we''ve introduced some limitations to the original
-    Elasticsearch specification. These limitations are detailed in the applicable API calls below.'
+    To ensure system performance and data availability, we've introduced some limitations to the original
+    Elasticsearch specification. These limitations are detailed in the applicable API calls below.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3330,8 +3348,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-security-account-api
   name: Logz.io Security account API
-  description: A security account with SIEM allows you to use the SIEM platform. You can create a SIEM
-    account using an API call.
+  description: >-
+    A security account with SIEM allows you to use the SIEM platform. You can create a SIEM account using
+    an API call.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3393,11 +3412,11 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-security-events-api
   name: Logz.io Security events API
-  description: 'A security event is logged whenever a security rule triggers in your [Logz.io Cloud SIEM
-    account](https://app.logz.io/#/dashboard/security/rules/rule-definitions?from=0&sortBy=updatedAt&sortOrder=DESC).
+  description: >-
+    A security event is logged whenever a security rule triggers in your [Logz.io Cloud SIEM account](https://app.logz.io/#/dashboard/security/rules/rule-definitions?from=0&sortBy=updatedAt&sortOrder=DESC).
 
 
-    Your Logz.io Cloud SIEM is pre-loaded with hundreds of security rules created and maintained by Logz.io''s
+    Your Logz.io Cloud SIEM is pre-loaded with hundreds of security rules created and maintained by Logz.io's
     security analysts. The list continues to be expanded and updated on a regular basis. You can also
     add your own security rules.
 
@@ -3410,7 +3429,7 @@ apis:
 
 
     These queries can be used to integrate with an automated response solution such as Cortex xSOAR or
-    simply to understand your security posture and identify suspicious activity in your accounts.'
+    simply to understand your security posture and identify suspicious activity in your accounts.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3472,8 +3491,9 @@ apis:
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
 - aid: logz-io:logz-io-security-rules-api
   name: Logz.io Security rules API
-  description: 'Security rules help you connect the dots between your data sources and events that could
-    indicate a security threat or breach.
+  description: >-
+    Security rules help you connect the dots between your data sources and events that could indicate
+    a security threat or breach.
 
 
     Your Cloud SIEM account comes pre-configured with security rules for different attack types and security
@@ -3483,7 +3503,7 @@ apis:
     endpoint.
 
 
-    You can also create new security rules to supplement the built-in rules.'
+    You can also create new security rules to supplement the built-in rules.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
@@ -3605,16 +3625,16 @@ apis:
     url: https://api-docs.logz.io/docs/logz/snapshots/
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/retrieve-audit-trail/
-- aid: logz-io:logz-io-who-am-i-api
-  name: Logz.io Who am I API
-  description: The Who am I API from Logz.io — 1 operation(s) for who am i.
+- aid: logz-io:logz-io-whoami-api
+  name: Logz.io Whoami API
+  description: The Whoami API from Logz.io — 1 operation(s) for whoami.
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
-  - Who am I
+  - Whoami
   properties:
   - type: OpenAPI
-    url: openapi/logz-io-who-am-i-api-openapi.yml
+    url: openapi/logz-io-whoami-api-openapi.yml
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/search/
   - type: Documentation
