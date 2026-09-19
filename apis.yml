@@ -1416,6 +1416,8 @@ apis:
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
@@ -3433,6 +3435,8 @@ apis:
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
+  - Security Events
+  tags_raw:
   - Security events
   properties:
   - type: OpenAPI
@@ -3507,6 +3511,8 @@ apis:
   humanURL: https://api-docs.logz.io/docs/logz/search/
   baseURL: https://api.logz.io/v1/search
   tags:
+  - Security Rules
+  tags_raw:
   - Security rules
   properties:
   - type: OpenAPI
