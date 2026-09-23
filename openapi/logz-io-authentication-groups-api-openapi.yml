@@ -1,0 +1,180 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Authentication groups API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Authentication groups
+  description: Before you can use Authentication Groups API, Logz.io support will need to enable SSO for your account.
+paths:
+  /v1/authentication/groups:
+    get:
+      summary: Get authentication groups
+      description: 'Returns a list of all existing authentication groups.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Authentication groups
+      operationId: getAuthGroups
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    group:
+                      type: string
+                      description: Group name
+                      example: group
+                    userRole:
+                      type: string
+                      description: User role
+                      example: role
+    post:
+      summary: Create/update authentication groups
+      description: 'Creates/updates existing authentication groups. To create or update groups, you need to send all these groups in the payload. With every update, all running user sessions will be terminated, so the users need to login again. To delete a group, you need to exclude this group from the payload that you send to update groups. With every deletion, all running user sessions will be terminated, so the users need to login again.
+
+
+        **Example 1.** Create groups called `group1` and `group2`. The payload will contain `[ { \"group\": \”group1\”, \"userRole\": \”USER_ROLE_READONLY\” }, { \"group\": \”group2\”, \"userRole\": \”USER_ROLE_ADMIN\” }]`. As a result, the two groups will be created with specified permissions.
+
+
+        **Example 2.** Update existing groups called `group1` and `group2`. The payload will contain `[ { \"group\": \”group1\”, \"userRole\": \”USER_ROLE_ADMIN” }, { \"group\": \”group2\”, \"userRole\": \”USER_ROLE_READONLY\” }]`. As a result, the two groups will be updated with specified permissions.
+
+
+        **Example 3.** Delete group called `group1` from the existing two groups: `group1` and `group2`. The payload will contain `[{ \"group\": \”group2\”, \"userRole\": \”USER_ROLE_READONLY\” }]`. As a result, `group1` will be deleted, as it is excluded from the payload.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Authentication groups
+      operationId: setAuthGroups
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    group:
+                      type: string
+                      description: Group name
+                      example: group
+                    userRole:
+                      type: string
+                      description: User role
+                      example: role
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  group:
+                    type: string
+                    description: Group name
+                    example: group
+                  userRole:
+                    type: string
+                    description: User role
+                    example: role
+        required: true
+components:
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

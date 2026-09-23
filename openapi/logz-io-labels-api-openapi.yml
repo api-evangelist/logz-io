@@ -1,0 +1,200 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Labels API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Labels
+paths:
+  /v1/metrics/prometheus/api/v1/labels:
+    get:
+      operationId: GetLabelNames
+      summary: Returns a list of label names
+      description: 'Retrieve a list of all label names optionally filtered by a time range and series selectors.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Labels
+      parameters:
+      - in: query
+        name: start
+        required: false
+        description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp. Optional.
+        schema:
+          type: string
+      - in: query
+        name: end
+        required: false
+        description: End timestamp, inclusive, as an RFC3339 or Unix timestamp. Optional.
+        schema:
+          type: string
+      - in: query
+        name: match[]
+        required: false
+        description: Series selector to narrow down the series from which to read the label names. Optional.
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: limit
+        required: false
+        description: Maximum number of label names to return. Optional.
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of label names.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelNamesResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+    post:
+      operationId: PostLabelNames
+      summary: Returns a list of label names using POST
+      description: 'Submit parameters in the request body using URL-encoded form parameters to retrieve a list of label names.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Labels
+      responses:
+        200:
+          description: Successful retrieval of label names.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelNamesResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                start:
+                  type: string
+                  description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp. Optional.
+                end:
+                  type: string
+                  description: End timestamp, inclusive, as an RFC3339 or Unix timestamp. Optional.
+                match[]:
+                  type: array
+                  items:
+                    type: string
+                  description: Series selector to narrow down the series from which to read the label names. Optional.
+                limit:
+                  type: integer
+                  description: Maximum number of label names to return. Optional.
+components:
+  schemas:
+    LabelNamesResult:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the request (e.g., success, fail).
+        data:
+          type: array
+          items:
+            type: string
+            description: A list of label names returned by the API.
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

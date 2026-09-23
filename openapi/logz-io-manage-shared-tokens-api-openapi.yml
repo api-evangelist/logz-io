@@ -1,0 +1,638 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Manage shared tokens API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Manage shared tokens
+  description: 'You can share Kibana visualization and dashboard snapshots using shared tokens. Snapshots are stored for 30 days and automatically deleted afterwards. Token filters are available to help you control what data to expose.
+
+
+    **Note:** Shared token endpoints require permissions that must be set by our Support team. Please email help@logz.io for assistance.'
+paths:
+  /v1/shared-tokens/filters:
+    get:
+      operationId: getAllFilters
+      summary: Retrieve all shared token filters
+      description: 'Returns an array of JSON objects, where each object shows information for a shared token filter.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/QueryFilter'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+    post:
+      operationId: createFilter
+      summary: Create a shared token filter
+      description: 'Creates a new shared token filter.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryFilter'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryFilter'
+  /v1/shared-tokens/filters/{id}:
+    get:
+      operationId: getFilter
+      summary: Retrieve a shared token filter by ID
+      description: 'Returns a shared token filter as a JSON object.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the shared token filter
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryFilter'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+    delete:
+      operationId: deleteFilter
+      summary: Delete a shared token filter
+      description: 'Deletes a shared token filter.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the shared token filter
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+  /v1/shared-tokens/{id}:
+    get:
+      operationId: getToken
+      summary: Retrieve a shared token by ID
+      description: 'Returns a shared token as a JSON object.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the shared token
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedToken'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+    put:
+      operationId: updateToken
+      summary: Update a shared token
+      description: 'Changes the filters attached to a shared token.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedToken'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSharedTokenRequest'
+    delete:
+      operationId: deleteToken
+      summary: Delete a shared token
+      description: 'Deletes a shared token.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the shared token
+        schema:
+          type: integer
+          format: int32
+      responses:
+        204:
+          description: successful operation
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+  /v1/shared-tokens:
+    get:
+      operationId: getAllTokens
+      summary: Retrieve all shared tokens
+      description: 'Returns an array of JSON objects, where each object shows information for a shared token.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/SharedToken'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+    post:
+      operationId: createToken
+      summary: Create a shared token
+      description: 'Creates a new shared token.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage shared tokens
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedToken'
+        400:
+          description: not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: token with id 12345 not found for account 54321
+                    description: The shared token or query filter could not be found
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSharedTokenRequest'
+components:
+  schemas:
+    CreateSharedTokenRequest:
+      type: object
+      properties:
+        tokenName:
+          type: string
+          default: string
+          description: Name of the token
+          example: Support team token
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+          description: IDs of filters to attach to the token
+          example:
+          - 339
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
+    UpdateSharedTokenRequest:
+      type: object
+      required:
+      - filters
+      properties:
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+            description: ID of the filter
+            example: 339
+          description: IDs of filters to attach to the token. To remove all filters, use an empty array `[]`.
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
+    SharedToken:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the shared token
+          example: 1241
+        name:
+          type: string
+          description: Descriptive name of the token
+          example: Snapshotting token
+        token:
+          type: string
+          description: The token
+          example: 6c36edf51-cf93883aa35-5bc6ce6-7bcfe60d87
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+          description: Array of filter IDs attached to each token. If no filter is attached, `null`.
+          example:
+          - 339
+          - 340
+        lastUsed:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+          description: UNIX timestamp in milliseconds. If token wasn't in use, `null`.
+          example: 1735743699.0
+        expirationDate:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int64
+          description: UNIX timestamp in milliseconds. If token doesn't have expiration date, `null`.
+          example: 1735743699.0
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
+    QueryFilter:
+      type: object
+      required:
+      - field
+      - value
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the shared token filter
+          example: 339
+        field:
+          type: string
+          pattern: ^[a-zA-Z0-9_@.-]+$
+          description: The field to filter
+        value:
+          type: string
+          pattern: ^[a-zA-Z0-9_@.-]+$
+          description: The filter query
+        description:
+          type: string
+          description: Name of the filter
+          example: 503 responses
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

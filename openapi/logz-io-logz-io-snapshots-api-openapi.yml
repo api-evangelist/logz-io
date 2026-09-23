@@ -1,0 +1,275 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io snapshots API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Logz.io snapshots
+paths:
+  /v1/snapshotter:
+    post:
+      tags:
+      - Logz.io snapshots
+      summary: Create a snapshot
+      description: 'Creates a new Kibana snapshot and shares with recipients through email or notification endpoint. Snapshots are stored for 30 days and automatically deleted afterwards.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createSnapshot
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotCreateResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SnapshotCreateRequest'
+  /v1/snapshotter/{snapshotId}:
+    get:
+      tags:
+      - Logz.io snapshots
+      summary: Retrieve a snapshot by ID
+      description: 'Returns the details of a snapshot, such as status and the snapshot image URL. Note that snapshots are stored for 30 days and automatically deleted afterwards.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: getSnapshot
+      parameters:
+      - name: snapshotId
+        in: path
+        required: true
+        description: ID of the snapshot
+        example: 3094
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SnapshotGetResponse'
+components:
+  schemas:
+    SnapshotCreateResponse:
+      type: object
+      properties:
+        snapshotId:
+          type: integer
+          format: int32
+          description: ID of the snapshot
+          example: 2049
+    SnapshotCreateRequest:
+      type: object
+      required:
+      - snapshotSavedObjectId
+      - snapshotTimeZone
+      - snapshotType
+      - timeFrameFrom
+      - timeFrameTo
+      properties:
+        snapshotType:
+          type: string
+          enum:
+          - DASHBOARD
+          - VISUALIZATION
+          description: The object type to share
+        snapshotSavedObjectId:
+          type: string
+          description: ID of the object to share. If you don't know the object ID, you can use the [/kibana/export](#operation/exportSavedObjects) endpoint.
+          example: 11f6a669-4f21-6313-dd83-319dbfc8ff96
+        slackWebhookUrls:
+          type: array
+          items:
+            type: string
+          description: URLs of Slack webhooks that you want to send this snapshot to. <br> At least one of `emails`, `slackWebhookUrls`, and `endpoints` is required with each request. If all three are missing, the request will fail.
+          example:
+          - https://hooks.slack.com/services/REDACTED/REDACTED/REDACTED
+        endpoints:
+          type: array
+          items:
+            type: integer
+            format: int32
+          description: IDs of notification endpoints that you want to send this snapshot to <br> At least one of `emails`, `slackWebhookUrls`, and `endpoints` is required with each request. If all three are missing, the request will fail.
+        emails:
+          type: array
+          items:
+            type: string
+          description: Email addresses that you want to send this snapshot to <br> At least one of `emails`, `slackWebhookUrls`, and `endpoints` is required with each request. If all three are missing, the request will fail.
+        message:
+          type: string
+          description: Message to send to the shared object recipients
+          example: Take a look at these Apache logs, let me know if you want me to do anything about it
+        timeFrameFrom:
+          type: integer
+          format: int64
+          description: Starting timedate of the visualization, as a Unix epoch integer.
+          example: 389836800
+        timeFrameTo:
+          type: integer
+          format: int64
+          description: Ending timedate of the visualization, as a Unix epoch integer.
+          example: 414720000
+        snapshotTimeZone:
+          type: string
+          description: Time zone to use in `timeFrameFrom` and `timeFrameTo`
+          example: UTC
+        queryString:
+          type: string
+          description: Search query
+          example: type:example
+        darkTheme:
+          type: boolean
+          description: To send the object with Kibana dark theme colors, `true`. Otherwise, `false`.
+    SnapshotGetResponse:
+      type: object
+      properties:
+        snapshotId:
+          type: integer
+          format: int32
+          description: ID of the snapshot
+          example: 3094
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 5555
+        snapshotType:
+          type: string
+          enum:
+          - DASHBOARD
+          - VISUALIZATION
+          description: The object type
+          example: VISUALIZATION
+        status:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILED
+          - IN_PROGRESS
+          description: Status of the snapshot capture operation
+          example: SUCCESS
+        snapshotSavedObjectName:
+          type: string
+          description: Name of the object captured in the snapshot
+          example: Mysql response times percentiles
+        imageUrl:
+          type: string
+          description: Web address where the snapshot image is stored
+          example: https://snapshotter-logzio-prod.s3.amazonaws.com/1234/567890/snapshots/8843_3094_dC6pBjbrWc1lfN7Gob82oJuSUxTGbm8D6hDE1TcR1pVzIVO0TsB3tuZEZs1YpOGh.png
+        appLinkUrl:
+          type: string
+          description: A link to the snapshot in the Logz.io app
+          example: https://app.logz.io/#/dashboard/kibana?kibanaRoute=%2Fvisualize%2Fedit%a4d365e001-5bc9-4851-1933-a70b45a67e9d%3F_g%3D%2528time%253A%2528from%253A%25272018-06-02T15
+        message:
+          type: string
+          description: Message to send to snapshot recipients
+          example: Hey, let me know if you need me to do anything about this.
+        timeFrameFrom:
+          type: integer
+          format: int64
+          description: Starting timedate of the visualization, as a Unix epoch integer.
+          example: 389836800
+        timeFrameTo:
+          type: integer
+          format: int64
+          description: Ending timedate of the visualization, as a Unix epoch integer.
+          example: 414720000
+        snapshotTimeZone:
+          type: string
+          description: Time zone to use in `timeFrameFrom` and `timeFrameTo`
+          example: UTC
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

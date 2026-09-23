@@ -1,0 +1,576 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Security events API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Security Events
+  description: A security event is logged whenever a security rule triggers in your Logz.io Cloud SIEM account.
+paths:
+  /v2/security/rules/events/search:
+    post:
+      summary: Fetch security events
+      description: 'Runs a search query in your Logz.io Cloud SIEM account to fetch the security events that match the query parameters.
+
+
+        You have the option to filter by rule name, rule severity, and/or event timestamp, and sort the results by time and/or severity, but this is not required. If you send the query with an empty JSON body, it returns all of the events logged in your Logz.io Cloud SIEM, going as far back as your account''s retention permits.
+
+
+        **Note:** Run this endpoint with an API token for your Logz.io Security account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Security Events
+      operationId: searchSecurityRulesEvents
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSearchResponseTriggeredResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertsEventsSearchRequest'
+  /v2/security/rules/events/{ruleId}:
+    put:
+      summary: Edit security events
+      description: 'Applies changes to a rule, identified by its ID. Please ensure to change the region in the URL to match your account''s region.
+
+
+        **Note:** Run this endpoint with an API token for your Logz.io Security account.'
+      tags:
+      - Security Events
+      operationId: editSecurityRulesEvents
+      responses:
+        201:
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedEdithResponseTriggeredResponse'
+        403:
+          description: forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Insufficient privileges
+                    description: Insufficient privileges. Contact our Support team for access to this API feature.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertsEventsEditRequest'
+  /v2/security/rules/events/logs/search:
+    post:
+      summary: Fetch the logs that triggered a security event
+      description: 'Runs a search query in your Logz.io Log Monitoring account to fetch the logs that triggered the security rule and caused it to log a security event.
+
+
+        This query returns an array of parsed logs linked to a single event - it isn''t a bulk action. Run this query to investigate an event and increase observability into details omitted from the security event log.
+
+
+        **Note:** Run this endpoint with an API token for your Logz.io Security account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Security Events
+      operationId: searchSecurityRuleEventLogs
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedSearchResponseMapStringObject'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertEventLogsSearchRequest'
+components:
+  schemas:
+    PagedSearchResponseTriggeredResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of events returned by the rule search query. The total entities found after filtering and sorting. This number is fixed and not affected by pagination.
+          example: 500
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TriggeredRule'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    PagedSearchResponseMapStringObject:
+      type: object
+      properties:
+        total:
+          description: Returns the total number of logs linked to the security event specified in the query. This number is fixed and not affected by pagination.
+          type: integer
+          format: int32
+          example: 5
+        results:
+          type: array
+          description: 'Array of logs returned in answer to the query. The logs are returned in their entirety and parsed.
+
+
+            If the logs are no longer retained in the database, the request will return empty. You can check your account''s log retention policy in your [log monitoring account](https://app.logz.io/#/dashboard/settings/usage-and-billing).'
+          items:
+            type: object
+            example:
+              Array of logs: null
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertsEventsSearchRequest:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/RulesEventsFilter'
+          summary: Filter by rule name, rule severity, or time range.
+        sort:
+          description: Explicit sorting rules are not required, but recommended. Otherwise the database will determine the sorting.
+          type: array
+          items:
+            $ref: '#/components/schemas/RulesEventsSortRequest'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertEventLogsSearchRequest:
+      type: object
+      required:
+      - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/RuleEventLogsFilter'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    RulesEventsSortRequest:
+      type: object
+      required:
+      - field
+      properties:
+        field:
+          type: string
+          description: Sort by date and/or severity. Order determines secondary sorting.
+          enum:
+          - DATE
+          - SEVERITY
+        descending:
+          type: boolean
+          default: true
+          description: If left blank, descending sorting will result. If `false` results in ascending sorting.
+    PagedEdithResponseTriggeredResponse:
+      type: array
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the alert or event.
+          example: 1234e5a6-1d1d-12a3-a1fa-b12345b6b7a8
+        alertEventId:
+          type: string
+          description: Identifier for the specific alert event.
+          example: ac1f234f-12da-123d-1ecc-12ed3ccbac45
+        title:
+          type: string
+          description: Title of the alert.
+          example: Auth0 - Account blocked due to repeated failed login attempts
+        description:
+          type: string
+          description: Detailed description of the alert.
+          example: An account was blocked due to 10 failed login attempts from the same IP address.
+        severity:
+          type: string
+          description: Alert severity level (e.g., INFO, MEDIUM).
+          example: MEDIUM
+        status:
+          type: string
+          description: Current status of the alert (e.g., NEW, RESOLVED).
+          example: ASSIGNED
+        assignee:
+          type: integer
+          format: int32
+          description: User ID of the person assigned to the alert.
+          example: 1234567
+        triggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was triggered.
+          example: 1734517694.888
+        updatedAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last updated.
+          example: 1735046340.774085
+        updatedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who last updated the alert.
+          example: 12345
+        comment:
+          type: string
+          description: Comment associated with the alert.
+          example: This is a comment.
+        commentedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who added the comment.
+          example: 12323
+        alertDefinitionId:
+          type: integer
+          format: int32
+          description: Identifier for the alert definition.
+          example: 3245176
+        count:
+          type: integer
+          format: int32
+          description: Number of occurrences of the alert.
+          example: 1
+        lastTriggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last triggered.
+          example: 1734517694.888
+        type:
+          type: string
+          description: Type of alert (e.g., GROUP, ALERT_EVENT).
+          example: ALERT_EVENT
+        groupingType:
+          type: string
+          description: Grouping method for the alert (e.g., ALERT_BASED).
+          example: ALERT_BASED
+    AlertsEventsEditRequest:
+      type: object
+      properties:
+        filter: null
+        $ref: '#/components/schemas/RulesEventsEdit'
+        summary: Edit rules.
+    Pagination:
+      type: object
+      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
+          default: 1
+          example: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: Controls the number of results per page. Valid inputs are 1 to 1000.
+          maximum: 1000
+          default: 25
+          example: 100
+    RuleEventLogsFilter:
+      type: object
+      description: Filter by the event's unique GUID to retrieve only the logs relevant to the event under investigation.
+      required:
+      - alertEventId
+      properties:
+        alertEventId:
+          type: string
+          description: Unique GUID of the security event in Logz.io Cloud SIEM. The GUID is returned in the results when querying to fetch security events or by inspecting an event log in the [UI](https://app.logz.io/#/dashboard/security/research/discover?) under the field `logzio-alert-event-id`.
+          example: 833203f9-de71-5a12-9083-9055a6d925bb
+    RulesTimeRange:
+      type: object
+      required:
+      - fromDate
+      - toDate
+      description: Add a timerange to filter by event timestamps that fall within the range. If applied, both the earliest and latest thresholds are required.
+      properties:
+        fromDate:
+          type: integer
+          format: int64
+          example: 1587134557
+          description: Absolute UNIX timestamp in seconds (not milliseconds). Your security account's retention policy determines the earliest events you'll be able to retrieve.
+        toDate:
+          type: integer
+          format: int64
+          example: 1587137557
+          description: Absolute UNIX timestamp in seconds (not milliseconds).
+    TriggeredRule:
+      type: object
+      properties:
+        alertId:
+          type: integer
+          format: int32
+          description: Unique identifier of the security rule in Logz.io Cloud SIEM. Equivalent to the log field `logzio-alert-definition-id`
+          example: 453345
+        name:
+          type: string
+          description: Name of the security rule in Logz.io Cloud SIEM
+          example: AWS EC2 - Brute force SSH login attempts
+        description:
+          type: string
+          description: Typically an explanation of the security rule's logic and suggested next steps
+          example: Suggested next steps...
+        alertSummary:
+          type: string
+          description: Equivalent to the `condition` field in the rule
+          example: Alert if query '*' results GREATER_THAN_OR_EQUALS 5.00 in 10 minutes. Count on Group By '[userIdentity.userName, sourceIPAddress]'
+        eventDate:
+          type: integer
+          format: int64
+          description: UNIX timestamp in seconds showing when the rule's conditions were met and the event was triggered
+          example: 1587860455
+        alertWindowStartDate:
+          type: integer
+          format: int64
+          description: UNIX timestamp in seconds of the earliest log that triggered the rule to log an event. It usually takes several logs under certain conditions to trigger a security rule.
+          example: 1587856855
+        alertWindowEndDate:
+          type: integer
+          format: int64
+          description: UNIX timestamp in seconds of the latest log that triggered the rule to log an event. It usually takes several logs under certain conditions to trigger a security rule.
+          example: 1587860455
+        severity:
+          type: string
+          enum:
+          - INFO
+          - LOW
+          - MEDIUM
+          - HIGH
+          - SEVERE
+          description: Severity of the security event as determined by the security rule's definition
+          example: SEVERE
+        alertEventId:
+          type: string
+          description: Unique identifier of the security event in Logz.io Cloud SIEM. Equivalent to the log field `logzio-alert-event-id`
+          example: 27cdcf45-ae12-581a-809e-17a6bbc9ae07
+        groupBy:
+          type: object
+          description: A map object. Array of field:value pairs (key-value pairs) used by the security rule to aggregate results. Security rules can apply `groupBy` conditions to aggregate results by up to 3 fields. The fields differ rule by rule.
+          example:
+            source_ip: 122.17.45.15
+            hostname: hostname1234
+        tags:
+          type: array
+          description: Tags are labels used to organize security rules.
+          example: threat
+          items:
+            type: object
+            example:
+              network_threat: null
+              recon: null
+        hits:
+          type: integer
+          format: int32
+          description: Hits represent the number of logs that triggered the security rule before being aggregated by the `groupBy` condition.
+          example: 30
+        isMuted:
+          type: boolean
+          description: Describes whether a specific returned alert event is muted.
+          example: true
+        mitreTags:
+          type: array
+          items:
+            type: string
+          description: Tags used for classifying, discussing, and interpreting security incidents. This feature is currently under development.
+    RulesEventsEdit:
+      type: object
+      description: Edit Security rules.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the alert or event.
+          example: 1234e5a6-1d1d-12a3-a1fa-b12345b6b7a8
+        alertEventId:
+          type: string
+          description: Identifier for the specific alert event.
+          example: ac1f234f-12da-123d-1ecc-12ed3ccbac45
+        title:
+          type: string
+          description: Title of the alert.
+          example: Auth0 - Account blocked due to repeated failed login attempts
+        description:
+          type: string
+          description: Detailed description of the alert.
+          example: An account was blocked due to 10 failed login attempts from the same IP address.
+        severity:
+          type: string
+          description: Alert severity level (e.g., INFO, MEDIUM).
+          example: MEDIUM
+        status:
+          type: string
+          description: Current status of the alert (e.g., NEW, RESOLVED).
+          example: ASSIGNED
+        assignee:
+          type: integer
+          format: int32
+          description: User ID of the person assigned to the alert.
+          example: 1234567
+        triggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was triggered.
+          example: 1734517694.888
+        updatedAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last updated.
+          example: 1735046340.774085
+        updatedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who last updated the alert.
+          example: 12345
+        comment:
+          type: string
+          description: Comment associated with the alert.
+          example: This is a comment.
+        commentedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who added the comment.
+          example: 12323
+        alertDefinitionId:
+          type: integer
+          format: int32
+          description: Identifier for the alert definition.
+          example: 3245176
+        count:
+          type: integer
+          format: int32
+          description: Number of occurrences of the alert.
+          example: 1
+        lastTriggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last triggered.
+          example: 1734517694.888
+        type:
+          type: string
+          description: Type of alert (e.g., GROUP, ALERT_EVENT).
+          example: ALERT_EVENT
+        groupingType:
+          type: string
+          description: Grouping method for the alert (e.g., ALERT_BASED).
+          example: ALERT_BASED
+    RulesEventsFilter:
+      type: object
+      description: Filter by rule name, rule severity, or time range.
+      properties:
+        searchTerm:
+          type: string
+          example: Falco
+          description: Filter for a matching string in the security rule name. You can manually test your results in the [UI](https://app.logz.io/#/dashboard/security/rules/rule-definitions?from=0&sortBy=updatedAt&sortOrder=DESC).
+        severities:
+          type: array
+          description: Filter by the severities of the security rules. You can manually test your results in the [UI](https://app.logz.io/#/dashboard/security/rules/rule-definitions?from=0&sortBy=updatedAt&sortOrder=DESC).
+          items:
+            type: string
+            example: SEVERE
+            enum:
+            - INFO
+            - LOW
+            - MEDIUM
+            - HIGH
+            - SEVERE
+        timeRange:
+          $ref: '#/components/schemas/RulesTimeRange'
+        includeMutedEvents:
+          type: boolean
+          example: true
+          description: Defines if muted events need to be passed. The endpoint will return both non-muted and muted events if this is set to `true`.
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

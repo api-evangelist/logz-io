@@ -1,0 +1,294 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Connect to CloudTrail API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Connect to CloudTrail
+  description: Establish a connection to ship logs to the Logz.io observability platform via an S3 bucket. Supports CloudTrail logs.
+paths:
+  /v1/log-shipping/cloudtrails:
+    get:
+      operationId: getAccountCloudTrails
+      summary: Retrieve all connected CloudTrail resources
+      description: 'Returns a list of CloudTrail resources connected to your Logz.io account.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Connect to CloudTrail
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CloudTrailResponse'
+    post:
+      operationId: createCloudTrail
+      summary: Create a new CloudTrail connector
+      description: 'Establishes a new connection to a CloudTrail resource. As a result, logs from your CloudTrail resource will ship to the connected Logz.io account via an AWS S3 bucket.
+
+
+        CloudTrail logs will be parsed using the Logz.io custom CloudTrail parsing pipeline.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Connect to CloudTrail
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdBean'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudTrailRequest'
+  /v1/log-shipping/cloudtrails/{id}:
+    get:
+      operationId: getCloudTrail
+      summary: Retrieve CloudTrail connector by ID
+      description: 'Returns details for a CloudTrail connector, identified by its ID.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Connect to CloudTrail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Logz.io ID of the CloudTrail connector
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CloudTrailResponse'
+    put:
+      operationId: updateCloudTrail
+      summary: Update a CloudTrail connector
+      description: 'Updates details for a CloudTrail connector.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Connect to CloudTrail
+      parameters:
+      - name: id
+        description: Logz.io ID of the CloudTrail connector.
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageBean'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CloudTrailRequest'
+    delete:
+      operationId: deleteCloudTrail
+      summary: Delete a CloudTrail connector
+      description: 'Deletes a CloudTrail connector. As a result, CloudTrail will stop shipping data to your Logz.io account.
+
+
+        **Note:** This endpoint requires permissions that must be set by our Support team. Please email help@logz.io for assistance.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Connect to CloudTrail
+      parameters:
+      - name: id
+        description: Logz.io ID of the CloudTrail connector.
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageBean'
+components:
+  schemas:
+    CloudTrailRequest:
+      type: object
+      properties:
+        accessKey:
+          type: string
+          description: AWS S3 access key
+          example: ee07df5801500745419c6dff
+        secretKey:
+          type: string
+          description: AWS secret access key
+          example: 506d891fe2163a511b450eddc3279539f6
+        bucket:
+          type: string
+          description: AWS S3 bucket name
+          example: LogzioBucket
+        prefix:
+          type: string
+          description: Prefix of the AWS S3 bucket
+          example: AWSLogs/7364988021587/myprefix
+        active:
+          type: boolean
+          description: If `true`, the CloudTrail connector is active and logs are being shipped to Logz.io. If `false`, the connector is disabled.
+    MessageBean:
+      type: object
+      properties:
+        message:
+          type: string
+          readOnly: true
+    IdBean:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          readOnly: true
+          minimum: 1
+          description: Logz.io ID of the CloudTrail connector. Use this ID to perform operations on the connector using Logz.io API endpoints.
+    CloudTrailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Logz.io ID of the CloudTrail connector. Use this ID to perform operations on the connector using Logz.io API endpoints.
+          example: 15
+        accessKey:
+          type: string
+          description: AWS S3 access key
+          example: ee07df5801500745419c6dff
+        bucket:
+          type: string
+          description: AWS S3 bucket name
+          example: cloudtrails bucket
+        prefix:
+          type: string
+          description: Prefix of the AWS S3 bucket
+          example: AWSLogs/7364988021587/myprefix
+        active:
+          type: boolean
+          description: If `true`, the CloudTrail connector is active and logs are being shipped to Logz.io. If `false`, the connector is disabled.
+          example: true
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

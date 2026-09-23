@@ -1,3 +1,5 @@
+# x-archived-from: logz-io-api-openapi.yml
+# x-archived-on: 2026-09-16
 swagger: '2.0'
 schemes: [ https ]
 host: api.logz.io
@@ -4549,15 +4551,15 @@ paths:
                 expires:
                   type: string
                   description: Snapshot expiry date.
-                  example: 2200-13-32T25:23:23+02:00
+                  example: '2200-13-32T25:23:23+02:00'
                 created:
                   type: string
                   description: Snapshot creation date.
-                  example: 2200-13-32T28:24:23+02:00
+                  example: '2200-13-32T28:24:23+02:00'
                 updated:
                   type: string
                   description: Snapshot update date.
-                  example: 2200-13-32T28:24:23+02:00
+                  example: '2200-13-32T28:24:23+02:00'
    
   /v1/grafana/api/snapshots/:
       post:
@@ -4668,10 +4670,10 @@ paths:
                       example:
                     expires:
                       type: string
-                      example: 2200-13-32T25:23:23+02:00
+                      example: '2200-13-32T25:23:23+02:00'
                     created:
                       type: string
-                      example: 2200-13-32T28:24:23+02:00
+                      example: '2200-13-32T28:24:23+02:00'
                 dashboard:
                   type: object
                   description: Dashboard.

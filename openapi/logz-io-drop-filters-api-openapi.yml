@@ -1,0 +1,277 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Drop filters API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Drop filters
+  description: Drop filters provide a solution for filtering out logs before they are indexed in your account to help lower costs and reduce account volume.
+paths:
+  /v1/drop-filters/search:
+    post:
+      summary: Retrieve drop filters
+      description: 'Returns all drop filters configured for the account, both active and inactive.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Drop filters
+      operationId: getAllForAccount
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LogsDropFiltersPipelineDefinition'
+  /v1/drop-filters/{id}/activate:
+    post:
+      summary: Activate a drop filter
+      description: 'Activates a drop filter identified by its ID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Drop filters
+      operationId: activate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsDropFiltersPipelineDefinition'
+  /v1/drop-filters/{id}/deactivate:
+    post:
+      summary: Deactivate a drop filter
+      description: 'Deactivates a drop filter identified by its ID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Drop filters
+      operationId: deactivate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsDropFiltersPipelineDefinition'
+  /v1/drop-filters/{id}:
+    delete:
+      summary: Delete a drop filter
+      description: 'Deletes a drop filter identified by its ID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Drop filters
+      operationId: delete
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsDropFiltersPipelineDefinition'
+  /v1/drop-filters:
+    post:
+      summary: Create drop filter
+      description: 'Creates and activates a new drop filter.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Drop filters
+      operationId: create
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogsDropFiltersPipelineDefinition'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DropFiltersCreateRequest'
+components:
+  schemas:
+    FieldCondition:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Exact field name in your Kibana mapping for the selected `logType`.
+          example: response
+        value:
+          type: object
+          description: Exact field value. The filter looks for an exact value match of the entire string.
+          example: 200
+    DropFiltersCreateRequest:
+      type: object
+      required:
+      - fieldConditions
+      properties:
+        logType:
+          type: string
+          description: Filters for the [log type](/user-guide/log-shipping/built-in-log-types.html).
+          example: apache
+        description:
+          type: string
+          description: Description of the drop filter
+          example: Drop all logs with response code 500
+        fieldConditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldCondition'
+        thresholdInGB:
+          type: number
+          format: double
+          description: The threshold in GB for the drop filter. If the total size of the logs that match the filter exceeds this threshold, the logs are dropped before indexing. <br> If not specified, the default is `0`, which means that all logs that match the filter are dropped.
+          example: 10.5
+    LogsDropFiltersPipelineDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
+          example: f54406c1-b4ad-5969-8542-f6a3e9df5c79
+        active:
+          type: boolean
+          description: If `true`, the drop filter is active and logs that match the filter are dropped before indexing. If `false`, the drop filter is disabled.
+          example: true
+        logType:
+          type: string
+          description: Filters for the [log type](/user-guide/log-shipping/built-in-log-types.html).
+          example: apache
+        description:
+          type: string
+          description: Description of the drop filter
+          example: Drop all logs with response code 500
+        fieldConditions:
+          type: array
+          description: Filters for an exact match of a field:value pair.
+          items:
+            $ref: '#/components/schemas/FieldCondition'
+        thresholdInGB:
+          type: number
+          format: double
+          description: The threshold in GB for the drop filter. If the total size of the logs that match the filter exceeds this threshold, the logs are dropped before indexing. <br> If not specified, the default is `0`, which means that all logs that match the filter are dropped.
+          example: 10.5
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

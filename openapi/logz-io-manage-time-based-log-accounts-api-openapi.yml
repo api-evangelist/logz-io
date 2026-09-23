@@ -1,0 +1,746 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Manage time-based log accounts API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Manage time-based log accounts
+  description: 'Use these API requests to manage time-based log accounts:
+
+    * Create, update, or delete a sub account.'
+paths:
+  /v1/account-management/time-based-accounts:
+    get:
+      summary: Retrieve settings for all accounts
+      description: 'Returns account settings for the main account and all of its associated sub accounts.
+
+
+        * The list of accounts is returned as an array of JSON objects.
+
+        * Must be run with an API token from the main account.
+
+        * Plan-specific fields - In the schema below, properties may be labeled as **Subscription** or **Consumption**. If a field doesn’t apply to your plan, it may be `null`.
+
+        * Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: getAll
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimeBasedAccount'
+    post:
+      summary: Create a sub account
+      description: 'Creates a new logging sub account. Must be run with an API token from the main account.
+
+
+        In the schema below, properties may be labeled as **Subscription** or **Consumption**. If a field doesn’t apply to your plan, it may be `null`.
+
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: createTimeBasedAccount
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeBasedAccountCreationResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeBasedAccountCreateRequest'
+  /v1/account-management/time-based-accounts/{id}:
+    get:
+      summary: Retrieve account settings by ID
+      description: 'Returns account configuration settings as a JSON object. Must be run with an API token from the main account.
+
+
+        In the schema below, properties may be labeled as **Subscription** or **Consumption**. If a field doesn’t apply to your plan, it may be `null`.
+
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the account to retrieve
+        x-example: 99999
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimeBasedAccount'
+    put:
+      summary: Update an account
+      description: 'Updates the account settings of a main account or sub account, with some exceptions, noted below:
+
+
+        * For the main account, the parameter `retentionDays` cannot be updated. It is determined by the plan you purchased.
+
+        * For the main account, if `isFlexible=false`, the parameters `maxDailyGB` and `reservedDailyGB` cannot be updated using this endpoint.
+
+        * In the schema below, properties may be labeled as **Subscription** or **Consumption**. If a field doesn’t apply to your plan, it may be `null`.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: updateTimeBasedAccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the account to update
+        x-example: 99999
+        schema:
+          type: integer
+          format: int32
+      responses:
+        204:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimeBasedAccountUpdateRequest'
+    delete:
+      summary: Delete a sub account
+      description: 'Deletes a sub account by its account ID. Must be run with an API token from the main account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: deleteTimeBasedAccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the account to be deleted.
+        x-example: 99999
+        schema:
+          type: integer
+          format: int32
+      responses:
+        204:
+          description: successful operation
+  /v1/account-management/time-based-accounts/detailed:
+    get:
+      summary: Retrieve detailed information for all accounts
+      description: 'Returns detailed account information for the main account and all of its associated sub accounts. Information includes usage and sharing permissions for Kibana objects.
+
+        * The list of accounts is returned as an array of JSON objects. Each sub account is its own object.
+
+        * Must be run with an API token from the main account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: getAllDetailedTimeBasedAccount
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DetailedTimeBasedAccount'
+  /v1/account-management/time-based-accounts/detailed/{id}:
+    get:
+      summary: Retrieve detailed account information by account ID
+      description: 'Returns detailed account information. Must be run with an API token from the main account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Manage time-based log accounts
+      operationId: getDetailedTimeBasedAccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the account to retrieve
+        x-example: 99999
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DetailedTimeBasedAccount'
+components:
+  schemas:
+    SharingAccount:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 88888
+        accountName:
+          type: string
+          description: Name of the account
+          example: dev group 8
+    DetailedTimeBasedAccount:
+      type: object
+      properties:
+        subAccountRelation:
+          $ref: '#/components/schemas/SubAccountRelation'
+        account:
+          $ref: '#/components/schemas/AccountView'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountView'
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        dailyUsagesList:
+          $ref: '#/components/schemas/DailyUsagesList'
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        snapsearchRetentionDays:
+          type: integer
+          format: int32
+          description: Number of days to retain data in the warm tier. Minimum value is 1.
+          example: 7
+    DailyUsagesList:
+      type: object
+      properties:
+        usage:
+          type: array
+          items:
+            $ref: '#/components/schemas/LHDailyCount'
+    Searchable:
+      type: boolean
+      description: If other accounts can search this account's logs, `true`. Otherwise, `false`.
+      default: false
+      example: true
+    TimeBasedAccountCreateRequest:
+      type: object
+      required:
+      - accountName
+      - email
+      - sharingObjectsAccounts
+      - retentionDays
+      properties:
+        email:
+          type: string
+          pattern: ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$
+          description: Account administrator's email address
+          example: help@logz.io
+        accountName:
+          type: string
+          description: Name of the account. Allowed characters include letters, numbers, dashes (`-`), dots (`.`), underscores (`_`), and spaces. Special characters such as `<`, `>`, `:`, `\"`, `/`, `\\`, `|`, `?`, `*` are not supported.
+          example: AWS Lambda svr 3
+        retentionDays:
+          type: integer
+          format: int32
+          description: How long log data is stored and searchable in Kibana, in days.
+          minimum: 1
+          example: 5
+        searchable:
+          $ref: '#/components/schemas/Searchable'
+        accessible:
+          $ref: '#/components/schemas/Accessible'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: 88888
+          description: IDs of accounts that can access this account's data. The array is required, but can be empty.
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        isFlexible:
+          type: boolean
+          default: false
+          x-plan: Subscription
+        reservedDailyGB:
+          type: number
+          format: float
+          default: null
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, don''t send this field or send it null.
+
+
+            * If `isFlexible=true`, this parameter is required. It determines the volume that is reserved for the account.'
+          example: 3
+        maxDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: "The maximum volume of data that an account can index per calendar day.\n* If **Consumption** account (`isFlexible: false`), this value determines the account's soft cap in GB. \n* If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.\n\n* If `isFlexible=true` this is used to limit the account's access to shared volume. Once the data shipped to the account exceeds the account's reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.\n\n* If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available."
+          example: 5
+        softLimitGB:
+          type: number
+          format: float
+          description: 'If **Subscription** account, this value is always null.
+
+            Indicates the account''s soft cap in GB.'
+          x-plan: Consumption
+    AccountUtilizationSettings:
+      type: object
+      description: Settings for logging metrics on your account utilization, such as used and expected data volume at current indexing rate.
+      properties:
+        frequencyMinutes:
+          type: integer
+          format: int32
+          description: How often utilization metrics are written to logs, in minutes
+          example: 5
+        utilizationEnabled:
+          type: boolean
+          description: If utilization metrics are written to logs, `true`. Otherwise, `false`.
+          example: true
+    SubAccountRelation:
+      type: object
+      description: Properties of the sub accounts related to this main account
+      properties:
+        ownerAccountId:
+          type: integer
+          format: int32
+          description: ID of the main account
+          example: 88765
+        subAccountId:
+          type: integer
+          format: int32
+          description: ID of the sub account
+          example: 89234
+        searchable:
+          $ref: '#/components/schemas/Searchable'
+        accessible:
+          $ref: '#/components/schemas/Accessible'
+        createdDate:
+          type: integer
+          format: int64
+          description: Date this account was created.
+          example: 1627489797000
+        lastUpdatedDate:
+          type: integer
+          format: int64
+          description: Date this account was last updated.
+          example: 1627489797000
+        lastUpdaterUserId:
+          type: integer
+          format: int32
+          description: ID of the user who last updated this account
+          example: 33342
+        type:
+          type: string
+          enum:
+          - OWNER_ACCOUNT
+          - SUB_ACCOUNT
+          - TIMELESS_INDEX
+          - ALL
+          description: Account type
+          example: SUB_ACCOUNT
+    TimeBasedAccountUpdateRequest:
+      type: object
+      required:
+      - accountName
+      - sharingObjectsAccounts
+      properties:
+        accountName:
+          type: string
+          description: Name of the account. Allowed characters include letters, numbers, dashes (`-`), dots (`.`), underscores (`_`), and spaces. Special characters such as `<`, `>`, `:`, `\"`, `/`, `\\`, `|`, `?`, `*` are not supported.
+          example: AWS Lambda svr 3
+        retentionDays:
+          type: integer
+          format: int32
+          description: This is how long log data is stored and searchable in Kibana, in days.
+          minimum: 1
+          example: 5
+        searchable:
+          $ref: '#/components/schemas/Searchable'
+        accessible:
+          $ref: '#/components/schemas/Accessible'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: 88888
+          description: IDs of accounts that can access this account's data. The array is required, but can be empty.
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        snapsearchRetentionDays:
+          type: integer
+          format: int32
+          description: Number of days to retain data in the warm tier. Minimum value is 1.
+          example: 7
+        reservedDailyGB:
+          type: number
+          format: float
+          default: null
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply. Leave it null.
+
+
+            * If `isFlexible=true`, this parameter is required. It determines the volume that is reserved for the account.'
+          example: 3
+        maxDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: 'The maximum volume of data that an account can index per calendar day.
+
+            * If **Consumption** account (`isFlexible: false`), this value is always null.
+
+
+            * If `isFlexible=false` this parameter can only be used to update a sub account, but not a main account. It determines the only capacity reserved for use by the account. It cannot be null.
+
+
+            * If `isFlexible=true` this is used to limit the account''s access to shared volume. Once the data shipped to the account exceeds the account''s reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.
+
+
+            * If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available.'
+          example: 5
+        softLimitGB:
+          type: number
+          format: float
+          description: 'If **Subscription** account, this value is always null.
+
+            Indicates the account''s soft cap in GB.'
+          x-plan: Consumption
+    LHDailyCount:
+      type: object
+      properties:
+        date:
+          type: integer
+          format: int64
+        bytes:
+          type: integer
+          format: int64
+    TimeBasedAccount:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int64
+          description: ID of the account
+          example: 99999
+        email:
+          type: string
+          description: Email address of the user who created the account
+          example: null
+        accountName:
+          type: string
+          description: Name of the account
+          example: 404 errors
+        retentionDays:
+          type: integer
+          format: int32
+          description: How long log data is retained in the Elasticsearch Index and searchable in Kibana, in days.
+          example: 5
+        searchable:
+          $ref: '#/components/schemas/Searchable'
+        accessible:
+          $ref: '#/components/schemas/Accessible'
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/SharingAccount'
+          description: Accounts that have permissions to access this account's Kibana objects.
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        isOwner:
+          type: boolean
+          default: false
+          description: If the account is an owner account, `true`. Otherwise, `false`.
+          example: false
+        snapsearchRetentionDays:
+          type: integer
+          format: int32
+          description: Number of days to retain data in the warm tier. Minimum value is 1.
+          example: 7
+        isFlexible:
+          type: boolean
+          default: false
+          x-plan: Subscription
+          description: '
+
+            Indicates whether the plan has **shared volume** enabled.
+
+
+
+            For `Consumption` accounts, this field defaults should be `false`.
+
+
+
+            If `true`, the volume of data that the account can index per calendar day is determined by 2 parameters: `reservedDailyGB` (Required) and  `maxDailyGB` (Optional, can be null).
+
+
+
+            If `false`, the volume of data that the account can index per calendar day is determined only by `maxDailyGB`. The parameter `reservedDailyGB` does not apply and should be null.'
+          example: true
+        reservedDailyGB:
+          type: number
+          format: float
+          default: null
+          x-plan: Subscription
+          description: 'Daily reserved capacity in GB.
+
+            * If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply and will be null.
+
+            * If `isFlexible=true`, this determines the daily volume in GBs that is reserved for the account, given as an integer.'
+        maxDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: "The maximum volume of data that an account can index per calendar day.\n* If **Consumption** account (`isFlexible: false`), this value determines the account's soft cap in GB. \n\n* If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.\n\n* If `isFlexible=true` this is used to limit the account's access to shared volume. Once the data shipped to the account exceeds the account's reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available. \n\n* If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available."
+          example: 5
+        isCapped:
+          type: boolean
+          default: false
+          x-plan: Subscription
+          description: '
+
+            * If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply and will be `false`.
+
+
+            * If `isFlexible=true`, this field determines whether the account is capped  by GB. If the account is capped, `true`.'
+          example: false
+        totalTimeBasedDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply and will be `null`.
+
+
+            * If `isFlexible=true`, this determines the account plan volume in GB.'
+          example: 5.0
+        sharedGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply and will be `null`.
+
+
+            * If `isFlexible=true`, this determines the shareable volume in GB.'
+          example: 5.0
+        softLimitGB:
+          type: number
+          format: float
+          description: 'If **Subscription** account, this value is always null.
+
+            Indicates the account''s soft cap in GB.'
+          x-plan: Consumption
+    AccountView:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        accountName:
+          type: string
+        accountToken:
+          type: string
+        active:
+          type: boolean
+        esIndexPrefix:
+          description: Prefix of the Elasticsearch Index used to index the data.
+          type: string
+        isFlexible:
+          type: boolean
+          default: false
+          description: '
+
+            Indicates whether the plan has **shared volume** enabled.
+
+
+
+            For **Consumption** accounts, this field defaults should be `false`.
+
+
+
+            If `true`, the volume of data that the account can index per calendar day is determined by 2 parameters: `reservedDailyGB` (Required) and  `maxDailyGB` (Optional, can be null).
+
+
+
+
+            If `false`, the volume of data that the account can index per calendar day is determined only by `maxDailyGB`. The parameter `reservedDailyGB` does not apply.'
+          example: true
+          x-plan: Subscription
+        reservedDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply.
+
+
+            * If `isFlexible=true`, this determines the daily volume in GB reserved for the account. This capacity is guaranteed and cannot be used by any other accounts.'
+          example: 3
+        maxDailyGB:
+          type: number
+          format: float
+          description: 'The maximum volume of data that an account can index per calendar day.
+
+
+            * If **Consumption** account (`isFlexible: false`), this value determines the account''s soft cap in GB.
+
+
+            * If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.
+
+
+            * If `isFlexible=true` this is used to limit the account''s access to shared volume. Once the data shipped to the account exceeds the account''s reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.
+
+
+            * If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available.'
+          example: 5
+          x-plan: Subscription
+        retentionDays:
+          type: integer
+          format: int32
+          description: How long log data is stored and searchable in Kibana, in days.
+        softLimitGB:
+          type: number
+          format: float
+          x-plan: Consumption
+          description: The account's soft limit in GB. If **Subscription** account, this value is always null.
+    DocSizeSetting:
+      type: boolean
+      description: Adds a LogSize field to each log to record the size in bytes, to better manage the account utilization.
+      default: false
+      example: true
+    TimeBasedAccountCreationResponse:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 99999
+    Accessible:
+      type: boolean
+      description: If users of the main account can access this account, `true`. Otherwise, `false`.
+      default: false
+      example: false
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

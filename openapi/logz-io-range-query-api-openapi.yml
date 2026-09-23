@@ -1,0 +1,233 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Range Query API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Range Query
+paths:
+  /v1/metrics/prometheus/api/v1/query_range:
+    get:
+      operationId: GetRangeQuery
+      summary: Evaluates an expression query over a range of time
+      description: 'Retrieve data over a specified time range by submitting a GET request with query parameters.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Range Query
+      parameters:
+      - in: query
+        name: query
+        required: true
+        description: Prometheus expression query string.
+        schema:
+          type: string
+      - in: query
+        name: start
+        required: true
+        description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp.
+        schema:
+          type: string
+      - in: query
+        name: end
+        required: true
+        description: End timestamp, inclusive, as an RFC3339 or Unix timestamp.
+        schema:
+          type: string
+      - in: query
+        name: step
+        required: true
+        description: Query resolution step width in seconds.
+        schema:
+          type: string
+      - in: query
+        name: timeout
+        required: false
+        description: Evaluation timeout. Optional, defaults to the value of the -query.timeout flag.
+        schema:
+          type: string
+      responses:
+        200:
+          description: Range query results in a defined format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RangeQueryResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+    post:
+      operationId: PostRangeQuery
+      summary: Evaluates an expression query over a range of time using POST
+      description: 'Submit query data in the request body using URL-encoded form parameters.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Range Query
+      responses:
+        200:
+          description: Successful range query evaluation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RangeQueryResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Prometheus expression query string.
+                start:
+                  type: string
+                  description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp.
+                end:
+                  type: string
+                  description: End timestamp, inclusive, as an RFC3339 or Unix timestamp.
+                step:
+                  type: string
+                  description: Query resolution step width in seconds.
+                timeout:
+                  type: string
+                  description: Evaluation timeout. Optional, defaults to the value of the -query.timeout flag.
+              required:
+              - query
+              - start
+              - end
+              - step
+components:
+  schemas:
+    RangeQueryResult:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the query (e.g., success, fail).
+        data:
+          type: object
+          properties:
+            resultType:
+              type: string
+              enum:
+              - matrix
+              description: Type of the result.
+            result:
+              type: array
+              items:
+                type: object
+                required:
+                - metric
+                - values
+                properties:
+                  metric:
+                    type: object
+                    additionalProperties:
+                      type: string
+                    description: Labels identifying the metric.
+                  values:
+                    type: array
+                    items:
+                      type: array
+                      items:
+                        type: string
+                      minItems: 2
+                      maxItems: 2
+                    description: A list of [timestamp, value] pairs returned by the query.
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

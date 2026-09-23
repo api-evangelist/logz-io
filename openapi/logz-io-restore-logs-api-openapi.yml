@@ -1,0 +1,292 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Restore logs API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Restore logs
+  description: 'You can restore data from your active archiving account, whether an AWS S3 bucket or Azure Blob Storage. Restoring data gives you the option to query logs after they have expired from your time-based account.
+
+
+    You can use the following endpoints to initiate a new restore process, retrieve, set up, test, and update an account''s archive settings.
+
+
+    Note: Logs that are dropped by drop filters are still archived and can be restored. You can temporarily disable drop filters to restore the data.'
+paths:
+  /archive/restore:
+    get:
+      summary: Retrieve all restore operations
+      description: 'Returns a complete history of all restore operations initiated for the account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Restore logs
+      operationId: getRestoreRequestsForAccountApi
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RestoreApiResponse'
+    post:
+      summary: Initiate restore operation
+      description: 'Initiates a new operation to restore data from a specific time frame. (As a result, also triggers the creation of a temporary restored account in Logz.io to hold the restored data until its automatic expiration.)
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Restore logs
+      operationId: createRestore
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreApiResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RestoreApiRequest'
+  /archive/restore/{id}:
+    get:
+      summary: Get an update on a restore operation
+      description: 'Returns the status of a specific restore operation by its ID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Restore logs
+      operationId: getRestoreRequestByIdApi
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the restore process
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreApiResponse'
+    delete:
+      summary: Delete a restore operation
+      description: 'Aborts a restore process before its completion.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Restore logs
+      operationId: abortRestoreRequestApi
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the restore process.
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RestoreApiResponse'
+components:
+  schemas:
+    RestoreApiResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the restore operation in Logz.io
+          example: 42
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the restored account in Logz.io
+          example: 564321
+        accountName:
+          type: string
+          description: Name of the restored account
+          example: My account name
+        restoredVolumeGb:
+          type: number
+          format: float
+          description: Volume of data restored so far. If the restore operation is still in progress, this will be continuously updated.
+          example: 99
+        status:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - ACTIVE
+          - LIMIT_EXCEEDED
+          - ABORTED
+          - FAILED
+          - DELETED
+          - EXPIRED
+          description: 'Returns the current status of the restored account.
+
+            - IN_PROGRESS - Data is being restored and is not yet available for querying or searching in Kibana.
+
+            - ACTIVE - The restored account is active and available for searching and querying in Kibana. Be sure to search the data in its original timestamp.
+
+            - LIMIT_EXCEEDED - The data exceeded 100 GB and caused the restore action to fail.
+
+            - ABORTED - A user aborted the restore operation before it completed. Only one account can be restored at a time.
+
+            - FAILED - The restored account failed to restore the data.
+
+            - DELETED - The restored account was deleted by a user.
+
+            - EXPIRED - Restored accounts automatically expire after a number of  days, as indicated by `expiresAt`.'
+          example: ACTIVE
+        startTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the earliest logs to be restored.
+          example: 1589947200.0
+        endTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the latest logs to be restored.
+          example: 1589954400.0
+        createdAt:
+          type: integer
+          format: int64
+          description: Timestamp when the restore process was created and entered the queue. (Since only one account can be restored at a time, the process may not initiate immediately.)
+          example: 1591902426.0
+        startedAt:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds when the restore process initiated.
+          example: 1591902428.0
+        finishedAt:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds when the restore process completed.
+          example: 1591902461.0
+        expiresAt:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying when the account is due to expire. Restored accounts expire automatically after a number of days, as specified in the account's terms.
+          example: 1592334461.0
+    RestoreApiRequest:
+      type: object
+      properties:
+        accountName:
+          type: string
+          description: Name of the restored account
+          example: My account name
+        startTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the earliest logs to be restored.
+          example: 1589947200.0
+        endTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the latest logs to be restored.
+          example: 1589954400.0
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

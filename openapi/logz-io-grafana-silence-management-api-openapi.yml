@@ -1,0 +1,244 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Grafana silence management API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Grafana silence management
+paths:
+  /v1/grafana/api/alertmanager/grafana/api/v2/silences/:
+    get:
+      operationId: getAllSilences
+      summary: Retrieve all silences
+      description: Retrieve a list of all existing silences, including their ID, status, and additional details.
+      tags:
+      - Grafana silence management
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SilenceGetAll'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SilenceGetAll'
+  /v1/grafana/api/alertmanager/grafana/api/v2/silences:
+    post:
+      operationId: createNewSilence
+      summary: Create new silence
+      description: Create a new silence to temporarily suppress alerts based on specified matchers and duration.
+      tags:
+      - Grafana silence management
+      responses:
+        200:
+          description: The silence was successfully created.
+        400:
+          description: The request body is invalid or missing required fields.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SilenceCreate'
+  /v1/grafana/api/alertmanager/grafana/api/v2/silence/<<UID>>:
+    delete:
+      operationId: deleteSilence
+      summary: Delete a silence
+      description: Remove an existing silence to resume alert notifications for the affected matchers.
+      tags:
+      - Grafana silence management
+      parameters:
+      - in: path
+        name: UID
+        required: true
+        schema:
+          description: Unique identifier of the silence.
+      responses:
+        200:
+          description: The silence was successfully deleted.
+        400:
+          description: The specified silence UID does not exist.
+components:
+  schemas:
+    SilenceGetAll:
+      type: object
+      required:
+      - title
+      - subComponents
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the silence.
+          example: e1a111a1-1a10-1caf-ae1b-1111112bf061
+        status:
+          type: object
+          description: The state of the silence (active or expired).
+          example: active
+        updatedAt:
+          type: string
+          description: Date and time in UTC when the silence was last updated.
+          example: 2020-04-02 18:58:16+00:00
+        comment:
+          type: string
+          description: A description or comment about the silence, its purpose, or any relevant details.
+          example: Created 2025-01-20 14:32
+        createdBy:
+          type: string
+          description: Name of the user who created the silence.
+          example: John Doe
+        endsAt:
+          type: string
+          description: Date and time in UTC when the silence ends.
+          example: 2025-01-20 14:32:00.839000+00:00
+        matchers:
+          type: array
+          description: List of matchers defining which alerts the silence applies to.
+          items:
+            type: object
+            properties:
+              isEqual:
+                type: string
+                example: true
+              isRegex:
+                type: string
+                example: false
+              name:
+                type: string
+                example: Name1
+              value:
+                type: string
+                example: test123
+        startsAt:
+          type: string
+          description: Date and time in UTC when the silence begins.
+          example: 2025-01-20 12:32:12.380000+00:00
+    SilenceCreate:
+      type: object
+      properties:
+        startsAt:
+          type: string
+          description: Date and time in UTC when the silence begins.
+          example: 2025-01-20 12:32:12.380000+00:00
+        endsAt:
+          type: string
+          description: Date and time in UTC when the silence ends.
+          example: 2025-01-20 14:32:00.839000+00:00
+        comment:
+          type: string
+          description: A description or comment about the silence, its purpose, or any relevant details.
+          example: Created 2025-01-20 14:32
+        createdBy:
+          type: string
+          description: Name of the user who created the silence.
+          example: John Doe
+        matchers:
+          type: array
+          description: List of matchers defining which alerts the silence applies to.
+          items:
+            type: object
+            properties:
+              isEqual:
+                type: string
+                example: true
+              isRegex:
+                type: string
+                example: false
+              name:
+                type: string
+                example: Name1
+              value:
+                type: string
+                example: test123
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

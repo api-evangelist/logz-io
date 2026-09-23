@@ -1,0 +1,275 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Parsing API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Parsing
+paths:
+  /v1/sawmill/log-type-pipeline/{logType}:
+    post:
+      operationId: getSawmillTestType
+      summary: Parse sample logs with a Sawmill pipeline
+      description: 'Performs parsing of sample logs with a given Sawmill pipeline (https://github.com/logzio/sawmill/wiki). A pipeline is a collection of parsing rules to be executed in a specific order where the syntax and functionality follow the guidelines of the Sawmill library. **Note:** this endpoint is not used to create or update parsing, but for testing purposes only.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Parsing
+      parameters:
+      - in: path
+        required: true
+        name: logType
+        description: Type of the log being parsed. This can be an existing type (already sent to Logz.io) or a new type (to be sent to Logz.io for parsing).
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                description: The response provides the value of `sampleLogs` after parsing.
+                items:
+                  type: object
+                example: '{"Movie":"TheMatrix","fragment":"test","@timestamp":"2021-08-15T12:17:45.731+0000","check":"value","message":"balima","type":"TestType","UA-device":"Other"}'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                pipeLineDefinition:
+                  type: string
+                  example: '{ "steps": [ { "kv": { "config": { "field": "hello", "fieldSplit": " ", "valueSplit": "=", "includeKeys": [ "time", "level", "msg" ] } } } ] }'
+                sampleLogs:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      type:
+                        type: string
+                        example: logType
+                      fullMessage:
+                        type: object
+                        properties:
+                          message:
+                            type: string
+                            example: hi
+                          hello:
+                            type: string
+                            example: 'time="2022-07-22T07:18:28Z" level=info msg="Error uploading file /var/lib/winlogbeat/test.json: BucketRegionError: incorrect region, the bucket is not in ''"us-east-1''" region, host id: 64fD82"'
+        required: true
+    get:
+      operationId: getLogType
+      summary: Get pipeline definition for a log type
+      description: 'Receive pipeline definition for a given log type, if the definition is already stored.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Parsing
+      parameters:
+      - in: path
+        required: true
+        name: logType
+        description: Log type that you need to retrieve a Sawmill pipeline for. If no parsing has been applied to this log type, 404 error will be given.
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                example: '{"steps":[{"addField":{"name":"addField","config":{"path":"Movie","value":"TheMatrix"}}}]}'
+        '404':
+          description: pipeline not found for this log type
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                - errorCode: SAWMILL_SELF_PARSE/PIPELINE NOT FOUND
+                  message: log type with name (logType) not found
+                  parameters:
+                  - logTypeName: SampleLogType
+  /v1/sawmill/external-mapping/upload:
+    post:
+      operationId: postSawmillMappingFile
+      summary: Upload an external mapping file to Logz.io storage
+      description: 'Uploads an external mapping file in `.properties` format to Logz.io storage. This file can be used later by Sawmill ExternalMappingSourceProcessor. This feature is not available by default. To enable it, contact Logz.io support. 10 files can be uploaded per account. The file size is limited to 50 MB.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Parsing
+      responses:
+        '201':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: Successfully updated external mapping
+                    description: Successfully updated external mapping
+        '400':
+          description: bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorCode:
+                    type: string
+                    example: FILE_RESTRICTIONS/EXTERNAL_MAPPINGS_LIMIT_REACHED
+                  message:
+                    type: string
+                    example: Failed to upload external mapping. Exceeded allowed amount of mapping files per account - 10. Please Contact Support to delete old mappings.
+                  requestId:
+                    type: string
+                  parameters:
+                    type: object
+                    properties:
+                      currentLimit:
+                        type: integer
+                        example: 10
+        '422':
+          description: validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: string
+                    example: Failed to update external mapping
+                    description: Failed to update external mapping
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  description: The external mapping file.
+                  format: binary
+  /v1/account/log-types:
+    get:
+      operationId: getLogTypes
+      summary: Get all log types
+      description: 'Get all log types for a given account including the log types with no parsing attached.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Parsing
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                - “metering-access”
+                - “lag-monitor”
+                - “business-analytics-metrics”
+                - “consul-agent”
+                - “auth0”
+components:
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

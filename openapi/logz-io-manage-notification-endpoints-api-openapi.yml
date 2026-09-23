@@ -1,0 +1,1013 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Manage notification endpoints API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Manage notification endpoints
+  description: Logz.io can send notifications to your preferred workspaces, such as Opsgenie, BigPanda, PagerDuty, and Slack.
+paths:
+  /v1/endpoints/slack:
+    post:
+      operationId: createSlack
+      summary: Create a Slack endpoint
+      tags:
+      - Manage notification endpoints
+      description: 'Creates a new Slack notification endpoint or sends a test message to Slack.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlackEndpointUpsertRequest'
+  /v1/endpoints/slack/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update Slack endpoint
+      description: 'Updates a Slack notification endpoint or sends a test message to Slack.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateSlack
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SlackEndpointUpsertRequest'
+  /v1/endpoints/custom:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create a custom notification endpoint
+      description: 'Creates a new notification endpoint for a custom integration or sends a test message to the custom endpoint.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createCustom
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomEndpointUpsertRequest'
+  /v1/endpoints/custom/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update a custom notification endpoint
+      description: 'Updates a new notification endpoint for a custom integration or sends a test message to the custom endpoint.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateCustom
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomEndpointUpsertRequest'
+  /v1/endpoints/pager-duty:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create a PagerDuty endpoint
+      description: 'Creates a new PagerDuty notification endpoint or sends a test message to PagerDuty.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createPagerDuty
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PagerDutyEndpointUpsertRequest'
+  /v1/endpoints/pager-duty/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update a PagerDuty endpoint
+      description: 'Updates a PagerDuty notification endpoint or sends a test message to PagerDuty.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updatePagerDuty
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PagerDutyEndpointUpsertRequest'
+  /v1/endpoints/big-panda:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create a BigPanda endpoint
+      description: 'Creates a new BigPanda notification endpoint or sends a test message to BigPanda.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createBigPanda
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BigPandaEndpointUpsertRequest'
+  /v1/endpoints/big-panda/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update a BigPanda endpoint
+      description: 'Updates a BigPanda notification endpoint or sends a test message to BigPanda.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateBigPanda
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BigPandaEndpointUpsertRequest'
+  /v1/endpoints/data-dog:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create a Datadog endpoint
+      description: 'Creates a new Datadog notification endpoint or sends a test message to Datadog.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createDataDog
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatadogEndpointUpsertRequest'
+  /v1/endpoints/data-dog/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update a Datadog endpoint
+      description: 'Updates a Datadog notification endpoint or sends a test message to Datadog.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateDataDog
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DatadogEndpointUpsertRequest'
+  /v1/endpoints/victorops:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create a VictorOps endpoint
+      description: 'Creates a new VictorOps notification endpoint or sends a test message to VictorOps.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createVictorops
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VictoropsEndpointUpsertRequest'
+  /v1/endpoints/victorops/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update a VictorOps endpoint
+      description: 'Updates a VictorOps notification endpoint or sends a test message to VictorOps.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateVictorops
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VictoropsEndpointUpsertRequest'
+  /v1/endpoints/{id}:
+    get:
+      tags:
+      - Manage notification endpoints
+      summary: Retrieve an endpoint by ID
+      description: 'Returns a JSON object representing a notification endpoint configured in the account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: getEndpointById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Endpoint'
+    delete:
+      tags:
+      - Manage notification endpoints
+      summary: Delete an endpoint
+      description: 'Deletes a notification endpoint.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: deleteEndpoint
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      responses:
+        204:
+          description: successful operation
+  /v1/endpoints:
+    get:
+      tags:
+      - Manage notification endpoints
+      summary: Retrieve all notification endpoints
+      description: 'Returns an array of JSON objects. Each object represents a notification endpoint configured in the account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: getAllEndpoints
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Endpoint'
+  /v1/endpoints/ops-genie:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create an OpsGenie endpoint
+      description: 'Creates a new OpsGenie notification endpoint or sends a test message to OpsGenie.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createOpsGenie
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpsGenieEndpointUpsertRequest'
+  /v1/endpoints/ops-genie/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update an OpsGenie endpoint
+      description: 'Updates an OpsGenie notification endpoint or sends a test message to OpsGenie.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateOpsGenie
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpsGenieEndpointUpsertRequest'
+  /v1/endpoints/service-now:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create an ServiceNow endpoint
+      description: 'Creates a new ServiceNow notification endpoint or sends a test message to ServiceNow.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createServiceNow
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceNowEndpointUpsertRequest'
+  /v1/endpoints/service-now/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update an ServiceNow endpoint
+      description: 'Updates an ServiceNow notification endpoint or sends a test message to ServiceNow.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateServiceNow
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ServiceNowEndpointUpsertRequest'
+  /v1/endpoints/microsoft-teams:
+    post:
+      tags:
+      - Manage notification endpoints
+      summary: Create an Microsoft Teams endpoint
+      description: 'Creates a new Microsoft Teams notification endpoint or sends a test message to Microsoft Teams.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: createMicrosoftTeams
+      parameters:
+      - name: test
+        in: query
+        required: false
+        description: 'To send a test message to the endpoint, `true`. Otherwise, `false`.
+
+
+          **Note:** If set to `true`, the notification endpoint is not created. To create the endpoint, you need to send the API request where `test=false`.'
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MicrosoftTeamsEndpointUpsertRequest'
+  /v1/endpoints/microsoft-teams/{id}:
+    put:
+      tags:
+      - Manage notification endpoints
+      summary: Update an Microsoft Teams endpoint
+      description: 'Updates an Microsoft Teams notification endpoint or sends a test message to Microsoft Teams.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: updateMicrosoftTeams
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the notification endpoint
+        schema:
+          type: integer
+          format: int32
+      - name: test
+        in: query
+        required: false
+        description: "To send a test message to the endpoint, `true`. Otherwise, `false`. \n\n**Note:** If set to `true`, the notification endpoint is not updated. To update the endpoint, you need to send the API request where `test=false`."
+        schema:
+          type: boolean
+          default: false
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EndpointUpsertResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MicrosoftTeamsEndpointUpsertRequest'
+components:
+  schemas:
+    PagerDutyEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: PagerDuty endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to PagerDuty
+        serviceKey:
+          type: string
+          description: API key from PagerDuty
+          example: 94ad63254a1397a51a1ae340c4f10890
+    OpsGenieEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: OpsGenie endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to OpsGenie
+        apiKey:
+          type: string
+          description: API key from OpsGenie, see https://docs.opsgenie.com/docs/logz-io-integration
+          example: c687f9231619d7d7b959f33e4cc821a5
+    Endpoint:
+      type: object
+      properties:
+        endpointType:
+          type: string
+          enum:
+          - BigPanda
+          - Slack
+          - Datadog
+          - Custom
+          - PagerDuty
+          - VictorOps
+          - Opsgenie
+          - ServiceNow
+          - Microsoft Teams
+          description: The notification endpoint type that will receive alert messages
+          example: Slack
+        id:
+          type: integer
+          format: int32
+          description: ID of the notification endpoint
+          example: 88
+        title:
+          type: string
+          description: Name of the endpoint
+          example: Slack
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Endpoint for sending alerts to Slack
+    EndpointUpsertResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: 'ID of the notification endpoint. If the API call was made where `test=true`, then no changes are made to the endpoint. In this case, the response body contains `{"id": -1}` to indicate that a test message was sent.'
+          example: 88
+    DatadogEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: Datadog endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to Datadog
+        apiKey:
+          type: string
+          description: API key from Datadog
+          example: c687f9231619d7d7b959f33e4cc821a5
+    MicrosoftTeamsEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New Microsoft Teams endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to logzio-alerts channel
+        url:
+          type: string
+          description: Your Microsoft Teams webhook URL, see https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
+          example: https://my.custom-endpoint.com
+    BigPandaEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: BigPanda endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to BigPanda
+        apiToken:
+          type: string
+          description: API authentication token from BigPanda
+          example: 94ad63254a1397a51a1ae340c4f10890
+        appKey:
+          type: string
+          description: Application key from BigPanda
+          example: c687f9231619d7d7b959f33e4cc821a5
+    CustomEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New custom endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to my custom endpoint
+        url:
+          type: string
+          description: URL where the notification will be sent
+          example: https://my.custom-endpoint.com
+        method:
+          type: string
+          description: The HTTP used to send the notification
+          example: POST
+        headers:
+          type: string
+          description: Header parameters to include, as comma-separated key-value pairs
+          example: authKey=6e30-60a9-3591
+        bodyTemplate:
+          type: object
+          description: JSON object that serves as the template for the message body.
+          additionalProperties:
+            type: object
+          example:
+            subject: Alert from Logz.io
+            message:
+              severity: LOW
+              body: Check Logz.io for log activity
+    SlackEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New Slack endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to logzio-alerts channel
+        url:
+          type: string
+          description: Your Slack webhook URL
+          example: https://hooks.slack.com/services/REDACTED/REDACTED/REDACTED
+    VictoropsEndpointUpsertRequest:
+      type: object
+      required:
+      - messageType
+      - routingKey
+      - serviceApiKey
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: VictorOps endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to VictorOps
+        routingKey:
+          type: string
+          description: Alert routing key from VictorOps
+          example: devops
+        messageType:
+          type: string
+          description: VictorOps REST API `message_type`. For more information, see [VictorOps knowledge base](https://help.victorops.com/knowledge-base/victorops-restendpoint-integration/).
+          example: WARNING
+        serviceApiKey:
+          type: string
+          description: API key from VictorOps
+          example: c687f9231619d7d7b959f33e4cc821a5
+    ServiceNowEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New ServiceNow endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to logzio-alerts channel
+        username:
+          type: string
+          description: ServiceNow user name
+          example: User
+        password:
+          type: string
+          description: ServiceNow password
+          example: Password
+        url:
+          type: string
+          description: Provide your instance URL to connect to your existing ServiceNow instance, i.e. https://xxxxxxxxx.service-now.com/.
+          example: https://my.custom-endpoint.com
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

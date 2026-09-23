@@ -1,0 +1,1095 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Grafana alerting provisioning API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Grafana alerting provisioning
+paths:
+  /v1/grafana/api/v1/provisioning/alert-rules:
+    get:
+      operationId: getAlertRules
+      summary: Return a list of all alerts
+      description: 'Returns a list of all alerts.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana alerting provisioning
+      parameters:
+      - in: query
+        name: panelId
+        schema:
+          description: Id of a specific panel to return in results.
+      - in: query
+        name: dashboardUid
+        schema:
+          description: Id of a specific dashboard to return in results.
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  annotations:
+                    type: object
+                    description: Annotations for the dashboard
+                    properties:
+                      runbook_url:
+                        type: string
+                        description: URL to the runbook
+                        example: https://supercoolrunbook.com/page/13
+                  condition:
+                    type: string
+                    description: Condition
+                    example: A
+                  data:
+                    type: array
+                    description: Response wrapper for the data retrieved
+                    items:
+                      type: object
+                      description: Data items retrieved
+                      properties:
+                        datasourceUid:
+                          type: string
+                          description: Grafana data source unique identifier
+                          example: -100
+                        model:
+                          type: object
+                          description: JSON is the raw JSON query and includes the model properties as well as custom properties.
+                          properties:
+                            conditions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  evaluator:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items:
+                                          type: integer
+                                          format: int32
+                                          example: 0
+                                      type:
+                                        type: string
+                                        example: gt
+                                  operator:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: and
+                                  query:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                  reducer:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                      type:
+                                        type: string
+                                        example: avg
+                                  type:
+                                    type: string
+                                    example: query
+                            datasource:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: __expr__
+                                uid:
+                                  type: string
+                                  example: __expr__
+                            expression:
+                              type: string
+                              example: 1 == 1
+                            hide:
+                              type: boolean
+                            intervalMs:
+                              type: integer
+                              format: int32
+                              example: 1000
+                            maxDataPoints:
+                              type: integer
+                              format: int32
+                              example: 43200
+                            refId:
+                              type: string
+                              example: A
+                            type:
+                              type: string
+                              example: math
+                        queryType:
+                          type: string
+                          description: Optional identifier for the type of query
+                          example: null
+                        refId:
+                          type: string
+                          description: Unique identifier of the query, set by the frontend call.
+                          example: A
+                        relativeTimeRange:
+                          type: object
+                          description: Per query start and end time for requests
+                          properties:
+                            from:
+                              type: integer
+                              format: int32
+                              example: 0
+                            to:
+                              type: integer
+                              format: int32
+                              example: 0
+                  execErrState:
+                    type: string
+                    example: Alerting
+                  folderUID:
+                    type: string
+                    description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                    example: project_x
+                  for:
+                    type: integer
+                    format: int32
+                    example: 0
+                  id:
+                    type: integer
+                    format: int32
+                    example: 0
+                  labels:
+                    type: object
+                    properties:
+                      team:
+                        type: string
+                        example: sre-team-1
+                  noDataState:
+                    type: string
+                    example: Alerting
+                  orgID:
+                    type: integer
+                    format: int32
+                    example: 0
+                  provenance:
+                    type: string
+                    example: string
+                  ruleGroup:
+                    type: string
+                    example: eval_group_1
+                  title:
+                    type: string
+                    example: Always firing
+                  uid:
+                    type: string
+                    example: string
+                  updated:
+                    type: string
+                    example: 2022-08-16 11:07:04.763000+00:00
+    post:
+      operationId: AlertRules
+      summary: Create a new alert rule
+      description: 'Creates a new alert rule.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana alerting provisioning
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  annotations:
+                    type: object
+                    properties:
+                      runbook_url:
+                        type: string
+                        example: https://supercoolrunbook.com/page/13
+                  condition:
+                    type: string
+                    example: A
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasourceUid:
+                          type: string
+                          example: -100
+                        model:
+                          type: object
+                          properties:
+                            conditions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  evaluator:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items:
+                                          type: integer
+                                          format: int32
+                                          example: 0
+                                      type:
+                                        type: string
+                                        example: gt
+                                  operator:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: and
+                                  query:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                  reducer:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                      type:
+                                        type: string
+                                        example: avg
+                                  type:
+                                    type: string
+                                    example: query
+                            datasource:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: __expr__
+                                uid:
+                                  type: string
+                                  example: __expr__
+                            expression:
+                              type: string
+                              example: 1 == 1
+                            hide:
+                              type: boolean
+                            intervalMs:
+                              type: integer
+                              format: int32
+                              example: 1000
+                            maxDataPoints:
+                              type: integer
+                              format: int32
+                              example: 43200
+                            refId:
+                              type: string
+                              example: A
+                            type:
+                              type: string
+                              example: math
+                        queryType:
+                          type: string
+                          example: null
+                        refId:
+                          type: string
+                          example: A
+                        relativeTimeRange:
+                          type: object
+                          properties:
+                            from:
+                              type: integer
+                              format: int32
+                              example: 0
+                            to:
+                              type: integer
+                              format: int32
+                              example: 0
+                  execErrState:
+                    type: string
+                    example: Alerting
+                  folderUID:
+                    type: string
+                    description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                    example: project_x
+                  for:
+                    type: integer
+                    format: int32
+                    example: 0
+                  id:
+                    type: integer
+                    format: int32
+                    example: 0
+                  labels:
+                    type: object
+                    properties:
+                      team:
+                        type: string
+                        example: sre-team-1
+                  noDataState:
+                    type: string
+                    example: Alerting
+                  orgID:
+                    type: integer
+                    format: int32
+                    example: 0
+                  provenance:
+                    type: string
+                    example: string
+                  ruleGroup:
+                    type: string
+                    example: eval_group_1
+                  title:
+                    type: string
+                    example: Always firing
+                  uid:
+                    type: string
+                    example: string
+                  updated:
+                    type: string
+                    example: 2022-08-16 13:09:06.350000+00:00
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                annotations:
+                  type: object
+                  properties:
+                    runbook_url:
+                      type: string
+                      example: https://supercoolrunbook.com/page/13
+                condition:
+                  type: string
+                  example: A
+                data:
+                  type: array
+                  items:
+                    type: object
+                    required:
+                    - datasourceUid
+                    properties:
+                      datasourceUid:
+                        type: string
+                        example: -100
+                      model:
+                        type: object
+                        properties:
+                          conditions:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                evaluator:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items:
+                                        type: integer
+                                        format: int32
+                                        example: 0
+                                    type:
+                                      type: string
+                                      example: gt
+                                operator:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: and
+                                query:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items: null
+                                reducer:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items: null
+                                    type:
+                                      type: string
+                                      example: avg
+                                type:
+                                  type: string
+                                  example: query
+                          datasource:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: __expr__
+                              uid:
+                                type: string
+                                example: __expr__
+                          expression:
+                            type: string
+                            example: 1 == 1
+                          hide:
+                            type: boolean
+                          intervalMs:
+                            type: integer
+                            format: int32
+                            example: 1000
+                          maxDataPoints:
+                            type: integer
+                            format: int32
+                            example: 43200
+                          refId:
+                            type: string
+                            example: A
+                          type:
+                            type: string
+                            example: math
+                      queryType:
+                        type: string
+                        example: null
+                      refId:
+                        type: string
+                        example: A
+                      relativeTimeRange:
+                        type: object
+                        properties:
+                          from:
+                            type: integer
+                            format: int32
+                            example: 0
+                          to:
+                            type: integer
+                            format: int32
+                            example: 0
+                execErrState:
+                  type: string
+                  example: Alerting
+                folderUID:
+                  type: string
+                  description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                  example: project_x
+                for:
+                  type: integer
+                  format: int32
+                  example: 0
+                id:
+                  type: integer
+                  format: int32
+                  example: 0
+                labels:
+                  type: object
+                  properties:
+                    team:
+                      type: string
+                      example: sre-team-1
+                noDataState:
+                  type: string
+                  example: Alerting
+                provenance:
+                  type: string
+                  example: string
+                ruleGroup:
+                  type: string
+                  example: eval_group_1
+                title:
+                  type: string
+                  example: Always firing
+                uid:
+                  type: string
+                  example: string
+  /v1/grafana/api/v1/provisioning/alert-rules/<<UID>>:
+    get:
+      operationId: getAlertRulesByUID
+      summary: Return a list of all alerts by UID
+      description: 'Returns a list of all alerts by a UID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana alerting provisioning
+      parameters:
+      - in: path
+        name: UID
+        schema:
+          description: Alert rule UID.
+        required: true
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  annotations:
+                    type: object
+                    properties:
+                      runbook_url:
+                        type: string
+                        example: https://supercoolrunbook.com/page/13
+                  condition:
+                    type: string
+                    example: A
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasourceUid:
+                          type: string
+                          example: -100
+                        model:
+                          type: object
+                          properties:
+                            conditions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  evaluator:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items:
+                                          type: integer
+                                          format: int32
+                                          example: 0
+                                      type:
+                                        type: string
+                                        example: gt
+                                  operator:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: and
+                                  query:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                  reducer:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                      type:
+                                        type: string
+                                        example: avg
+                                  type:
+                                    type: string
+                                    example: query
+                            datasource:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: __expr__
+                                uid:
+                                  type: string
+                                  example: __expr__
+                            expression:
+                              type: string
+                              example: 1 == 1
+                            hide:
+                              type: boolean
+                            intervalMs:
+                              type: integer
+                              format: int32
+                              example: 1000
+                            maxDataPoints:
+                              type: integer
+                              format: int32
+                              example: 43200
+                            refId:
+                              type: string
+                              example: A
+                            type:
+                              type: string
+                              example: math
+                        queryType:
+                          type: string
+                          example: null
+                        refId:
+                          type: string
+                          example: A
+                        relativeTimeRange:
+                          type: object
+                          properties:
+                            from:
+                              type: integer
+                              format: int32
+                              example: 0
+                            to:
+                              type: integer
+                              format: int32
+                              example: 0
+                  execErrState:
+                    type: string
+                    example: Alerting
+                  folderUID:
+                    type: string
+                    description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                    example: project_x
+                  for:
+                    type: integer
+                    format: int32
+                    example: 0
+                  id:
+                    type: integer
+                    format: int32
+                    example: 0
+                  labels:
+                    type: object
+                    properties:
+                      team:
+                        type: string
+                        example: sre-team-1
+                  noDataState:
+                    type: string
+                    example: Alerting
+                  orgID:
+                    type: integer
+                    format: int32
+                    example: 0
+                  provenance:
+                    type: string
+                    example: string
+                  ruleGroup:
+                    type: string
+                    example: eval_group_1
+                  title:
+                    type: string
+                    example: Always firing
+                  uid:
+                    type: string
+                    example: string
+                  updated:
+                    type: string
+                    example: 2022-08-16 13:09:06.350000+00:00
+    put:
+      operationId: putAlertRulesByUID
+      summary: Amend an alert by UID
+      description: 'Amend an alert by UID.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana alerting provisioning
+      parameters:
+      - in: path
+        name: UID
+        schema:
+          description: Alert rule UID.
+        required: true
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  annotations:
+                    type: object
+                    properties:
+                      runbook_url:
+                        type: string
+                        example: https://supercoolrunbook.com/page/13
+                  condition:
+                    type: string
+                    example: A
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        datasourceUid:
+                          type: string
+                          example: -100
+                        model:
+                          type: object
+                          properties:
+                            conditions:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  evaluator:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items:
+                                          type: integer
+                                          format: int32
+                                          example: 0
+                                      type:
+                                        type: string
+                                        example: gt
+                                  operator:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                        example: and
+                                  query:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                  reducer:
+                                    type: object
+                                    properties:
+                                      params:
+                                        type: array
+                                        items: null
+                                      type:
+                                        type: string
+                                        example: avg
+                                  type:
+                                    type: string
+                                    example: query
+                            datasource:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                  example: __expr__
+                                uid:
+                                  type: string
+                                  example: __expr__
+                            expression:
+                              type: string
+                              example: 1 == 1
+                            hide:
+                              type: boolean
+                            intervalMs:
+                              type: integer
+                              format: int32
+                              example: 1000
+                            maxDataPoints:
+                              type: integer
+                              format: int32
+                              example: 43200
+                            refId:
+                              type: string
+                              example: A
+                            type:
+                              type: string
+                              example: math
+                        queryType:
+                          type: string
+                          example: null
+                        refId:
+                          type: string
+                          example: A
+                        relativeTimeRange:
+                          type: object
+                          properties:
+                            from:
+                              type: integer
+                              format: int32
+                              example: 0
+                            to:
+                              type: integer
+                              format: int32
+                              example: 0
+                  execErrState:
+                    type: string
+                    example: Alerting
+                  folderUID:
+                    type: string
+                    description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                    example: project_x
+                  for:
+                    type: integer
+                    format: int32
+                    example: 0
+                  id:
+                    type: integer
+                    format: int32
+                    example: 0
+                  labels:
+                    type: object
+                    properties:
+                      team:
+                        type: string
+                        example: sre-team-1
+                  noDataState:
+                    type: string
+                    example: Alerting
+                  orgID:
+                    type: integer
+                    format: int32
+                    example: 0
+                  provenance:
+                    type: string
+                    example: string
+                  ruleGroup:
+                    type: string
+                    example: eval_group_1
+                  title:
+                    type: string
+                    example: Always firing
+                  uid:
+                    type: string
+                    example: string
+                  updated:
+                    type: string
+                    example: 2022-08-16 14:04:25.062000+00:00
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                annotations:
+                  type: object
+                  properties:
+                    runbook_url:
+                      type: string
+                      example: https://supercoolrunbook.com/page/13
+                condition:
+                  type: string
+                  example: A
+                data:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      datasourceUid:
+                        type: string
+                        example: -100
+                      model:
+                        type: object
+                        properties:
+                          conditions:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                evaluator:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items:
+                                        type: integer
+                                        format: int32
+                                        example: 0
+                                    type:
+                                      type: string
+                                      example: gt
+                                operator:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: and
+                                query:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items: null
+                                reducer:
+                                  type: object
+                                  properties:
+                                    params:
+                                      type: array
+                                      items: null
+                                    type:
+                                      type: string
+                                      example: avg
+                                type:
+                                  type: string
+                                  example: query
+                          datasource:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: __expr__
+                              uid:
+                                type: string
+                                example: __expr__
+                          expression:
+                            type: string
+                            example: 1 == 1
+                          hide:
+                            type: boolean
+                          intervalMs:
+                            type: integer
+                            format: int32
+                            example: 1000
+                          maxDataPoints:
+                            type: integer
+                            format: int32
+                            example: 43200
+                          refId:
+                            type: string
+                            example: A
+                          type:
+                            type: string
+                            example: math
+                      queryType:
+                        type: string
+                        example: null
+                      refId:
+                        type: string
+                        example: A
+                      relativeTimeRange:
+                        type: object
+                        properties:
+                          from:
+                            type: integer
+                            format: int32
+                            example: 0
+                          to:
+                            type: integer
+                            format: int32
+                            example: 0
+                execErrState:
+                  type: string
+                  example: Alerting
+                folderUID:
+                  type: string
+                  description: The unique identifier (uid) of a folder to search in for dashboards. You cannot use `General` folder or the folder generated by logz.io - `Logz.io Dashboards` - to place your alerts.
+                  example: project_x
+                for:
+                  type: integer
+                  format: int32
+                  example: 0
+                id:
+                  type: integer
+                  format: int32
+                  example: 0
+                labels:
+                  type: object
+                  properties:
+                    team:
+                      type: string
+                      example: sre-team-1
+                noDataState:
+                  type: string
+                  example: Alerting
+                orgID:
+                  type: integer
+                  format: int32
+                  example: 0
+                provenance:
+                  type: string
+                  example: string
+                ruleGroup:
+                  type: string
+                  example: eval_group_1
+                title:
+                  type: string
+                  example: Always firing
+                uid:
+                  type: string
+                  example: string
+components:
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

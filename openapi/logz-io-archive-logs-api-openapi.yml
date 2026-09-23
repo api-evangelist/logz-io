@@ -1,0 +1,352 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Archive logs API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Archive logs
+  description: 'You can archive logs to an AWS S3 bucket or Azure Blob Storage. Archiving gives you the option to restore logs and query them after they have expired from your time-based account.
+
+
+    You can use the following endpoints to retrieve, set up, test, and update an account''s archive settings.
+
+
+    Note: Logs are archived before they are indexed and analyzed by Logz.io. If you are using drop filters, note that dropped logs will still be archived.'
+paths:
+  /v2/archive/settings:
+    get:
+      summary: Retrieve archiving settings
+      description: 'Gets the current archive settings for a time-based log account.
+
+
+        Note that only one archive can be active per account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Archive logs
+      operationId: getSettingsForAccount
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveSettingsResponse'
+    post:
+      summary: Set up archiving
+      description: 'Configure archiving for a time-based log account. One archive can be configured per account (or sub account). For more on this, see AWS Access with IAM and Archiving.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Archive logs
+      operationId: createSettings
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveSettings'
+  /v2/archive/settings/test:
+    post:
+      summary: Test archive settings
+      description: 'Tests the settings and returns the status code to confirm that a connection with the provider was established.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Archive logs
+      operationId: testSettings
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestStorageRequest'
+  /v2/archive/settings/{id}:
+    get:
+      summary: Retrieve archive settings
+      description: 'Retrieves an archiving settings by the ID of the settings.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Archive logs
+      operationId: getSettings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the archive settings.
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: successful operation
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArchiveSettingsResponse'
+    put:
+      summary: Update archive settings
+      description: 'Updates the archiving settings for a time-based log account. (The API token identifies the account.) Please ensure to change the region in the URL to match your account''s region.
+
+
+        You can use this endpoint to:
+
+        * Switch archive settings between AWS and Azure Blob Storage or vice versa.
+
+        * Update credentials.
+
+        * Switch your AWS authentication method between credential keys and IAM roles.
+
+
+        Note that only one archive can be active per account.'
+      tags:
+      - Archive logs
+      operationId: updateSettings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the archive settings.
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: successful operation
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArchiveSettings'
+    delete:
+      summary: Delete archive settings
+      description: 'Deletes the archiving settings for a time-based log account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Archive logs
+      operationId: deleteSettings
+      parameters:
+      - name: id
+        in: path
+        required: true
+        description: ID of the archive settings.
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    ArchiveSettingsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique ID of the archive settings.
+          example: 323
+        settings:
+          $ref: '#/components/schemas/ArchiveSettings'
+    S3StorageSettings:
+      type: object
+      required:
+      - credentialsType
+      - path
+      description: Applicable settings when the `storageType` is `S3`.
+      properties:
+        credentialsType:
+          description: Specifies which credentials will be used for authentication. The options are either `KEYS` with `s3SecretCredentials`, or `IAM` with `s3IamCredentials`.
+          type: string
+          enum:
+          - IAM
+          - KEYS
+        path:
+          type: string
+          description: 'Specify a path to the **root** of the S3 bucket. (Currently, archiving to a sub-bucket is supported, but not restoring from one.)
+
+            **Unique buckets** - It is important to archive each account/sub-account to a separate S3 bucket.'
+        s3SecretCredentials:
+          $ref: '#/components/schemas/S3SecretCredentials'
+        s3IamCredentials:
+          $ref: '#/components/schemas/S3IamCredentials'
+    S3IamCredentials:
+      type: object
+      properties:
+        arn:
+          type: string
+          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
+    S3SecretCredentials:
+      type: object
+      required:
+      - accessKey
+      - secretKey
+      description: Authentication with S3 Secret Credentials is supported for backward compatibility. IAM roles are strongly recommended.
+      properties:
+        accessKey:
+          type: string
+        secretKey:
+          type: string
+    ArchiveSettings:
+      type: object
+      required:
+      - storageType
+      properties:
+        storageType:
+          type: string
+          enum:
+          - S3
+          - BLOB
+          description: Specifies the storage provider. If `S3`, the   `amazonS3StorageSettings` are relevant. If `BLOB`, the `azureBlobStorageSettings` are relevant.
+          example: S3
+        enabled:
+          type: boolean
+          description: If `true`, archiving is currently enabled.
+          default: true
+          example: true
+        compressed:
+          type: boolean
+          description: If `true`, logs are compressed before they are archived.
+          default: true
+          example: true
+        amazonS3StorageSettings:
+          description: Applicable settings when the `storageType` is `S3`.
+          $ref: '#/components/schemas/S3StorageSettings'
+        azureBlobStorageSettings:
+          description: Applicable settings when the `storageType` is `Blob`.
+          $ref: '#/components/schemas/BlobSettings'
+    TestStorageRequest:
+      type: object
+      properties: null
+      id:
+        type: integer
+        format: int32
+      archiveSettings:
+        $ref: '#/components/schemas/ArchiveSettings'
+    BlobSettings:
+      type: object
+      description: Applicable settings when the `storageType` is `Blob`. For detailed instructions about setting up a storage container in Azure and locating the required parameters, [click here](/user-guide/archive-and-restore/azure-blob-permissions/).
+      required:
+      - tenantId
+      - clientId
+      - clientSecret
+      - accountName
+      - containerName
+      properties:
+        tenantId:
+          type: string
+          description: Azure Directory (tenant) ID. The Tenant ID of the AD app. Go to Azure Active Directory > App registrations and select the app to see it.
+        clientId:
+          type: string
+          description: Azure application (client) ID. The Client ID of the AD app, found under the App Overview page. Go to Azure Active Directory > App registrations and select the app to see it.
+        clientSecret:
+          type: string
+          description: Azure client secret. Password of the Client secret, found in the app's Certificates & secrets page. Go to Azure Active Directory > App registrations and select the app. Then select Certificates & secrets to see it.
+        accountName:
+          type: string
+          description: Azure Storage account name. Name of the storage account that holds the container where the logs will be archived.
+        containerName:
+          type: string
+          description: Name of the container in the Storage account. This is where the logs will be archived.
+        path:
+          type:
+          - string
+          - 'null'
+          description: Optional virtual sub-folder specifiying a path within the container. Logs will be archived under the path “{container-name}/{virtual sub-folder}”. Avoid leading and trailing slashes (/). For example, the prefix “region1” is good, but “/region1/” is not.
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

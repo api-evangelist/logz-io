@@ -1,0 +1,206 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Time Series API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Time Series
+paths:
+  /v1/metrics/prometheus/api/v1/series:
+    get:
+      operationId: GetSeriesByLabels
+      summary: Returns the list of time series that match a certain label set
+      description: 'Retrieve time series data by submitting a GET request with label matchers and time range parameters.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Time Series
+      parameters:
+      - in: query
+        name: match[]
+        required: true
+        description: Series selector that selects the series to return. At least one must be provided.
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - in: query
+        name: start
+        required: true
+        description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp.
+        schema:
+          type: string
+      - in: query
+        name: end
+        required: true
+        description: End timestamp, inclusive, as an RFC3339 or Unix timestamp.
+        schema:
+          type: string
+      - in: query
+        name: limit
+        required: false
+        description: Maximum number of returned series. Optional.
+        schema:
+          type: integer
+      responses:
+        200:
+          description: List of matching time series.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeriesResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+    post:
+      operationId: PostSeriesByLabels
+      summary: Returns the list of time series that match a certain label set using POST
+      description: 'Submit label matchers and time range data in the request body using URL-encoded form parameters.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Time Series
+      responses:
+        200:
+          description: Successful retrieval of matching time series.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SeriesResult'
+        400:
+          description: Invalid request parameters.
+        500:
+          description: Internal server error.
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                match[]:
+                  type: array
+                  items:
+                    type: string
+                  description: Series selector that selects the series to return. At least one must be provided.
+                start:
+                  type: string
+                  description: Start timestamp, inclusive, as an RFC3339 or Unix timestamp.
+                end:
+                  type: string
+                  description: End timestamp, inclusive, as an RFC3339 or Unix timestamp.
+                limit:
+                  type: integer
+                  description: Maximum number of returned series. Optional.
+              required:
+              - match[]
+              - start
+              - end
+components:
+  schemas:
+    SeriesResult:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status of the request (e.g., success, fail).
+        data:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+            description: An array of objects containing the label name/value pairs which identify each series.
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

@@ -1,0 +1,202 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Grafana data source API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Grafana data source
+paths:
+  /v1/grafana/api/datasources/summary:
+    get:
+      operationId: getAllDatasources
+      summary: Return a list of data sources
+      description: 'Return a list of data sources for all accounts under the API token provided.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana data source
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 123
+                      description: Data source Id
+                    uid:
+                      type: string
+                      example: DCFaFyDnk
+                      description: Data source UID
+                    name:
+                      type: string
+                      example: cluster6_metrics
+                      description: Data source name
+                    type:
+                      type: string
+                      example: prometheus
+                      description: Enum for the data source type. Can be eithern prometheus or elasticsearch.
+                    database:
+                      type: string
+                      example: 123456
+                      description: Metrics account ID
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data source not found.
+  /v1/grafana/api/datasources/name/{metric_account_name}/summary:
+    get:
+      operationId: getDatasourceByAccount
+      summary: Get a data source for a given account
+      description: 'Get a data source for a given account.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana data source
+      parameters:
+      - in: path
+        name: metric_account_name
+        schema:
+          description: Logz.io metric account name
+        required: true
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 123
+                    description: Data source Id
+                  uid:
+                    type: string
+                    example: DCFaFyDnk
+                    description: Data source UID
+                  name:
+                    type: string
+                    example: cluster6_metrics
+                    description: Data source name
+                  type:
+                    type: string
+                    example: prometheus
+                    description: Enum for the data source type. Can be eithern prometheus or elasticsearch.
+                  database:
+                    type: string
+                    example: 123456
+                    description: Metrics account ID
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Data source not found.
+components:
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

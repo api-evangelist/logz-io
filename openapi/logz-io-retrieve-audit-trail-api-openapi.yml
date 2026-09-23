@@ -1,0 +1,302 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Retrieve audit trail API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Retrieve audit trail
+paths:
+  /v1/audit-trail/event-types:
+    post:
+      operationId: listAccountAuditTrails
+      summary: Retrieve all event types in the audit trail
+      description: 'Returns an array of strings. Each string is an event type that appears in the account''s audit trail. Each event type is shown once, no matter how many times it occurs in the account''s audit trail.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Retrieve audit trail
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditTrailEventTypesResponse'
+  /v1/audit-trail:
+    post:
+      operationId: listAccountAuditTrailsFiltered
+      description: Please ensure to change the region in the URL to match your account's region.
+      summary: Retrieve a filtered list of audit trail events
+      tags:
+      - Retrieve audit trail
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuditTrailFilteredResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuditTrailFilterRequest'
+components:
+  schemas:
+    AuditTrailEventTypesResponse:
+      type: object
+      properties:
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types in the audit trail
+          example:
+          - Added user
+          - Admin created a sub account
+          - Changed password
+          - Failed login
+          - Login
+          - Logz.io admin has enabled a sawmill configuration
+          - Suspended user
+          - User created a token
+          - User installed an ELK app
+    AuditEventUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user or token
+          example: 5374
+        fullName:
+          type: string
+          description: First and last name of the user, or name of the token
+          example: Larry Appleton
+        deleted:
+          type: boolean
+          description: If this user or token has been deleted, `true`. Otherwise, `false`.
+          example: false
+        userToken:
+          type: boolean
+          description: If this is a token, `true`. If this is a user, `false`.
+    AuditEventExtraData:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Name of the field
+          example: Account name
+        oldValue:
+          type: string
+          description: Original value of the field
+          example: Test account
+        newValue:
+          type: string
+          description: New value of the field
+          example: Apache access logs
+    AuditTrailFilterRequest:
+      type: object
+      properties:
+        size:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 500
+          default: 500
+          description: Maximum number of results to return.
+          example: 150
+        from:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          default: 0
+          description: Of the results found, the first result to return.
+          example: 15
+        auditEventUser:
+          $ref: '#/components/schemas/AuditEventUser'
+        auditEventType:
+          type: string
+          description: Code for the event type
+          example: Added user
+        fromDate:
+          type: integer
+          format: int64
+          description: Starting timedate, as Unix epoch milliseconds.
+          example: 389880000
+        toDate:
+          type: integer
+          format: int64
+          description: Ending timedate, as Unix epoch milliseconds.
+          example: 414763200
+        sortDescending:
+          type: boolean
+          description: To sort results in descending order, `true`. For ascending order, `false`.
+        includeFiltersData:
+          type: boolean
+    AuditEventTypeData:
+      type: object
+      properties:
+        auditEventType:
+          type: string
+          description: Code for the event type
+          example: Added user
+        auditEventTypeTitle:
+          type: string
+          description: Description of the event type
+          example: Added user
+    AuditTrailFilteredResponse:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 500
+          description: The number of results requested
+          example: 50
+        from:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: Of the results found, the first result returned.
+          example: 0
+        total:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 500
+          description: Total number of results that met the search criteria.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventData'
+        auditEventUsersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventUser'
+        auditEventTypesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventTypeData'
+    AuditEventData:
+      type: object
+      properties:
+        auditEventUser:
+          $ref: '#/components/schemas/AuditEventUser'
+        date:
+          type: integer
+          format: int64
+          description: Date of the audit event, as Unix epoch milliseconds
+          example: 1527168668
+        auditEventTypeTitle:
+          type: string
+          description: The event type
+          example: Admin created a sub account
+        ip:
+          type: string
+          description: IP address of the client device that generated the event
+          example: 52.203.237.249
+        geoLocation:
+          type: string
+          description: Geographical location of the device that made the request
+          example: New York - USA
+        extraDataList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventExtraData'
+        valid:
+          type: boolean
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

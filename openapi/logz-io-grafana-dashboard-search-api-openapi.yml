@@ -1,0 +1,180 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Grafana dashboard search API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Grafana dashboard search
+paths:
+  /v1/grafana/api/search/:
+    get:
+      operationId: searchDashboard
+      summary: Search folders and dashboards
+      description: 'Search folders and dashboards.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      tags:
+      - Grafana dashboard search
+      parameters:
+      - in: query
+        name: query
+        schema:
+          description: Search query.
+      - in: query
+        name: tag
+        schema:
+          description: List of tags to search for.
+      - in: query
+        name: type
+        schema:
+          description: Type to search for, dash-folder or dash-db.
+      - in: query
+        name: dashboardIds
+        schema:
+          description: List of dashboard id’s to search for.
+      - in: query
+        name: folderIds
+        schema:
+          description: List of folder id’s to search in for dashboards.
+      - in: query
+        name: starred
+        schema:
+          description: Flag indicating if only starred Dashboards should be returned.
+      - in: query
+        name: limit
+        schema:
+          description: Limit the number of returned results (max 5000).
+      - in: query
+        name: page
+        schema:
+          description: Use this parameter to access hits beyond limit. Numbering starts at 1. limit param acts as page size. Only available in Grafana v6.2+.
+      responses:
+        200:
+          description: successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    description: ID.
+                    example: 163
+                  uid:
+                    type: string
+                    description: UID.
+                    example: '000000163'
+                  title:
+                    type: string
+                    description: Title.
+                    example: Folder
+                  url:
+                    type: string
+                    description: URL.
+                    example: /dashboards/f/000000163/folder
+                  type:
+                    type: string
+                    description: Type.
+                    example: dash-folder
+                  tags:
+                    type: array
+                    description: Tags.
+                  isStarred:
+                    type: boolean
+                    description: Whether the dashboard is starred.
+                  uri:
+                    type: string
+                    description: URI.
+                    example: db/folder
+components:
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.

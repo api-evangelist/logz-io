@@ -1,0 +1,228 @@
+openapi: 3.2.0
+info:
+  description: '# Introduction
+
+    This API is documented using the **OpenAPI 2.0** specification.'
+  title: Logz.io Import or export Kibana objects API
+  termsOfService: https://logz.io/about-us/terms-of-use/
+  contact:
+    email: help@logz.io
+    url: https://docs.logz.io/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+- url: https://api.logz.io/
+security:
+- X-API-TOKEN: []
+tags:
+- name: Import or export Kibana objects
+paths:
+  /v1/kibana/export:
+    post:
+      tags:
+      - Import or export Kibana objects
+      summary: Export Kibana objects
+      description: 'Exports the configuration of Kibana objects. All objects of a single type (search, visualization, or dashboard) are returned as an array of JSON objects. For example, if you export `visualization`, each visualization is returned as a JSON object.
+
+
+        You can import objects using the /kibana/import endpoint.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: exportSavedObjects
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KibanaExportResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KibanaExportRequest'
+  /v1/kibana/import:
+    post:
+      tags:
+      - Import or export Kibana objects
+      summary: Import Kibana objects
+      description: 'Imports Kibana search, visualization, or dashboard objects. You can export objects using the /kibana/export endpoint.
+
+        Please ensure to change the region in the URL to match your account''s region.'
+      operationId: importSavedObjects
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KibanaImportResponse'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KibanaImportRequest'
+components:
+  schemas:
+    KibanaExportRequest:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - search
+          - visualization
+          - dashboard
+          - query
+          description: The object type to export
+    KibanaExportResponse:
+      type: object
+      properties:
+        kibanaVersion:
+          type: string
+          readOnly: true
+          description: The version of Kibana used at the time of export
+          example: 4.0.0-beta3
+        hits:
+          type: array
+          readOnly: true
+          items:
+            type: object
+          description: Exported Kibana objects
+    KibanaImportResponse:
+      type: object
+      properties:
+        created:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: E-commerce-App-Transactions-overtime
+          description: Name of Kibana objects that were created
+        updated:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: HTTP-Response-over-time
+          description: Names of the Kibana objects that were overwritten. Objects are shown here only if `override` was `true` in the import call.
+        ignored:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: Transaction-overtime
+          description: Names of the Kibana objects that were not overwritten. Objects are shown here only if `override` was `false` in the import call.
+        failed:
+          type: array
+          readOnly: true
+          items:
+            type: string
+            example: Apache-Response-Over-Time
+          description: Names of the Kibana objects that could not be created, updated, or ignored.
+    KibanaImportRequest:
+      type: object
+      properties:
+        kibanaVersion:
+          type: string
+          description: The version of Kibana used at the time of export. This must match the current version of Kibana that you're importing to.
+          example: 4.0.0-beta3
+        override:
+          type: boolean
+          description: 'To update an existing object with the same ID, `true`. Otherwise, `false`.
+
+
+            If override is `true`, response message shows overwritten objects as `updated`. If override is `false`, no existing objects are updated, and response message shows these objects as `ignored`.'
+          example: false
+        hits:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+          description: 'Each JSON object in the array represents a discrete Kibana object.
+
+
+            **Note:** As a best practice, import only objects that were exported from Kibana.'
+  securitySchemes:
+    X-API-TOKEN:
+      description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
+
+
+        API tokens are account-specific. You will need to be logged into the relevant Log Management or SIEM account to view the API tokens associated with it.
+
+
+        To manage your API tokens, log into the relevant account in your Logz.io platform, click the gear in the top-right menu, and select [**Tools > Manage tokens > API tokens**](https://app.logz.io/#/dashboard/settings/manage-tokens/api).
+
+
+        It''s important to keep your tokens secure. API tokens carry privileges to make changes to users and accounts, so if you believe an API token has been compromised, delete it, and replace it with a new token in your integrations.'
+      type: apiKey
+      in: header
+      name: X-API-TOKEN
+x-servers:
+- url: https://api.logz.io
+  description: US East (Northern Virginia)
+- url: https://api-au.logz.io
+  description: Asia Pacific (Sydney)
+- url: https://api-ca.logz.io
+  description: Canada (Central)
+- url: https://api-eu.logz.io
+  description: Europe (Frankfurt)
+- url: https://api-uk.logz.io
+  description: Europe (London)
+x-tagGroups:
+- name: Log Monitoring
+  tags:
+  - Search logs
+  - Alerts
+  - Deployments
+  - Insights
+  - Logz.io snapshots
+- name: Cloud SIEM
+  tags:
+  - Security account
+  - Security rules
+  - Security events
+  - Lookup lists
+- name: Account administration
+  tags:
+  - Manage users
+  - Manage metrics account
+  - Associated accounts
+  - Authentication groups
+  - Who am I
+  - Manage time-based log accounts
+  - Manage shared tokens
+  - Manage API tokens
+  - Manage notification endpoints
+  - Import or export Kibana objects
+- name: Manage data shipping
+  tags:
+  - Manage log shipping tokens
+  - Drop filters
+  - Archive logs
+  - Restore logs
+  - Parsing
+  - Delete object API
+- name: Data security
+  tags:
+  - Retrieve audit trail
+- name: Connect to AWS resources
+  tags:
+  - Connect to CloudTrail
+  - Connect to S3 Buckets
+- name: Metrics API Gateway
+  tags:
+  - Grafana contact points
+  - Grafana data source
+  - Grafana alerting provisioning
+  - Grafana silence management
+  - Grafana annotations
+  - Grafana dashboards
+  - Grafana dashboard search
+  - Grafana snapshots
+  - Grafana get all folders
+  description: Metrics API Gateway to supported endpoints.
