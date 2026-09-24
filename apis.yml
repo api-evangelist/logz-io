@@ -32,8 +32,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -103,8 +101,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -165,8 +161,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -229,8 +223,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -293,8 +285,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -365,8 +355,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -427,8 +415,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -490,8 +476,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -552,8 +536,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -615,8 +597,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -677,8 +657,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -740,8 +718,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -804,8 +780,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -866,8 +840,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -928,8 +900,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -991,8 +961,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1053,8 +1021,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1116,8 +1082,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1179,8 +1143,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1241,8 +1203,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1304,8 +1264,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1366,8 +1324,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1432,8 +1388,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1506,8 +1460,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1569,8 +1521,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1631,8 +1581,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1693,8 +1641,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1756,8 +1702,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1818,8 +1762,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1880,8 +1822,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -1942,8 +1882,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2005,8 +1943,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2067,8 +2003,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2131,8 +2065,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2210,8 +2142,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2272,8 +2202,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2334,8 +2262,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2396,8 +2322,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2458,8 +2382,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2520,8 +2442,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2582,8 +2502,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2644,8 +2562,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2717,8 +2633,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2786,8 +2700,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2857,8 +2769,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2919,8 +2829,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -2981,8 +2889,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3043,8 +2949,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3105,8 +3009,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3177,8 +3079,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3239,8 +3139,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3306,8 +3204,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3370,8 +3266,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3451,8 +3345,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3527,8 +3419,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3589,8 +3479,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
@@ -3651,8 +3539,6 @@ apis:
     url: json-schema/logz-io-log-document-schema.json
   - type: JSONLD
     url: json-ld/logz-io-context.jsonld
-  - type: GraphQL
-    url: graphql/logz-io-graphql.md
   - type: Documentation
     url: https://api-docs.logz.io/docs/logz/archive-logs/
   - type: Documentation
