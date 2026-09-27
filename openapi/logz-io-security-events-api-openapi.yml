@@ -111,206 +111,6 @@ paths:
               $ref: '#/components/schemas/AlertEventLogsSearchRequest'
 components:
   schemas:
-    PagedSearchResponseTriggeredResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          format: int32
-          description: The total number of events returned by the rule search query. The total entities found after filtering and sorting. This number is fixed and not affected by pagination.
-          example: 500
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/TriggeredRule'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    PagedSearchResponseMapStringObject:
-      type: object
-      properties:
-        total:
-          description: Returns the total number of logs linked to the security event specified in the query. This number is fixed and not affected by pagination.
-          type: integer
-          format: int32
-          example: 5
-        results:
-          type: array
-          description: 'Array of logs returned in answer to the query. The logs are returned in their entirety and parsed.
-
-
-            If the logs are no longer retained in the database, the request will return empty. You can check your account''s log retention policy in your [log monitoring account](https://app.logz.io/#/dashboard/settings/usage-and-billing).'
-          items:
-            type: object
-            example:
-              Array of logs: null
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    AlertsEventsSearchRequest:
-      type: object
-      properties:
-        filter:
-          $ref: '#/components/schemas/RulesEventsFilter'
-          summary: Filter by rule name, rule severity, or time range.
-        sort:
-          description: Explicit sorting rules are not required, but recommended. Otherwise the database will determine the sorting.
-          type: array
-          items:
-            $ref: '#/components/schemas/RulesEventsSortRequest'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    AlertEventLogsSearchRequest:
-      type: object
-      required:
-      - filter
-      properties:
-        filter:
-          $ref: '#/components/schemas/RuleEventLogsFilter'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    RulesEventsSortRequest:
-      type: object
-      required:
-      - field
-      properties:
-        field:
-          type: string
-          description: Sort by date and/or severity. Order determines secondary sorting.
-          enum:
-          - DATE
-          - SEVERITY
-        descending:
-          type: boolean
-          default: true
-          description: If left blank, descending sorting will result. If `false` results in ascending sorting.
-    PagedEdithResponseTriggeredResponse:
-      type: array
-      properties:
-        id:
-          type: string
-          description: Unique identifier for the alert or event.
-          example: 1234e5a6-1d1d-12a3-a1fa-b12345b6b7a8
-        alertEventId:
-          type: string
-          description: Identifier for the specific alert event.
-          example: ac1f234f-12da-123d-1ecc-12ed3ccbac45
-        title:
-          type: string
-          description: Title of the alert.
-          example: Auth0 - Account blocked due to repeated failed login attempts
-        description:
-          type: string
-          description: Detailed description of the alert.
-          example: An account was blocked due to 10 failed login attempts from the same IP address.
-        severity:
-          type: string
-          description: Alert severity level (e.g., INFO, MEDIUM).
-          example: MEDIUM
-        status:
-          type: string
-          description: Current status of the alert (e.g., NEW, RESOLVED).
-          example: ASSIGNED
-        assignee:
-          type: integer
-          format: int32
-          description: User ID of the person assigned to the alert.
-          example: 1234567
-        triggeredAt:
-          type: integer
-          format: int64
-          description: Timestamp (in seconds since epoch) when the alert was triggered.
-          example: 1734517694.888
-        updatedAt:
-          type: integer
-          format: int64
-          description: Timestamp (in seconds since epoch) when the alert was last updated.
-          example: 1735046340.774085
-        updatedBy:
-          type: integer
-          format: int32
-          description: User ID of the person who last updated the alert.
-          example: 12345
-        comment:
-          type: string
-          description: Comment associated with the alert.
-          example: This is a comment.
-        commentedBy:
-          type: integer
-          format: int32
-          description: User ID of the person who added the comment.
-          example: 12323
-        alertDefinitionId:
-          type: integer
-          format: int32
-          description: Identifier for the alert definition.
-          example: 3245176
-        count:
-          type: integer
-          format: int32
-          description: Number of occurrences of the alert.
-          example: 1
-        lastTriggeredAt:
-          type: integer
-          format: int64
-          description: Timestamp (in seconds since epoch) when the alert was last triggered.
-          example: 1734517694.888
-        type:
-          type: string
-          description: Type of alert (e.g., GROUP, ALERT_EVENT).
-          example: ALERT_EVENT
-        groupingType:
-          type: string
-          description: Grouping method for the alert (e.g., ALERT_BASED).
-          example: ALERT_BASED
-    AlertsEventsEditRequest:
-      type: object
-      properties:
-        filter: null
-        $ref: '#/components/schemas/RulesEventsEdit'
-        summary: Edit rules.
-    Pagination:
-      type: object
-      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
-          default: 1
-          example: 1
-        pageSize:
-          type: integer
-          format: int32
-          description: Controls the number of results per page. Valid inputs are 1 to 1000.
-          maximum: 1000
-          default: 25
-          example: 100
-    RuleEventLogsFilter:
-      type: object
-      description: Filter by the event's unique GUID to retrieve only the logs relevant to the event under investigation.
-      required:
-      - alertEventId
-      properties:
-        alertEventId:
-          type: string
-          description: Unique GUID of the security event in Logz.io Cloud SIEM. The GUID is returned in the results when querying to fetch security events or by inspecting an event log in the [UI](https://app.logz.io/#/dashboard/security/research/discover?) under the field `logzio-alert-event-id`.
-          example: 833203f9-de71-5a12-9083-9055a6d925bb
-    RulesTimeRange:
-      type: object
-      required:
-      - fromDate
-      - toDate
-      description: Add a timerange to filter by event timestamps that fall within the range. If applied, both the earliest and latest thresholds are required.
-      properties:
-        fromDate:
-          type: integer
-          format: int64
-          example: 1587134557
-          description: Absolute UNIX timestamp in seconds (not milliseconds). Your security account's retention policy determines the earliest events you'll be able to retrieve.
-        toDate:
-          type: integer
-          format: int64
-          example: 1587137557
-          description: Absolute UNIX timestamp in seconds (not milliseconds).
     TriggeredRule:
       type: object
       properties:
@@ -469,6 +269,127 @@ components:
           type: string
           description: Grouping method for the alert (e.g., ALERT_BASED).
           example: ALERT_BASED
+    Pagination:
+      type: object
+      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
+          default: 1
+          example: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: Controls the number of results per page. Valid inputs are 1 to 1000.
+          maximum: 1000
+          default: 25
+          example: 100
+    RulesEventsSortRequest:
+      type: object
+      required:
+      - field
+      properties:
+        field:
+          type: string
+          description: Sort by date and/or severity. Order determines secondary sorting.
+          enum:
+          - DATE
+          - SEVERITY
+        descending:
+          type: boolean
+          default: true
+          description: If left blank, descending sorting will result. If `false` results in ascending sorting.
+    RuleEventLogsFilter:
+      type: object
+      description: Filter by the event's unique GUID to retrieve only the logs relevant to the event under investigation.
+      required:
+      - alertEventId
+      properties:
+        alertEventId:
+          type: string
+          description: Unique GUID of the security event in Logz.io Cloud SIEM. The GUID is returned in the results when querying to fetch security events or by inspecting an event log in the [UI](https://app.logz.io/#/dashboard/security/research/discover?) under the field `logzio-alert-event-id`.
+          example: 833203f9-de71-5a12-9083-9055a6d925bb
+    PagedEdithResponseTriggeredResponse:
+      type: array
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the alert or event.
+          example: 1234e5a6-1d1d-12a3-a1fa-b12345b6b7a8
+        alertEventId:
+          type: string
+          description: Identifier for the specific alert event.
+          example: ac1f234f-12da-123d-1ecc-12ed3ccbac45
+        title:
+          type: string
+          description: Title of the alert.
+          example: Auth0 - Account blocked due to repeated failed login attempts
+        description:
+          type: string
+          description: Detailed description of the alert.
+          example: An account was blocked due to 10 failed login attempts from the same IP address.
+        severity:
+          type: string
+          description: Alert severity level (e.g., INFO, MEDIUM).
+          example: MEDIUM
+        status:
+          type: string
+          description: Current status of the alert (e.g., NEW, RESOLVED).
+          example: ASSIGNED
+        assignee:
+          type: integer
+          format: int32
+          description: User ID of the person assigned to the alert.
+          example: 1234567
+        triggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was triggered.
+          example: 1734517694.888
+        updatedAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last updated.
+          example: 1735046340.774085
+        updatedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who last updated the alert.
+          example: 12345
+        comment:
+          type: string
+          description: Comment associated with the alert.
+          example: This is a comment.
+        commentedBy:
+          type: integer
+          format: int32
+          description: User ID of the person who added the comment.
+          example: 12323
+        alertDefinitionId:
+          type: integer
+          format: int32
+          description: Identifier for the alert definition.
+          example: 3245176
+        count:
+          type: integer
+          format: int32
+          description: Number of occurrences of the alert.
+          example: 1
+        lastTriggeredAt:
+          type: integer
+          format: int64
+          description: Timestamp (in seconds since epoch) when the alert was last triggered.
+          example: 1734517694.888
+        type:
+          type: string
+          description: Type of alert (e.g., GROUP, ALERT_EVENT).
+          example: ALERT_EVENT
+        groupingType:
+          type: string
+          description: Grouping method for the alert (e.g., ALERT_BASED).
+          example: ALERT_BASED
     RulesEventsFilter:
       type: object
       description: Filter by rule name, rule severity, or time range.
@@ -495,6 +416,85 @@ components:
           type: boolean
           example: true
           description: Defines if muted events need to be passed. The endpoint will return both non-muted and muted events if this is set to `true`.
+    PagedSearchResponseTriggeredResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of events returned by the rule search query. The total entities found after filtering and sorting. This number is fixed and not affected by pagination.
+          example: 500
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/TriggeredRule'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertEventLogsSearchRequest:
+      type: object
+      required:
+      - filter
+      properties:
+        filter:
+          $ref: '#/components/schemas/RuleEventLogsFilter'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertsEventsEditRequest:
+      type: object
+      properties:
+        filter: null
+        $ref: '#/components/schemas/RulesEventsEdit'
+        summary: Edit rules.
+    PagedSearchResponseMapStringObject:
+      type: object
+      properties:
+        total:
+          description: Returns the total number of logs linked to the security event specified in the query. This number is fixed and not affected by pagination.
+          type: integer
+          format: int32
+          example: 5
+        results:
+          type: array
+          description: 'Array of logs returned in answer to the query. The logs are returned in their entirety and parsed.
+
+
+            If the logs are no longer retained in the database, the request will return empty. You can check your account''s log retention policy in your [log monitoring account](https://app.logz.io/#/dashboard/settings/usage-and-billing).'
+          items:
+            type: object
+            example:
+              Array of logs: null
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    RulesTimeRange:
+      type: object
+      required:
+      - fromDate
+      - toDate
+      description: Add a timerange to filter by event timestamps that fall within the range. If applied, both the earliest and latest thresholds are required.
+      properties:
+        fromDate:
+          type: integer
+          format: int64
+          example: 1587134557
+          description: Absolute UNIX timestamp in seconds (not milliseconds). Your security account's retention policy determines the earliest events you'll be able to retrieve.
+        toDate:
+          type: integer
+          format: int64
+          example: 1587137557
+          description: Absolute UNIX timestamp in seconds (not milliseconds).
+    AlertsEventsSearchRequest:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/RulesEventsFilter'
+          summary: Filter by rule name, rule severity, or time range.
+        sort:
+          description: Explicit sorting rules are not required, but recommended. Otherwise the database will determine the sorting.
+          type: array
+          items:
+            $ref: '#/components/schemas/RulesEventsSortRequest'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

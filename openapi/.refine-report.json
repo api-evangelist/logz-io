@@ -62,7 +62,9 @@
     "logz-io-time-series-api-openapi.yml",
     "logz-io-who-am-i-api-openapi.yml"
   ],
-  "archived": [],
+  "archived": [
+    "deleted 1 superseded output(s) from the previous generation"
+  ],
   "errors": [],
   "warnings": [
     "logz-io-api-openapi.yml: info.version missing"
@@ -104,7 +106,8 @@
     "logz-io-api-openapi.yml: declared missing tag: Query",
     "logz-io-api-openapi.yml: declared missing tag: Range Query",
     "logz-io-api-openapi.yml: declared missing tag: Time Series",
-    "apis.yml register: already-registered"
+    "superseded outputs removed: logz-io-whoami-api-openapi.yml",
+    "apis.yml register: written (+1 apis, 57 total)"
   ],
   "skipped": [
     "logz-io-alerts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -163,6 +166,6 @@
     "logz-io-security-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "logz-io-security-rules-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "logz-io-time-series-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "logz-io-who-am-i-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+    "logz-io-whoami-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]
 }

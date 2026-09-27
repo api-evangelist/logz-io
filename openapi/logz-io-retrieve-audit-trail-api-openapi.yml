@@ -55,24 +55,34 @@ paths:
               $ref: '#/components/schemas/AuditTrailFilterRequest'
 components:
   schemas:
-    AuditTrailEventTypesResponse:
+    AuditEventData:
       type: object
       properties:
-        eventTypes:
+        auditEventUser:
+          $ref: '#/components/schemas/AuditEventUser'
+        date:
+          type: integer
+          format: int64
+          description: Date of the audit event, as Unix epoch milliseconds
+          example: 1527168668
+        auditEventTypeTitle:
+          type: string
+          description: The event type
+          example: Admin created a sub account
+        ip:
+          type: string
+          description: IP address of the client device that generated the event
+          example: 52.203.237.249
+        geoLocation:
+          type: string
+          description: Geographical location of the device that made the request
+          example: New York - USA
+        extraDataList:
           type: array
           items:
-            type: string
-          description: Event types in the audit trail
-          example:
-          - Added user
-          - Admin created a sub account
-          - Changed password
-          - Failed login
-          - Login
-          - Logz.io admin has enabled a sawmill configuration
-          - Suspended user
-          - User created a token
-          - User installed an ELK app
+            $ref: '#/components/schemas/AuditEventExtraData'
+        valid:
+          type: boolean
     AuditEventUser:
       type: object
       properties:
@@ -92,21 +102,41 @@ components:
         userToken:
           type: boolean
           description: If this is a token, `true`. If this is a user, `false`.
-    AuditEventExtraData:
+    AuditTrailFilteredResponse:
       type: object
       properties:
-        fieldName:
-          type: string
-          description: Name of the field
-          example: Account name
-        oldValue:
-          type: string
-          description: Original value of the field
-          example: Test account
-        newValue:
-          type: string
-          description: New value of the field
-          example: Apache access logs
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 500
+          description: The number of results requested
+          example: 50
+        from:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: Of the results found, the first result returned.
+          example: 0
+        total:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 500
+          description: Total number of results that met the search criteria.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventData'
+        auditEventUsersList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventUser'
+        auditEventTypesList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventTypeData'
     AuditTrailFilterRequest:
       type: object
       properties:
@@ -147,6 +177,39 @@ components:
           description: To sort results in descending order, `true`. For ascending order, `false`.
         includeFiltersData:
           type: boolean
+    AuditEventExtraData:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Name of the field
+          example: Account name
+        oldValue:
+          type: string
+          description: Original value of the field
+          example: Test account
+        newValue:
+          type: string
+          description: New value of the field
+          example: Apache access logs
+    AuditTrailEventTypesResponse:
+      type: object
+      properties:
+        eventTypes:
+          type: array
+          items:
+            type: string
+          description: Event types in the audit trail
+          example:
+          - Added user
+          - Admin created a sub account
+          - Changed password
+          - Failed login
+          - Login
+          - Logz.io admin has enabled a sawmill configuration
+          - Suspended user
+          - User created a token
+          - User installed an ELK app
     AuditEventTypeData:
       type: object
       properties:
@@ -158,69 +221,6 @@ components:
           type: string
           description: Description of the event type
           example: Added user
-    AuditTrailFilteredResponse:
-      type: object
-      properties:
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 500
-          description: The number of results requested
-          example: 50
-        from:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 2147483647
-          description: Of the results found, the first result returned.
-          example: 0
-        total:
-          type: integer
-          format: int64
-          minimum: 0
-          maximum: 500
-          description: Total number of results that met the search criteria.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEventData'
-        auditEventUsersList:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEventUser'
-        auditEventTypesList:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEventTypeData'
-    AuditEventData:
-      type: object
-      properties:
-        auditEventUser:
-          $ref: '#/components/schemas/AuditEventUser'
-        date:
-          type: integer
-          format: int64
-          description: Date of the audit event, as Unix epoch milliseconds
-          example: 1527168668
-        auditEventTypeTitle:
-          type: string
-          description: The event type
-          example: Admin created a sub account
-        ip:
-          type: string
-          description: IP address of the client device that generated the event
-          example: 52.203.237.249
-        geoLocation:
-          type: string
-          description: Geographical location of the device that made the request
-          example: New York - USA
-        extraDataList:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEventExtraData'
-        valid:
-          type: boolean
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

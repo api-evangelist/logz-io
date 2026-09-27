@@ -74,6 +74,43 @@ paths:
           description: The specified silence UID does not exist.
 components:
   schemas:
+    SilenceCreate:
+      type: object
+      properties:
+        startsAt:
+          type: string
+          description: Date and time in UTC when the silence begins.
+          example: 2025-01-20 12:32:12.380000+00:00
+        endsAt:
+          type: string
+          description: Date and time in UTC when the silence ends.
+          example: 2025-01-20 14:32:00.839000+00:00
+        comment:
+          type: string
+          description: A description or comment about the silence, its purpose, or any relevant details.
+          example: Created 2025-01-20 14:32
+        createdBy:
+          type: string
+          description: Name of the user who created the silence.
+          example: John Doe
+        matchers:
+          type: array
+          description: List of matchers defining which alerts the silence applies to.
+          items:
+            type: object
+            properties:
+              isEqual:
+                type: string
+                example: true
+              isRegex:
+                type: string
+                example: false
+              name:
+                type: string
+                example: Name1
+              value:
+                type: string
+                example: test123
     SilenceGetAll:
       type: object
       required:
@@ -126,43 +163,6 @@ components:
           type: string
           description: Date and time in UTC when the silence begins.
           example: 2025-01-20 12:32:12.380000+00:00
-    SilenceCreate:
-      type: object
-      properties:
-        startsAt:
-          type: string
-          description: Date and time in UTC when the silence begins.
-          example: 2025-01-20 12:32:12.380000+00:00
-        endsAt:
-          type: string
-          description: Date and time in UTC when the silence ends.
-          example: 2025-01-20 14:32:00.839000+00:00
-        comment:
-          type: string
-          description: A description or comment about the silence, its purpose, or any relevant details.
-          example: Created 2025-01-20 14:32
-        createdBy:
-          type: string
-          description: Name of the user who created the silence.
-          example: John Doe
-        matchers:
-          type: array
-          description: List of matchers defining which alerts the silence applies to.
-          items:
-            type: object
-            properties:
-              isEqual:
-                type: string
-                example: true
-              isRegex:
-                type: string
-                example: false
-              name:
-                type: string
-                example: Name1
-              value:
-                type: string
-                example: test123
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

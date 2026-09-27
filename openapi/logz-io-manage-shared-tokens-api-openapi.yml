@@ -440,6 +440,27 @@ paths:
               $ref: '#/components/schemas/CreateSharedTokenRequest'
 components:
   schemas:
+    UpdateSharedTokenRequest:
+      type: object
+      required:
+      - filters
+      properties:
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+            description: ID of the filter
+            example: 339
+          description: IDs of filters to attach to the token. To remove all filters, use an empty array `[]`.
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
     CreateSharedTokenRequest:
       type: object
       properties:
@@ -457,27 +478,6 @@ components:
           description: IDs of filters to attach to the token
           example:
           - 339
-        filtersOperator:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
-          example: OR
-    UpdateSharedTokenRequest:
-      type: object
-      required:
-      - filters
-      properties:
-        filters:
-          type: array
-          uniqueItems: true
-          items:
-            type: integer
-            format: int32
-            description: ID of the filter
-            example: 339
-          description: IDs of filters to attach to the token. To remove all filters, use an empty array `[]`.
         filtersOperator:
           type: array
           uniqueItems: true

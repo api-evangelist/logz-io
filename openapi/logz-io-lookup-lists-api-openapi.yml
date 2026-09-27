@@ -347,95 +347,19 @@ paths:
         required: true
 components:
   schemas:
-    LookupListsSearchRequest:
-      type: object
-      properties:
-        filter:
-          $ref: '#/components/schemas/LookupListsFilter'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    LookupList:
-      type: object
-      summary: General indentifiers for the lookup - its ID, name, and description.
-      properties:
-        id:
-          type: string
-          description: GUID of the lookup list.
-          example: 7c985e09-3db6-5dc6-ae33-58403493e13f
-        name:
-          type: string
-          minLength: 1
-          maxLength: 40
-          description: Name of the lookup list.
-        description:
-          type: string
-          minLength: 0
-          maxLength: 400
-          description: Description of the lookup list.
-    LookupListsFilter:
-      type: object
-      description: Filter by names that contain a term, by lookup ID, or by both. If both properties are sent, they must both be satsified (`AND` logic).
-      properties:
-        searchTerm:
-          type: string
-          description: Filters for lookup names that contains the search term.
-          example: servers
-        byIds:
-          type: array
-          description: List of lookup IDs.
-          items:
-            type: string
-    PagedSearchResponseLookupList:
+    PagedSearchResponseLookupListElement:
       type: object
       properties:
         total:
           type: integer
           format: int32
-          description: Total number of search results.
+          description: Total number of search results. The results are relvent elements contained in the lookup list.
         results:
           type: array
           items:
-            $ref: '#/components/schemas/LookupList'
+            $ref: '#/components/schemas/LookupListElement'
         pagination:
           $ref: '#/components/schemas/Pagination'
-    LookupListElementCreateRequest:
-      type: object
-      required:
-      - value
-      properties:
-        value:
-          type: string
-          minLength: 1
-          maxLength: 80
-          description: A single field value.
-          example: 54.53.1.1
-        comment:
-          type: string
-          minLength: 0
-          maxLength: 200
-          description: Optional. A place to add a note or additional details about the value. For example, if the value is an IP address, the comment can identify the server.
-          example: ABC Server
-        expirationDate:
-          type: integer
-          format: int64
-          description: Optional. The expiration date and time of the lookup list as UNIX epoch milliseconds. When this parameter is left empty, the lookup list does not expire.
-    Pagination:
-      type: object
-      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
-          default: 1
-          example: 1
-        pageSize:
-          type: integer
-          format: int32
-          description: Controls the number of results per page. Valid inputs are 1 to 1000.
-          maximum: 1000
-          default: 25
-          example: 100
     LookupListElementBulkResponse:
       type: object
       properties:
@@ -479,26 +403,41 @@ components:
           type: integer
           format: int64
           description: Optional. The expiration date and time of the lookup list as UNIX epoch milliseconds. When this parameter is left empty, the lookup list does not expire.
-    PagedSearchResponseLookupListElement:
+    Pagination:
       type: object
+      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
       properties:
-        total:
+        pageNumber:
           type: integer
           format: int32
-          description: Total number of search results. The results are relvent elements contained in the lookup list.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/LookupListElement'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    LookupListElementsSearchRequest:
+          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
+          default: 1
+          example: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: Controls the number of results per page. Valid inputs are 1 to 1000.
+          maximum: 1000
+          default: 25
+          example: 100
+    LookupList:
       type: object
+      summary: General indentifiers for the lookup - its ID, name, and description.
       properties:
-        filter:
-          $ref: '#/components/schemas/LookupListElementsFilter'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
+        id:
+          type: string
+          description: GUID of the lookup list.
+          example: 7c985e09-3db6-5dc6-ae33-58403493e13f
+        name:
+          type: string
+          minLength: 1
+          maxLength: 40
+          description: Name of the lookup list.
+        description:
+          type: string
+          minLength: 0
+          maxLength: 400
+          description: Description of the lookup list.
     LookupListElementsFilter:
       type: object
       description: Filter for elements by value, element ID, or by comments that contain a search term. If multiple properties are sent, they must all be satisfied (`AND` logic).
@@ -518,6 +457,67 @@ components:
           description: Filters by exact value. (Looks for elements that match any one of the values in the array.)
           items:
             type: string
+    LookupListElementCreateRequest:
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: A single field value.
+          example: 54.53.1.1
+        comment:
+          type: string
+          minLength: 0
+          maxLength: 200
+          description: Optional. A place to add a note or additional details about the value. For example, if the value is an IP address, the comment can identify the server.
+          example: ABC Server
+        expirationDate:
+          type: integer
+          format: int64
+          description: Optional. The expiration date and time of the lookup list as UNIX epoch milliseconds. When this parameter is left empty, the lookup list does not expire.
+    LookupListsSearchRequest:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/LookupListsFilter'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    PagedSearchResponseLookupList:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: Total number of search results.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/LookupList'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    LookupListsFilter:
+      type: object
+      description: Filter by names that contain a term, by lookup ID, or by both. If both properties are sent, they must both be satsified (`AND` logic).
+      properties:
+        searchTerm:
+          type: string
+          description: Filters for lookup names that contains the search term.
+          example: servers
+        byIds:
+          type: array
+          description: List of lookup IDs.
+          items:
+            type: string
+    LookupListElementsSearchRequest:
+      type: object
+      properties:
+        filter:
+          $ref: '#/components/schemas/LookupListElementsFilter'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     LookupListCreateRequest:
       type: object
       properties:

@@ -156,6 +156,36 @@ paths:
           description: successful operation
 components:
   schemas:
+    BlobSettings:
+      type: object
+      description: Applicable settings when the `storageType` is `Blob`. For detailed instructions about setting up a storage container in Azure and locating the required parameters, [click here](/user-guide/archive-and-restore/azure-blob-permissions/).
+      required:
+      - tenantId
+      - clientId
+      - clientSecret
+      - accountName
+      - containerName
+      properties:
+        tenantId:
+          type: string
+          description: Azure Directory (tenant) ID. The Tenant ID of the AD app. Go to Azure Active Directory > App registrations and select the app to see it.
+        clientId:
+          type: string
+          description: Azure application (client) ID. The Client ID of the AD app, found under the App Overview page. Go to Azure Active Directory > App registrations and select the app to see it.
+        clientSecret:
+          type: string
+          description: Azure client secret. Password of the Client secret, found in the app's Certificates & secrets page. Go to Azure Active Directory > App registrations and select the app. Then select Certificates & secrets to see it.
+        accountName:
+          type: string
+          description: Azure Storage account name. Name of the storage account that holds the container where the logs will be archived.
+        containerName:
+          type: string
+          description: Name of the container in the Storage account. This is where the logs will be archived.
+        path:
+          type:
+          - string
+          - 'null'
+          description: Optional virtual sub-folder specifiying a path within the container. Logs will be archived under the path “{container-name}/{virtual sub-folder}”. Avoid leading and trailing slashes (/). For example, the prefix “region1” is good, but “/region1/” is not.
     ArchiveSettingsResponse:
       type: object
       properties:
@@ -188,23 +218,6 @@ components:
           $ref: '#/components/schemas/S3SecretCredentials'
         s3IamCredentials:
           $ref: '#/components/schemas/S3IamCredentials'
-    S3IamCredentials:
-      type: object
-      properties:
-        arn:
-          type: string
-          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
-    S3SecretCredentials:
-      type: object
-      required:
-      - accessKey
-      - secretKey
-      description: Authentication with S3 Secret Credentials is supported for backward compatibility. IAM roles are strongly recommended.
-      properties:
-        accessKey:
-          type: string
-        secretKey:
-          type: string
     ArchiveSettings:
       type: object
       required:
@@ -233,6 +246,12 @@ components:
         azureBlobStorageSettings:
           description: Applicable settings when the `storageType` is `Blob`.
           $ref: '#/components/schemas/BlobSettings'
+    S3IamCredentials:
+      type: object
+      properties:
+        arn:
+          type: string
+          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
     TestStorageRequest:
       type: object
       properties: null
@@ -241,36 +260,17 @@ components:
         format: int32
       archiveSettings:
         $ref: '#/components/schemas/ArchiveSettings'
-    BlobSettings:
+    S3SecretCredentials:
       type: object
-      description: Applicable settings when the `storageType` is `Blob`. For detailed instructions about setting up a storage container in Azure and locating the required parameters, [click here](/user-guide/archive-and-restore/azure-blob-permissions/).
       required:
-      - tenantId
-      - clientId
-      - clientSecret
-      - accountName
-      - containerName
+      - accessKey
+      - secretKey
+      description: Authentication with S3 Secret Credentials is supported for backward compatibility. IAM roles are strongly recommended.
       properties:
-        tenantId:
+        accessKey:
           type: string
-          description: Azure Directory (tenant) ID. The Tenant ID of the AD app. Go to Azure Active Directory > App registrations and select the app to see it.
-        clientId:
+        secretKey:
           type: string
-          description: Azure application (client) ID. The Client ID of the AD app, found under the App Overview page. Go to Azure Active Directory > App registrations and select the app to see it.
-        clientSecret:
-          type: string
-          description: Azure client secret. Password of the Client secret, found in the app's Certificates & secrets page. Go to Azure Active Directory > App registrations and select the app. Then select Certificates & secrets to see it.
-        accountName:
-          type: string
-          description: Azure Storage account name. Name of the storage account that holds the container where the logs will be archived.
-        containerName:
-          type: string
-          description: Name of the container in the Storage account. This is where the logs will be archived.
-        path:
-          type:
-          - string
-          - 'null'
-          description: Optional virtual sub-folder specifiying a path within the container. Logs will be archived under the path “{container-name}/{virtual sub-folder}”. Avoid leading and trailing slashes (/). For example, the prefix “region1” is good, but “/region1/” is not.
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

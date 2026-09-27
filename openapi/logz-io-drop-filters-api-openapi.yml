@@ -134,6 +134,35 @@ paths:
               $ref: '#/components/schemas/DropFiltersCreateRequest'
 components:
   schemas:
+    LogsDropFiltersPipelineDefinition:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
+          example: f54406c1-b4ad-5969-8542-f6a3e9df5c79
+        active:
+          type: boolean
+          description: If `true`, the drop filter is active and logs that match the filter are dropped before indexing. If `false`, the drop filter is disabled.
+          example: true
+        logType:
+          type: string
+          description: Filters for the [log type](/user-guide/log-shipping/built-in-log-types.html).
+          example: apache
+        description:
+          type: string
+          description: Description of the drop filter
+          example: Drop all logs with response code 500
+        fieldConditions:
+          type: array
+          description: Filters for an exact match of a field:value pair.
+          items:
+            $ref: '#/components/schemas/FieldCondition'
+        thresholdInGB:
+          type: number
+          format: double
+          description: The threshold in GB for the drop filter. If the total size of the logs that match the filter exceeds this threshold, the logs are dropped before indexing. <br> If not specified, the default is `0`, which means that all logs that match the filter are dropped.
+          example: 10.5
     FieldCondition:
       type: object
       properties:
@@ -160,35 +189,6 @@ components:
           example: Drop all logs with response code 500
         fieldConditions:
           type: array
-          items:
-            $ref: '#/components/schemas/FieldCondition'
-        thresholdInGB:
-          type: number
-          format: double
-          description: The threshold in GB for the drop filter. If the total size of the logs that match the filter exceeds this threshold, the logs are dropped before indexing. <br> If not specified, the default is `0`, which means that all logs that match the filter are dropped.
-          example: 10.5
-    LogsDropFiltersPipelineDefinition:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Drop filter ID in the Logz.io database. You can run the `/v1/drop-filters/search` endpoint to retrieve the IDs of all the drop filters in the account.
-          example: f54406c1-b4ad-5969-8542-f6a3e9df5c79
-        active:
-          type: boolean
-          description: If `true`, the drop filter is active and logs that match the filter are dropped before indexing. If `false`, the drop filter is disabled.
-          example: true
-        logType:
-          type: string
-          description: Filters for the [log type](/user-guide/log-shipping/built-in-log-types.html).
-          example: apache
-        description:
-          type: string
-          description: Description of the drop filter
-          example: Drop all logs with response code 500
-        fieldConditions:
-          type: array
-          description: Filters for an exact match of a field:value pair.
           items:
             $ref: '#/components/schemas/FieldCondition'
         thresholdInGB:
