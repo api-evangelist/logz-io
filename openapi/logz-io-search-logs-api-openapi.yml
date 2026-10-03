@@ -191,6 +191,23 @@ paths:
               $ref: '#/components/schemas/ScrollRequest'
 components:
   schemas:
+    ScrollResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          readOnly: true
+          example: 200
+        scrollId:
+          type: string
+          readOnly: true
+          description: Keep passing this ID in the request until you've retrieved all of the results. Copy this ID and pass it as the field `scroll_id` in a request to the same endpoint to retrieve the next page of results. (Remember to first clear the request body of all other parameters. The `scrollId` is valid for 20 minutes.)
+          example: DnF1ZXJ5VGhlbkZldGNoCQAAAAAWXRbqFlNpSWRrTUtXUUR1N1pJbG9uSkJINncAAAAAFp6B-xZTTVFrMGt4eVFnZXhQZV9YbVRrU3NnAAAAABakA8QWNjY1RUZtdWZRS1NZZWt1ZERTNHNaQQAAAAAWXRbrFlNpSWRrTUtXUUR1N1pJbG9uSkJINncAAAAAFl0W7BZTaUlka01LV1FEdTdaSWxvbkpCSDZ3AAAAABQ1nb4WVjRyRlUxZWRUU0dzbTV5VVVqYkhxdwAAAAAUdHVqFlF0b3Znei1ZUXgtZEkyZkR3M0pMbGcAAAAAFvGs6hZKVklxaXIyZ1NOQzF5NHg1cmhtVDV3AAAAABR0dWkWUXRvdmd6LVlReC1kSTJmRHczSkxsZw==
+        hits:
+          type: string
+          readOnly: true
+          description: Query results in stringified JSON format. 'hits' are the total number of logs that match the query.
     ScrollRequest:
       type: object
       properties:
@@ -275,23 +292,6 @@ components:
               terms:
                 field: type
                 size: 5
-    ScrollResponse:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-          readOnly: true
-          example: 200
-        scrollId:
-          type: string
-          readOnly: true
-          description: Keep passing this ID in the request until you've retrieved all of the results. Copy this ID and pass it as the field `scroll_id` in a request to the same endpoint to retrieve the next page of results. (Remember to first clear the request body of all other parameters. The `scrollId` is valid for 20 minutes.)
-          example: DnF1ZXJ5VGhlbkZldGNoCQAAAAAWXRbqFlNpSWRrTUtXUUR1N1pJbG9uSkJINncAAAAAFp6B-xZTTVFrMGt4eVFnZXhQZV9YbVRrU3NnAAAAABakA8QWNjY1RUZtdWZRS1NZZWt1ZERTNHNaQQAAAAAWXRbrFlNpSWRrTUtXUUR1N1pJbG9uSkJINncAAAAAFl0W7BZTaUlka01LV1FEdTdaSWxvbkpCSDZ3AAAAABQ1nb4WVjRyRlUxZWRUU0dzbTV5VVVqYkhxdwAAAAAUdHVqFlF0b3Znei1ZUXgtZEkyZkR3M0pMbGcAAAAAFvGs6hZKVklxaXIyZ1NOQzF5NHg1cmhtVDV3AAAAABR0dWkWUXRvdmd6LVlReC1kSTJmRHczSkxsZw==
-        hits:
-          type: string
-          readOnly: true
-          description: Query results in stringified JSON format. 'hits' are the total number of logs that match the query.
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

@@ -717,39 +717,6 @@ paths:
               $ref: '#/components/schemas/MicrosoftTeamsEndpointUpsertRequest'
 components:
   schemas:
-    CustomEndpointUpsertRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Name of the endpoint
-          example: New custom endpoint
-        description:
-          type: string
-          description: Detailed description of the endpoint
-          example: Sends notifications to my custom endpoint
-        url:
-          type: string
-          description: URL where the notification will be sent
-          example: https://my.custom-endpoint.com
-        method:
-          type: string
-          description: The HTTP used to send the notification
-          example: POST
-        headers:
-          type: string
-          description: Header parameters to include, as comma-separated key-value pairs
-          example: authKey=6e30-60a9-3591
-        bodyTemplate:
-          type: object
-          description: JSON object that serves as the template for the message body.
-          additionalProperties:
-            type: object
-          example:
-            subject: Alert from Logz.io
-            message:
-              severity: LOW
-              body: Check Logz.io for log activity
     Endpoint:
       type: object
       properties:
@@ -795,82 +762,21 @@ components:
           type: string
           description: API key from OpsGenie, see https://docs.opsgenie.com/docs/logz-io-integration
           example: c687f9231619d7d7b959f33e4cc821a5
-    ServiceNowEndpointUpsertRequest:
+    DatadogEndpointUpsertRequest:
       type: object
       properties:
         title:
           type: string
           description: Name of the endpoint
-          example: New ServiceNow endpoint
+          example: Datadog endpoint
         description:
           type: string
           description: Detailed description of the endpoint
-          example: Sends notifications to logzio-alerts channel
-        username:
+          example: Sends notifications to Datadog
+        apiKey:
           type: string
-          description: ServiceNow user name
-          example: User
-        password:
-          type: string
-          description: ServiceNow password
-          example: Password
-        url:
-          type: string
-          description: Provide your instance URL to connect to your existing ServiceNow instance, i.e. https://xxxxxxxxx.service-now.com/.
-          example: https://my.custom-endpoint.com
-    SlackEndpointUpsertRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Name of the endpoint
-          example: New Slack endpoint
-        description:
-          type: string
-          description: Detailed description of the endpoint
-          example: Sends notifications to logzio-alerts channel
-        url:
-          type: string
-          description: Your Slack webhook URL
-          example: https://hooks.slack.com/services/REDACTED/REDACTED/REDACTED
-    EndpointUpsertResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: 'ID of the notification endpoint. If the API call was made where `test=true`, then no changes are made to the endpoint. In this case, the response body contains `{"id": -1}` to indicate that a test message was sent.'
-          example: 88
-    MicrosoftTeamsEndpointUpsertRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Name of the endpoint
-          example: New Microsoft Teams endpoint
-        description:
-          type: string
-          description: Detailed description of the endpoint
-          example: Sends notifications to logzio-alerts channel
-        url:
-          type: string
-          description: Your Microsoft Teams webhook URL, see https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
-          example: https://my.custom-endpoint.com
-    PagerDutyEndpointUpsertRequest:
-      type: object
-      properties:
-        title:
-          type: string
-          description: Name of the endpoint
-          example: PagerDuty endpoint
-        description:
-          type: string
-          description: Detailed description of the endpoint
-          example: Sends notifications to PagerDuty
-        serviceKey:
-          type: string
-          description: API key from PagerDuty
-          example: 94ad63254a1397a51a1ae340c4f10890
+          description: API key from Datadog
+          example: c687f9231619d7d7b959f33e4cc821a5
     BigPandaEndpointUpsertRequest:
       type: object
       properties:
@@ -890,21 +796,54 @@ components:
           type: string
           description: Application key from BigPanda
           example: c687f9231619d7d7b959f33e4cc821a5
-    DatadogEndpointUpsertRequest:
+    SlackEndpointUpsertRequest:
       type: object
       properties:
         title:
           type: string
           description: Name of the endpoint
-          example: Datadog endpoint
+          example: New Slack endpoint
         description:
           type: string
           description: Detailed description of the endpoint
-          example: Sends notifications to Datadog
-        apiKey:
+          example: Sends notifications to logzio-alerts channel
+        url:
           type: string
-          description: API key from Datadog
-          example: c687f9231619d7d7b959f33e4cc821a5
+          description: Your Slack webhook URL
+          example: https://hooks.slack.com/services/REDACTED/REDACTED/REDACTED
+    CustomEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New custom endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to my custom endpoint
+        url:
+          type: string
+          description: URL where the notification will be sent
+          example: https://my.custom-endpoint.com
+        method:
+          type: string
+          description: The HTTP used to send the notification
+          example: POST
+        headers:
+          type: string
+          description: Header parameters to include, as comma-separated key-value pairs
+          example: authKey=6e30-60a9-3591
+        bodyTemplate:
+          type: object
+          description: JSON object that serves as the template for the message body.
+          additionalProperties:
+            type: object
+          example:
+            subject: Alert from Logz.io
+            message:
+              severity: LOW
+              body: Check Logz.io for log activity
     VictoropsEndpointUpsertRequest:
       type: object
       required:
@@ -932,6 +871,67 @@ components:
           type: string
           description: API key from VictorOps
           example: c687f9231619d7d7b959f33e4cc821a5
+    MicrosoftTeamsEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New Microsoft Teams endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to logzio-alerts channel
+        url:
+          type: string
+          description: Your Microsoft Teams webhook URL, see https://docs.microsoft.com/en-us/microsoftteams/platform/webhooks-and-connectors/how-to/add-incoming-webhook
+          example: https://my.custom-endpoint.com
+    EndpointUpsertResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: 'ID of the notification endpoint. If the API call was made where `test=true`, then no changes are made to the endpoint. In this case, the response body contains `{"id": -1}` to indicate that a test message was sent.'
+          example: 88
+    PagerDutyEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: PagerDuty endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to PagerDuty
+        serviceKey:
+          type: string
+          description: API key from PagerDuty
+          example: 94ad63254a1397a51a1ae340c4f10890
+    ServiceNowEndpointUpsertRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Name of the endpoint
+          example: New ServiceNow endpoint
+        description:
+          type: string
+          description: Detailed description of the endpoint
+          example: Sends notifications to logzio-alerts channel
+        username:
+          type: string
+          description: ServiceNow user name
+          example: User
+        password:
+          type: string
+          description: ServiceNow password
+          example: Password
+        url:
+          type: string
+          description: Provide your instance URL to connect to your existing ServiceNow instance, i.e. https://xxxxxxxxx.service-now.com/.
+          example: https://my.custom-endpoint.com
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

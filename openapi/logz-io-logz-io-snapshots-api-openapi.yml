@@ -66,14 +66,6 @@ paths:
                 $ref: '#/components/schemas/SnapshotGetResponse'
 components:
   schemas:
-    SnapshotCreateResponse:
-      type: object
-      properties:
-        snapshotId:
-          type: integer
-          format: int32
-          description: ID of the snapshot
-          example: 2049
     SnapshotCreateRequest:
       type: object
       required:
@@ -136,6 +128,14 @@ components:
         darkTheme:
           type: boolean
           description: To send the object with Kibana dark theme colors, `true`. Otherwise, `false`.
+    SnapshotCreateResponse:
+      type: object
+      properties:
+        snapshotId:
+          type: integer
+          format: int32
+          description: ID of the snapshot
+          example: 2049
     SnapshotGetResponse:
       type: object
       properties:

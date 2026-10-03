@@ -292,6 +292,14 @@ paths:
                     example: Finished unsuspending user 11300 from accounts.
 components:
   schemas:
+    UserManagementUpsertResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user
+          example: 13485
     UserManagementUpsertRequest:
       type: object
       required:
@@ -346,14 +354,6 @@ components:
           type: boolean
           description: If the user is active, `true`. If the user is suspended, `false`.
           example: true
-    UserManagementUpsertResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: ID of the user
-          example: 13485
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

@@ -48,31 +48,6 @@ paths:
               $ref: '#/components/schemas/PublicGetAccountInsightsRequest'
 components:
   schemas:
-    PageResponsePublicAccountInsightResponse:
-      type: object
-      properties:
-        pageSize:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 500
-          description: Number of results to return per page. Must be a positive integer between 0-500.
-        from:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 2147483647
-          description: UNIX timestamp in milliseconds.
-        total:
-          type: integer
-          format: int64
-          minimum: 0
-          maximum: 500
-          description: Total number of results found.
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAccountInsightResponse'
     PublicGetAccountInsightsRequest:
       type: object
       properties:
@@ -151,6 +126,31 @@ components:
           type: string
           description: Searches for an Insight by its title.
           example: Exception
+    PageResponsePublicAccountInsightResponse:
+      type: object
+      properties:
+        pageSize:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 500
+          description: Number of results to return per page. Must be a positive integer between 0-500.
+        from:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 2147483647
+          description: UNIX timestamp in milliseconds.
+        total:
+          type: integer
+          format: int64
+          minimum: 0
+          maximum: 500
+          description: Total number of results found.
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAccountInsightResponse'
     PublicAccountInsightResponse:
       type: object
       properties:

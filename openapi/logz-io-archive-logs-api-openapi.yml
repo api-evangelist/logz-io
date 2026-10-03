@@ -156,6 +156,14 @@ paths:
           description: successful operation
 components:
   schemas:
+    TestStorageRequest:
+      type: object
+      properties: null
+      id:
+        type: integer
+        format: int32
+      archiveSettings:
+        $ref: '#/components/schemas/ArchiveSettings'
     BlobSettings:
       type: object
       description: Applicable settings when the `storageType` is `Blob`. For detailed instructions about setting up a storage container in Azure and locating the required parameters, [click here](/user-guide/archive-and-restore/azure-blob-permissions/).
@@ -186,38 +194,12 @@ components:
           - string
           - 'null'
           description: Optional virtual sub-folder specifiying a path within the container. Logs will be archived under the path “{container-name}/{virtual sub-folder}”. Avoid leading and trailing slashes (/). For example, the prefix “region1” is good, but “/region1/” is not.
-    ArchiveSettingsResponse:
+    S3IamCredentials:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
-          description: Unique ID of the archive settings.
-          example: 323
-        settings:
-          $ref: '#/components/schemas/ArchiveSettings'
-    S3StorageSettings:
-      type: object
-      required:
-      - credentialsType
-      - path
-      description: Applicable settings when the `storageType` is `S3`.
-      properties:
-        credentialsType:
-          description: Specifies which credentials will be used for authentication. The options are either `KEYS` with `s3SecretCredentials`, or `IAM` with `s3IamCredentials`.
+        arn:
           type: string
-          enum:
-          - IAM
-          - KEYS
-        path:
-          type: string
-          description: 'Specify a path to the **root** of the S3 bucket. (Currently, archiving to a sub-bucket is supported, but not restoring from one.)
-
-            **Unique buckets** - It is important to archive each account/sub-account to a separate S3 bucket.'
-        s3SecretCredentials:
-          $ref: '#/components/schemas/S3SecretCredentials'
-        s3IamCredentials:
-          $ref: '#/components/schemas/S3IamCredentials'
+          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
     ArchiveSettings:
       type: object
       required:
@@ -246,20 +228,6 @@ components:
         azureBlobStorageSettings:
           description: Applicable settings when the `storageType` is `Blob`.
           $ref: '#/components/schemas/BlobSettings'
-    S3IamCredentials:
-      type: object
-      properties:
-        arn:
-          type: string
-          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
-    TestStorageRequest:
-      type: object
-      properties: null
-      id:
-        type: integer
-        format: int32
-      archiveSettings:
-        $ref: '#/components/schemas/ArchiveSettings'
     S3SecretCredentials:
       type: object
       required:
@@ -271,6 +239,38 @@ components:
           type: string
         secretKey:
           type: string
+    S3StorageSettings:
+      type: object
+      required:
+      - credentialsType
+      - path
+      description: Applicable settings when the `storageType` is `S3`.
+      properties:
+        credentialsType:
+          description: Specifies which credentials will be used for authentication. The options are either `KEYS` with `s3SecretCredentials`, or `IAM` with `s3IamCredentials`.
+          type: string
+          enum:
+          - IAM
+          - KEYS
+        path:
+          type: string
+          description: 'Specify a path to the **root** of the S3 bucket. (Currently, archiving to a sub-bucket is supported, but not restoring from one.)
+
+            **Unique buckets** - It is important to archive each account/sub-account to a separate S3 bucket.'
+        s3SecretCredentials:
+          $ref: '#/components/schemas/S3SecretCredentials'
+        s3IamCredentials:
+          $ref: '#/components/schemas/S3IamCredentials'
+    ArchiveSettingsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique ID of the archive settings.
+          example: 323
+        settings:
+          $ref: '#/components/schemas/ArchiveSettings'
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
