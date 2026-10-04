@@ -208,6 +208,15 @@ components:
         descending:
           type: boolean
           description: For descending order, use `true`. For ascending order, use `false`.
+    ShippingTokensFilterRequest:
+      type: object
+      required:
+      - enabled
+      description: Filters your search for token attributes.
+      properties:
+        enabled:
+          type: boolean
+          description: Set to `true` to filter for enabled tokens. Set to `false` to filter for disabled tokens.
     ShippingTokensLimitsResponse:
       type: object
       properties:
@@ -233,17 +242,6 @@ components:
             $ref: '#/components/schemas/ShippingTokensSortRequest'
         pagination:
           $ref: '#/components/schemas/Pagination'
-    ShippingTokensRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Descriptive name for this token.
-          example: staging eu
-        enabled:
-          type: boolean
-          default: true
-          description: To enable this token, `true`. To disable, `false`.
     PagedSearchResponseShippingTokensModel:
       type: object
       properties:
@@ -273,15 +271,17 @@ components:
           maximum: 1000
           default: 25
           example: 100
-    ShippingTokensFilterRequest:
+    ShippingTokensRequest:
       type: object
-      required:
-      - enabled
-      description: Filters your search for token attributes.
       properties:
+        name:
+          type: string
+          description: Descriptive name for this token.
+          example: staging eu
         enabled:
           type: boolean
-          description: Set to `true` to filter for enabled tokens. Set to `false` to filter for disabled tokens.
+          default: true
+          description: To enable this token, `true`. To disable, `false`.
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

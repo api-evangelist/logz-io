@@ -113,6 +113,17 @@ components:
           - Suspended user
           - User created a token
           - User installed an ELK app
+    AuditEventTypeData:
+      type: object
+      properties:
+        auditEventType:
+          type: string
+          description: Code for the event type
+          example: Added user
+        auditEventTypeTitle:
+          type: string
+          description: Description of the event type
+          example: Added user
     AuditEventExtraData:
       type: object
       properties:
@@ -163,36 +174,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditEventTypeData'
-    AuditEventUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: ID of the user or token
-          example: 5374
-        fullName:
-          type: string
-          description: First and last name of the user, or name of the token
-          example: Larry Appleton
-        deleted:
-          type: boolean
-          description: If this user or token has been deleted, `true`. Otherwise, `false`.
-          example: false
-        userToken:
-          type: boolean
-          description: If this is a token, `true`. If this is a user, `false`.
-    AuditEventTypeData:
-      type: object
-      properties:
-        auditEventType:
-          type: string
-          description: Code for the event type
-          example: Added user
-        auditEventTypeTitle:
-          type: string
-          description: Description of the event type
-          example: Added user
     AuditEventData:
       type: object
       properties:
@@ -221,6 +202,25 @@ components:
             $ref: '#/components/schemas/AuditEventExtraData'
         valid:
           type: boolean
+    AuditEventUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user or token
+          example: 5374
+        fullName:
+          type: string
+          description: First and last name of the user, or name of the token
+          example: Larry Appleton
+        deleted:
+          type: boolean
+          description: If this user or token has been deleted, `true`. Otherwise, `false`.
+          example: false
+        userToken:
+          type: boolean
+          description: If this is a token, `true`. If this is a user, `false`.
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

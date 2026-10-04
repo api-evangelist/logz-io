@@ -440,6 +440,51 @@ paths:
               $ref: '#/components/schemas/CreateSharedTokenRequest'
 components:
   schemas:
+    CreateSharedTokenRequest:
+      type: object
+      properties:
+        tokenName:
+          type: string
+          default: string
+          description: Name of the token
+          example: Support team token
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+          description: IDs of filters to attach to the token
+          example:
+          - 339
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
+    UpdateSharedTokenRequest:
+      type: object
+      required:
+      - filters
+      properties:
+        filters:
+          type: array
+          uniqueItems: true
+          items:
+            type: integer
+            format: int32
+            description: ID of the filter
+            example: 339
+          description: IDs of filters to attach to the token. To remove all filters, use an empty array `[]`.
+        filtersOperator:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
+          example: OR
     SharedToken:
       type: object
       properties:
@@ -512,51 +557,6 @@ components:
           type: string
           description: Name of the filter
           example: 503 responses
-    CreateSharedTokenRequest:
-      type: object
-      properties:
-        tokenName:
-          type: string
-          default: string
-          description: Name of the token
-          example: Support team token
-        filters:
-          type: array
-          uniqueItems: true
-          items:
-            type: integer
-            format: int32
-          description: IDs of filters to attach to the token
-          example:
-          - 339
-        filtersOperator:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
-          example: OR
-    UpdateSharedTokenRequest:
-      type: object
-      required:
-      - filters
-      properties:
-        filters:
-          type: array
-          uniqueItems: true
-          items:
-            type: integer
-            format: int32
-            description: ID of the filter
-            example: 339
-          description: IDs of filters to attach to the token. To remove all filters, use an empty array `[]`.
-        filtersOperator:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-          description: Logical operator used to combine filters. Possible values can be `OR` or `AND`.
-          example: OR
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

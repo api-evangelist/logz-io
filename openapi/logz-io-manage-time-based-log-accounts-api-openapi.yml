@@ -207,154 +207,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/LHDailyCount'
-    TimeBasedAccountCreationResponse:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-          description: ID of the account
-          example: 99999
-    LHDailyCount:
-      type: object
-      properties:
-        date:
-          type: integer
-          format: int64
-        bytes:
-          type: integer
-          format: int64
-    DocSizeSetting:
-      type: boolean
-      description: Adds a LogSize field to each log to record the size in bytes, to better manage the account utilization.
-      default: false
-      example: true
-    Searchable:
-      type: boolean
-      description: If other accounts can search this account's logs, `true`. Otherwise, `false`.
-      default: false
-      example: true
-    SharingAccount:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-          description: ID of the account
-          example: 88888
-        accountName:
-          type: string
-          description: Name of the account
-          example: dev group 8
-    AccountView:
-      type: object
-      properties:
-        accountId:
-          type: integer
-          format: int32
-        accountName:
-          type: string
-        accountToken:
-          type: string
-        active:
-          type: boolean
-        esIndexPrefix:
-          description: Prefix of the Elasticsearch Index used to index the data.
-          type: string
-        isFlexible:
-          type: boolean
-          default: false
-          description: '
-
-            Indicates whether the plan has **shared volume** enabled.
-
-
-
-            For **Consumption** accounts, this field defaults should be `false`.
-
-
-
-            If `true`, the volume of data that the account can index per calendar day is determined by 2 parameters: `reservedDailyGB` (Required) and  `maxDailyGB` (Optional, can be null).
-
-
-
-
-            If `false`, the volume of data that the account can index per calendar day is determined only by `maxDailyGB`. The parameter `reservedDailyGB` does not apply.'
-          example: true
-          x-plan: Subscription
-        reservedDailyGB:
-          type: number
-          format: float
-          x-plan: Subscription
-          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
-
-            * If `isFlexible=false`, this field does not apply.
-
-
-            * If `isFlexible=true`, this determines the daily volume in GB reserved for the account. This capacity is guaranteed and cannot be used by any other accounts.'
-          example: 3
-        maxDailyGB:
-          type: number
-          format: float
-          description: 'The maximum volume of data that an account can index per calendar day.
-
-
-            * If **Consumption** account (`isFlexible: false`), this value determines the account''s soft cap in GB.
-
-
-            * If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.
-
-
-            * If `isFlexible=true` this is used to limit the account''s access to shared volume. Once the data shipped to the account exceeds the account''s reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.
-
-
-            * If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available.'
-          example: 5
-          x-plan: Subscription
-        retentionDays:
-          type: integer
-          format: int32
-          description: How long log data is stored and searchable in Kibana, in days.
-        softLimitGB:
-          type: number
-          format: float
-          x-plan: Consumption
-          description: The account's soft limit in GB. If **Subscription** account, this value is always null.
-    AccountUtilizationSettings:
-      type: object
-      description: Settings for logging metrics on your account utilization, such as used and expected data volume at current indexing rate.
-      properties:
-        frequencyMinutes:
-          type: integer
-          format: int32
-          description: How often utilization metrics are written to logs, in minutes
-          example: 5
-        utilizationEnabled:
-          type: boolean
-          description: If utilization metrics are written to logs, `true`. Otherwise, `false`.
-          example: true
-    DetailedTimeBasedAccount:
-      type: object
-      properties:
-        subAccountRelation:
-          $ref: '#/components/schemas/SubAccountRelation'
-        account:
-          $ref: '#/components/schemas/AccountView'
-        sharingObjectsAccounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountView'
-        utilizationSettings:
-          $ref: '#/components/schemas/AccountUtilizationSettings'
-        dailyUsagesList:
-          $ref: '#/components/schemas/DailyUsagesList'
-        docSizeSetting:
-          $ref: '#/components/schemas/DocSizeSetting'
-        snapsearchRetentionDays:
-          type: integer
-          format: int32
-          description: Number of days to retain data in the warm tier. Minimum value is 1.
-          example: 7
     SubAccountRelation:
       type: object
       description: Properties of the sub accounts related to this main account
@@ -397,78 +249,19 @@ components:
           - ALL
           description: Account type
           example: SUB_ACCOUNT
-    TimeBasedAccountCreateRequest:
+    AccountUtilizationSettings:
       type: object
-      required:
-      - accountName
-      - email
-      - sharingObjectsAccounts
-      - retentionDays
+      description: Settings for logging metrics on your account utilization, such as used and expected data volume at current indexing rate.
       properties:
-        email:
-          type: string
-          pattern: ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$
-          description: Account administrator's email address
-          example: help@logz.io
-        accountName:
-          type: string
-          description: Name of the account. Allowed characters include letters, numbers, dashes (`-`), dots (`.`), underscores (`_`), and spaces. Special characters such as `<`, `>`, `:`, `\"`, `/`, `\\`, `|`, `?`, `*` are not supported.
-          example: AWS Lambda svr 3
-        retentionDays:
+        frequencyMinutes:
           type: integer
           format: int32
-          description: How long log data is stored and searchable in Kibana, in days.
-          minimum: 1
+          description: How often utilization metrics are written to logs, in minutes
           example: 5
-        searchable:
-          $ref: '#/components/schemas/Searchable'
-        accessible:
-          $ref: '#/components/schemas/Accessible'
-        sharingObjectsAccounts:
-          type: array
-          items:
-            type: integer
-            format: int32
-            example: 88888
-          description: IDs of accounts that can access this account's data. The array is required, but can be empty.
-        docSizeSetting:
-          $ref: '#/components/schemas/DocSizeSetting'
-        utilizationSettings:
-          $ref: '#/components/schemas/AccountUtilizationSettings'
-        isFlexible:
+        utilizationEnabled:
           type: boolean
-          default: false
-          x-plan: Subscription
-        reservedDailyGB:
-          type: number
-          format: float
-          default: null
-          x-plan: Subscription
-          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
-
-            * If `isFlexible=false`, don''t send this field or send it null.
-
-
-            * If `isFlexible=true`, this parameter is required. It determines the volume that is reserved for the account.'
-          example: 3
-        maxDailyGB:
-          type: number
-          format: float
-          x-plan: Subscription
-          description: "The maximum volume of data that an account can index per calendar day.\n* If **Consumption** account (`isFlexible: false`), this value determines the account's soft cap in GB. \n* If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.\n\n* If `isFlexible=true` this is used to limit the account's access to shared volume. Once the data shipped to the account exceeds the account's reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.\n\n* If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available."
-          example: 5
-        softLimitGB:
-          type: number
-          format: float
-          description: 'If **Subscription** account, this value is always null.
-
-            Indicates the account''s soft cap in GB.'
-          x-plan: Consumption
-    Accessible:
-      type: boolean
-      description: If users of the main account can access this account, `true`. Otherwise, `false`.
-      default: false
-      example: false
+          description: If utilization metrics are written to logs, `true`. Otherwise, `false`.
+          example: true
     TimeBasedAccount:
       type: object
       properties:
@@ -593,6 +386,51 @@ components:
 
             Indicates the account''s soft cap in GB.'
           x-plan: Consumption
+    DocSizeSetting:
+      type: boolean
+      description: Adds a LogSize field to each log to record the size in bytes, to better manage the account utilization.
+      default: false
+      example: true
+    Accessible:
+      type: boolean
+      description: If users of the main account can access this account, `true`. Otherwise, `false`.
+      default: false
+      example: false
+    Searchable:
+      type: boolean
+      description: If other accounts can search this account's logs, `true`. Otherwise, `false`.
+      default: false
+      example: true
+    TimeBasedAccountCreationResponse:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 99999
+    DetailedTimeBasedAccount:
+      type: object
+      properties:
+        subAccountRelation:
+          $ref: '#/components/schemas/SubAccountRelation'
+        account:
+          $ref: '#/components/schemas/AccountView'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountView'
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        dailyUsagesList:
+          $ref: '#/components/schemas/DailyUsagesList'
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        snapsearchRetentionDays:
+          type: integer
+          format: int32
+          description: Number of days to retain data in the warm tier. Minimum value is 1.
+          example: 7
     TimeBasedAccountUpdateRequest:
       type: object
       required:
@@ -665,6 +503,168 @@ components:
 
             Indicates the account''s soft cap in GB.'
           x-plan: Consumption
+    AccountView:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+        accountName:
+          type: string
+        accountToken:
+          type: string
+        active:
+          type: boolean
+        esIndexPrefix:
+          description: Prefix of the Elasticsearch Index used to index the data.
+          type: string
+        isFlexible:
+          type: boolean
+          default: false
+          description: '
+
+            Indicates whether the plan has **shared volume** enabled.
+
+
+
+            For **Consumption** accounts, this field defaults should be `false`.
+
+
+
+            If `true`, the volume of data that the account can index per calendar day is determined by 2 parameters: `reservedDailyGB` (Required) and  `maxDailyGB` (Optional, can be null).
+
+
+
+
+            If `false`, the volume of data that the account can index per calendar day is determined only by `maxDailyGB`. The parameter `reservedDailyGB` does not apply.'
+          example: true
+          x-plan: Subscription
+        reservedDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, this field does not apply.
+
+
+            * If `isFlexible=true`, this determines the daily volume in GB reserved for the account. This capacity is guaranteed and cannot be used by any other accounts.'
+          example: 3
+        maxDailyGB:
+          type: number
+          format: float
+          description: 'The maximum volume of data that an account can index per calendar day.
+
+
+            * If **Consumption** account (`isFlexible: false`), this value determines the account''s soft cap in GB.
+
+
+            * If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.
+
+
+            * If `isFlexible=true` this is used to limit the account''s access to shared volume. Once the data shipped to the account exceeds the account''s reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.
+
+
+            * If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available.'
+          example: 5
+          x-plan: Subscription
+        retentionDays:
+          type: integer
+          format: int32
+          description: How long log data is stored and searchable in Kibana, in days.
+        softLimitGB:
+          type: number
+          format: float
+          x-plan: Consumption
+          description: The account's soft limit in GB. If **Subscription** account, this value is always null.
+    TimeBasedAccountCreateRequest:
+      type: object
+      required:
+      - accountName
+      - email
+      - sharingObjectsAccounts
+      - retentionDays
+      properties:
+        email:
+          type: string
+          pattern: ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$
+          description: Account administrator's email address
+          example: help@logz.io
+        accountName:
+          type: string
+          description: Name of the account. Allowed characters include letters, numbers, dashes (`-`), dots (`.`), underscores (`_`), and spaces. Special characters such as `<`, `>`, `:`, `\"`, `/`, `\\`, `|`, `?`, `*` are not supported.
+          example: AWS Lambda svr 3
+        retentionDays:
+          type: integer
+          format: int32
+          description: How long log data is stored and searchable in Kibana, in days.
+          minimum: 1
+          example: 5
+        searchable:
+          $ref: '#/components/schemas/Searchable'
+        accessible:
+          $ref: '#/components/schemas/Accessible'
+        sharingObjectsAccounts:
+          type: array
+          items:
+            type: integer
+            format: int32
+            example: 88888
+          description: IDs of accounts that can access this account's data. The array is required, but can be empty.
+        docSizeSetting:
+          $ref: '#/components/schemas/DocSizeSetting'
+        utilizationSettings:
+          $ref: '#/components/schemas/AccountUtilizationSettings'
+        isFlexible:
+          type: boolean
+          default: false
+          x-plan: Subscription
+        reservedDailyGB:
+          type: number
+          format: float
+          default: null
+          x-plan: Subscription
+          description: '* If **Consumption** account (`isFlexible: false`), this value is always null.
+
+            * If `isFlexible=false`, don''t send this field or send it null.
+
+
+            * If `isFlexible=true`, this parameter is required. It determines the volume that is reserved for the account.'
+          example: 3
+        maxDailyGB:
+          type: number
+          format: float
+          x-plan: Subscription
+          description: "The maximum volume of data that an account can index per calendar day.\n* If **Consumption** account (`isFlexible: false`), this value determines the account's soft cap in GB. \n* If `isFlexible=false` this is the only capacity reserved for use by the account. Cannot be null.\n\n* If `isFlexible=true` this is used to limit the account's access to shared volume. Once the data shipped to the account exceeds the account's reserved capacity, the account can continue to index data up to its `maxDailyGB`, as long as shared volume is available.\n\n* If null (and `isFlexible=true`), the account is uncapped and can continue to index data as long as shared volume is available."
+          example: 5
+        softLimitGB:
+          type: number
+          format: float
+          description: 'If **Subscription** account, this value is always null.
+
+            Indicates the account''s soft cap in GB.'
+          x-plan: Consumption
+    SharingAccount:
+      type: object
+      properties:
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 88888
+        accountName:
+          type: string
+          description: Name of the account
+          example: dev group 8
+    LHDailyCount:
+      type: object
+      properties:
+        date:
+          type: integer
+          format: int64
+        bytes:
+          type: integer
+          format: int64
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

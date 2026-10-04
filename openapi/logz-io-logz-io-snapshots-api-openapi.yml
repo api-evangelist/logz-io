@@ -66,6 +66,64 @@ paths:
                 $ref: '#/components/schemas/SnapshotGetResponse'
 components:
   schemas:
+    SnapshotGetResponse:
+      type: object
+      properties:
+        snapshotId:
+          type: integer
+          format: int32
+          description: ID of the snapshot
+          example: 3094
+        accountId:
+          type: integer
+          format: int32
+          description: ID of the account
+          example: 5555
+        snapshotType:
+          type: string
+          enum:
+          - DASHBOARD
+          - VISUALIZATION
+          description: The object type
+          example: VISUALIZATION
+        status:
+          type: string
+          enum:
+          - SUCCESS
+          - FAILED
+          - IN_PROGRESS
+          description: Status of the snapshot capture operation
+          example: SUCCESS
+        snapshotSavedObjectName:
+          type: string
+          description: Name of the object captured in the snapshot
+          example: Mysql response times percentiles
+        imageUrl:
+          type: string
+          description: Web address where the snapshot image is stored
+          example: https://snapshotter-logzio-prod.s3.amazonaws.com/1234/567890/snapshots/8843_3094_dC6pBjbrWc1lfN7Gob82oJuSUxTGbm8D6hDE1TcR1pVzIVO0TsB3tuZEZs1YpOGh.png
+        appLinkUrl:
+          type: string
+          description: A link to the snapshot in the Logz.io app
+          example: https://app.logz.io/#/dashboard/kibana?kibanaRoute=%2Fvisualize%2Fedit%a4d365e001-5bc9-4851-1933-a70b45a67e9d%3F_g%3D%2528time%253A%2528from%253A%25272018-06-02T15
+        message:
+          type: string
+          description: Message to send to snapshot recipients
+          example: Hey, let me know if you need me to do anything about this.
+        timeFrameFrom:
+          type: integer
+          format: int64
+          description: Starting timedate of the visualization, as a Unix epoch integer.
+          example: 389836800
+        timeFrameTo:
+          type: integer
+          format: int64
+          description: Ending timedate of the visualization, as a Unix epoch integer.
+          example: 414720000
+        snapshotTimeZone:
+          type: string
+          description: Time zone to use in `timeFrameFrom` and `timeFrameTo`
+          example: UTC
     SnapshotCreateRequest:
       type: object
       required:
@@ -136,64 +194,6 @@ components:
           format: int32
           description: ID of the snapshot
           example: 2049
-    SnapshotGetResponse:
-      type: object
-      properties:
-        snapshotId:
-          type: integer
-          format: int32
-          description: ID of the snapshot
-          example: 3094
-        accountId:
-          type: integer
-          format: int32
-          description: ID of the account
-          example: 5555
-        snapshotType:
-          type: string
-          enum:
-          - DASHBOARD
-          - VISUALIZATION
-          description: The object type
-          example: VISUALIZATION
-        status:
-          type: string
-          enum:
-          - SUCCESS
-          - FAILED
-          - IN_PROGRESS
-          description: Status of the snapshot capture operation
-          example: SUCCESS
-        snapshotSavedObjectName:
-          type: string
-          description: Name of the object captured in the snapshot
-          example: Mysql response times percentiles
-        imageUrl:
-          type: string
-          description: Web address where the snapshot image is stored
-          example: https://snapshotter-logzio-prod.s3.amazonaws.com/1234/567890/snapshots/8843_3094_dC6pBjbrWc1lfN7Gob82oJuSUxTGbm8D6hDE1TcR1pVzIVO0TsB3tuZEZs1YpOGh.png
-        appLinkUrl:
-          type: string
-          description: A link to the snapshot in the Logz.io app
-          example: https://app.logz.io/#/dashboard/kibana?kibanaRoute=%2Fvisualize%2Fedit%a4d365e001-5bc9-4851-1933-a70b45a67e9d%3F_g%3D%2528time%253A%2528from%253A%25272018-06-02T15
-        message:
-          type: string
-          description: Message to send to snapshot recipients
-          example: Hey, let me know if you need me to do anything about this.
-        timeFrameFrom:
-          type: integer
-          format: int64
-          description: Starting timedate of the visualization, as a Unix epoch integer.
-          example: 389836800
-        timeFrameTo:
-          type: integer
-          format: int64
-          description: Ending timedate of the visualization, as a Unix epoch integer.
-          example: 414720000
-        snapshotTimeZone:
-          type: string
-          description: Time zone to use in `timeFrameFrom` and `timeFrameTo`
-          example: UTC
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

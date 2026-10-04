@@ -292,39 +292,6 @@ paths:
                     example: Finished unsuspending user 11300 from accounts.
 components:
   schemas:
-    UserManagementUpsertResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: ID of the user
-          example: 13485
-    UserManagementUpsertRequest:
-      type: object
-      required:
-      - fullName
-      - username
-      - roles
-      - accountID
-      properties:
-        username:
-          type: string
-          pattern: ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$
-          description: Email address used to sign in to Logz.io. This property cannot be updated. A new user will need to be created for each email address.
-          example: drvenkman@gbusters.com
-        fullName:
-          type: string
-          description: The user's first and last name
-          example: Peter Venkman
-        accountID:
-          type: integer
-          format: int32
-          description: ID of the account attached to the user
-        role:
-          type: string
-          description: User role. Can be `USER_ROLE_READONLY`, `USER_ROLE_REGULAR` or `USER_ROLE_ACCOUNT_ADMIN`.
-          example: USER_ROLE_READONLY
     User:
       type: object
       properties:
@@ -354,6 +321,39 @@ components:
           type: boolean
           description: If the user is active, `true`. If the user is suspended, `false`.
           example: true
+    UserManagementUpsertRequest:
+      type: object
+      required:
+      - fullName
+      - username
+      - roles
+      - accountID
+      properties:
+        username:
+          type: string
+          pattern: ^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9-]+)*(\.[A-Za-z]{2,})$
+          description: Email address used to sign in to Logz.io. This property cannot be updated. A new user will need to be created for each email address.
+          example: drvenkman@gbusters.com
+        fullName:
+          type: string
+          description: The user's first and last name
+          example: Peter Venkman
+        accountID:
+          type: integer
+          format: int32
+          description: ID of the account attached to the user
+        role:
+          type: string
+          description: User role. Can be `USER_ROLE_READONLY`, `USER_ROLE_REGULAR` or `USER_ROLE_ACCOUNT_ADMIN`.
+          example: USER_ROLE_READONLY
+    UserManagementUpsertResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user
+          example: 13485
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

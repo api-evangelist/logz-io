@@ -220,17 +220,6 @@ components:
           - cloudfront
           description: Specify the log type you will be sending to Logz.io. As a result, Logz.io will apply the appropriate parsing pipeline. [Learn more about parsing options supported by Logz.io](/user-guide/log-shipping/built-in-log-types.html).
           example: elb
-    AWSAssumeRoleDetails:
-      type: object
-      properties:
-        logzioAWSAccountId:
-          type: string
-          description: Logz.io account ID. Provide this account ID when creating a new AWS IAM Role.
-          example: null
-        assignedExternalId:
-          type: string
-          description: Logz.io external ID. Provide this external ID when creating a new AWS IAM Role.
-          example: null
     S3BucketResponse:
       type: object
       required:
@@ -295,6 +284,17 @@ components:
           - cloudfront
           description: Specifies the log type being sent to Logz.io. Determines the parsing pipeline used to parse and map the logs. [Learn more about parsing options supported by Logz.io](/user-guide/log-shipping/built-in-log-types.html).
           example: elb
+    AWSAssumeRoleDetails:
+      type: object
+      properties:
+        logzioAWSAccountId:
+          type: string
+          description: Logz.io account ID. Provide this account ID when creating a new AWS IAM Role.
+          example: null
+        assignedExternalId:
+          type: string
+          description: Logz.io external ID. Provide this external ID when creating a new AWS IAM Role.
+          example: null
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

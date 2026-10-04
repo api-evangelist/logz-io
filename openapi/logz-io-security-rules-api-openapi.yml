@@ -408,18 +408,38 @@ paths:
         required: true
 components:
   schemas:
-    RuleSchedule:
+    FilterLists:
       type: object
-      description: Defines the frequency and the time frame in which an rule will be evaluated.
+      description: Runs Elasticsearch [Bool Query](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-bool-query.html) filters on the data (before the search query is applied). The most efficient way to grab the logs you are looking for.
       properties:
-        cronExpression:
-          type: string
-          description: Cron job for the intervals schedule.
-          example: 0 0/60 9-17 ? * * *
-        timezone:
-          type: string
-          description: Time zone for the cron job. If no time zone is selected, UTC will be used by default.
-          example: America/Sao_Paulo
+        must:
+          type: array
+          items:
+            type: object
+            properties:
+              match_phrase:
+                type: object
+                properties:
+                  Field:
+                    type: object
+                    properties:
+                      query:
+                        type: string
+                        example: value
+        must_not:
+          type: array
+          items:
+            type: object
+            properties:
+              match_phrase:
+                type: object
+                properties:
+                  Field:
+                    type: object
+                    properties:
+                      query:
+                        type: string
+                        example: value
     RuleQuery:
       type: object
       description: Determines when the rule should trigger using any combination of a search query, filters, group by aggregations, accounts to search, and trigger conditions.
@@ -457,6 +477,32 @@ components:
             type: integer
             format: int32
             example: 2321
+    RuleSchedule:
+      type: object
+      description: Defines the frequency and the time frame in which an rule will be evaluated.
+      properties:
+        cronExpression:
+          type: string
+          description: Cron job for the intervals schedule.
+          example: 0 0/60 9-17 ? * * *
+        timezone:
+          type: string
+          description: Time zone for the cron job. If no time zone is selected, UTC will be used by default.
+          example: America/Sao_Paulo
+    PagedSearchResponseSecurityRuleResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int32
+          description: The total number of rules returned by the query. The total entities found after filtering and sorting. This number is fixed and not affected by pagination.
+          example: 500
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SecurityRuleResponse'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
     SecurityRuleResponse:
       type: object
       properties:
@@ -553,22 +599,154 @@ components:
           items:
             type: string
           description: "Maps this rule to MITRE ATT&CK tactics and techniques. \nHelps correlate events with known adversary behavior. \nTags are saved as MITRE ATT&CK ID, for example: \"T1110\" , \"T1090.003\""
-    RuleRecipients:
+    RuleTrigger:
       type: object
-      description: Add email addresses and/or endpoint channels to automatically receive notifications with sample data when the rule triggers.
+      description: Sets the triggering threshold and severity tab to label the event when the rule triggers.
       properties:
-        emails:
+        operator:
+          type: string
+          enum:
+          - LESS_THAN
+          - GREATER_THAN
+          - LESS_THAN_OR_EQUALS
+          - GREATER_THAN_OR_EQUALS
+          - EQUALS
+          - NOT_EQUALS
+          example: GREATER_THAN_OR_EQUALS
+          description: Specifies the operator for evaluating the results.
+        severityThresholdTiers:
+          type: object
+          description: 'Sets a severity label per trigger threshold as a key:value pair.
+
+
+            If using more than one sub-component, only 1 severityThresholdTiers is allowed. Otherwise, 1 per `enum` are allowed (for a total of 5 thresholds of increasing severities).
+
+
+            Increasing severity must adhere to the logic of the operator.'
+          enum:
+          - INFO
+          - LOW
+          - MEDIUM
+          - HIGH
+          - SEVERE
+          additionalProperties: null
+          default:
+            MEDIUM: 10.0
+          example:
+            MEDIUM: 10.0
+            HIGH: 100.0
+            SEVERE: 300.0
+    AlertsSearchRequest:
+      title: Search request Results
+      type: object
+      properties:
+        filter:
+          description: Filter by rule name, severity, and more. If you want to get all rules, just send `filter` as an empty object the payload.
+          $ref: '#/components/schemas/AlertsFilter'
+        sort:
+          description: Explicit sorting rules are not required, but recommended. Otherwise the database will determine the sorting.
+          $ref: '#/components/schemas/AlertsSortRequest'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+    AlertsSortRequest:
+      type: object
+      required:
+      - field
+      properties:
+        sortByField:
+          type: string
+          description: Sort by a single parameter.
+          enum:
+          - SEVERITY
+          - name
+          - createdAt
+          - updatedAt
+        descending:
+          type: boolean
+          default: true
+          description: If left blank, descending sorting will result. If `false` results in ascending sorting.
+    BoolFilter:
+      type: object
+      description: Apply `must` and `must_not` filters to the monitoring alert. Filters are more efficient compared to a query, so it's recommended to opt for a filter over a query, where possible. See [Elasticsearch Bool-Query](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-bool-query.html) for more detail.
+      properties:
+        bool:
+          $ref: '#/components/schemas/FilterLists'
+    Pagination:
+      type: object
+      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
+      properties:
+        pageNumber:
+          type: integer
+          format: int32
+          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
+          default: 1
+          example: 1
+        pageSize:
+          type: integer
+          format: int32
+          description: Controls the number of results per page. Valid inputs are 1 to 1000.
+          maximum: 1000
+          default: 25
+          example: 100
+    RuleOutput:
+      type: object
+      description: Automatically sends out notifications with sample results when the rule triggers.
+      properties:
+        recipients:
+          $ref: '#/components/schemas/RuleRecipients'
+        suppressNotificationsMinutes:
+          type: integer
+          format: int32
+          minimum: 5
+          maximum: 1440
+          description: Add a waiting period in minutes to space out notifications. (The rule will still trigger but will not send out notifications during the waiting period.)
+          example: 60
+        type:
+          type: string
+          description: Selects the output format for the rule notification. If the rule has no aggregations/group by fields, `JSON` offers the option to send full sample logs without selecting specific fields.
+          enum:
+          - JSON
+          - TABLE
+    SubRuleCorrelation:
+      type: object
+      description: 'Only applicable when multiple sub-components are in use. Selects a logic for correlating the rule’s sub-components.
+
+
+        `AND` is currently the only supported operator. When `AND` is the `correlationOperator`, both sub-components must meet their triggering criteria for the rule to trigger.'
+      properties:
+        correlationOperators:
           type: array
-          description: Array of email addresses to be notified when the rule triggers.
           items:
             type: string
-            example: tom.a@logz.io
-        notificationEndpointIds:
+            enum:
+            - AND
+        joins:
           type: array
-          description: Array of IDs of pre-configured endpoint channels to notify when the rule triggers.
+          description: 'Specifies which group by fields must have the same values to trigger the rule.
+
+
+            Joins the group by fields from the first and second sub-components. The key represents the index of the sub component in the array (See the example - the index of the first sub-component is 0, the second is 1).
+
+
+            The fields must be ordered pairs of the group by fields already in use in the `queryDefinition`.'
           items:
-            type: integer
-            format: int32
+            type: object
+            additionalProperties: null
+            example:
+              0: region
+              1: region
+    SubRuleOutput:
+      type: object
+      description: Selects the data output to be sent in the notification when the rule triggers. Not applicable, when grouping by fields or aggregating results, as the output is auto-selected.
+      properties:
+        columns:
+          type: array
+          items:
+            $ref: '#/components/schemas/ColumnConfig'
+        shouldUseAllFields:
+          type: boolean
+          description: If `true`, the notification output will include entire logs with all of their fields in the sample data.
+        default: true
     SecurityRuleRequest:
       type: object
       required:
@@ -643,6 +821,38 @@ components:
           items:
             type: string
           description: "Maps this rule to MITRE ATT&CK tactics and techniques. \nHelps correlate events with known adversary behavior. \nTags are saved as MITRE ATT&CK ID, for example: \"T0895\" , \"T1695.001\""
+    RuleRecipients:
+      type: object
+      description: Add email addresses and/or endpoint channels to automatically receive notifications with sample data when the rule triggers.
+      properties:
+        emails:
+          type: array
+          description: Array of email addresses to be notified when the rule triggers.
+          items:
+            type: string
+            example: tom.a@logz.io
+        notificationEndpointIds:
+          type: array
+          description: Array of IDs of pre-configured endpoint channels to notify when the rule triggers.
+          items:
+            type: integer
+            format: int32
+    ColumnConfig:
+      type: object
+      description: Customize the alert output to be sent out in notifications when the alert triggers.
+      properties:
+        fieldName:
+          type: string
+          description: Specify the fields to be included in the notification.
+        regex:
+          type: string
+          description: Trims the data using regex filters. [Learn more](https://docs.logz.io/user-guide/alerts/regex-filters.html)
+        sort:
+          type: string
+          description: Specify a single field to sort by. The field cannot be an analyzed field (a field that supports free text search or searching by part of a message, such as the 'message' field).
+          enum:
+          - DESC
+          - ASC
     Aggregation:
       type: object
       description: Specifies a trigger condition that acts as a threshold.
@@ -681,57 +891,6 @@ components:
           description: 'Used by the `PERCENTAGE` aggregation to select the field’s value. This value is used to determine if its ratio out of the total amount of logs in the query satisfies the trigger condition.
 
             * Only relevant for the `PERCENTAGE` aggregation.'
-    RuleTrigger:
-      type: object
-      description: Sets the triggering threshold and severity tab to label the event when the rule triggers.
-      properties:
-        operator:
-          type: string
-          enum:
-          - LESS_THAN
-          - GREATER_THAN
-          - LESS_THAN_OR_EQUALS
-          - GREATER_THAN_OR_EQUALS
-          - EQUALS
-          - NOT_EQUALS
-          example: GREATER_THAN_OR_EQUALS
-          description: Specifies the operator for evaluating the results.
-        severityThresholdTiers:
-          type: object
-          description: 'Sets a severity label per trigger threshold as a key:value pair.
-
-
-            If using more than one sub-component, only 1 severityThresholdTiers is allowed. Otherwise, 1 per `enum` are allowed (for a total of 5 thresholds of increasing severities).
-
-
-            Increasing severity must adhere to the logic of the operator.'
-          enum:
-          - INFO
-          - LOW
-          - MEDIUM
-          - HIGH
-          - SEVERE
-          additionalProperties: null
-          default:
-            MEDIUM: 10.0
-          example:
-            MEDIUM: 10.0
-            HIGH: 100.0
-            SEVERE: 300.0
-    PagedSearchResponseSecurityRuleResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          format: int32
-          description: The total number of rules returned by the query. The total entities found after filtering and sorting. This number is fixed and not affected by pagination.
-          example: 500
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SecurityRuleResponse'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
     AlertsFilter:
       type: object
       properties:
@@ -786,165 +945,6 @@ components:
           $ref: '#/components/schemas/RuleTrigger'
         output:
           $ref: '#/components/schemas/SubRuleOutput'
-    AlertsSortRequest:
-      type: object
-      required:
-      - field
-      properties:
-        sortByField:
-          type: string
-          description: Sort by a single parameter.
-          enum:
-          - SEVERITY
-          - name
-          - createdAt
-          - updatedAt
-        descending:
-          type: boolean
-          default: true
-          description: If left blank, descending sorting will result. If `false` results in ascending sorting.
-    AlertsSearchRequest:
-      title: Search request Results
-      type: object
-      properties:
-        filter:
-          description: Filter by rule name, severity, and more. If you want to get all rules, just send `filter` as an empty object the payload.
-          $ref: '#/components/schemas/AlertsFilter'
-        sort:
-          description: Explicit sorting rules are not required, but recommended. Otherwise the database will determine the sorting.
-          $ref: '#/components/schemas/AlertsSortRequest'
-        pagination:
-          $ref: '#/components/schemas/Pagination'
-    ColumnConfig:
-      type: object
-      description: Customize the alert output to be sent out in notifications when the alert triggers.
-      properties:
-        fieldName:
-          type: string
-          description: Specify the fields to be included in the notification.
-        regex:
-          type: string
-          description: Trims the data using regex filters. [Learn more](https://docs.logz.io/user-guide/alerts/regex-filters.html)
-        sort:
-          type: string
-          description: Specify a single field to sort by. The field cannot be an analyzed field (a field that supports free text search or searching by part of a message, such as the 'message' field).
-          enum:
-          - DESC
-          - ASC
-    Pagination:
-      type: object
-      description: Default pagination is a page of 25 results. Look for the `total` field in the response for the number of available results overall, and use the pagination function to page through the results.
-      properties:
-        pageNumber:
-          type: integer
-          format: int32
-          description: If you overshoot the page number, it will return empty with no results, but it won't fail the request.
-          default: 1
-          example: 1
-        pageSize:
-          type: integer
-          format: int32
-          description: Controls the number of results per page. Valid inputs are 1 to 1000.
-          maximum: 1000
-          default: 25
-          example: 100
-    FilterLists:
-      type: object
-      description: Runs Elasticsearch [Bool Query](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-bool-query.html) filters on the data (before the search query is applied). The most efficient way to grab the logs you are looking for.
-      properties:
-        must:
-          type: array
-          items:
-            type: object
-            properties:
-              match_phrase:
-                type: object
-                properties:
-                  Field:
-                    type: object
-                    properties:
-                      query:
-                        type: string
-                        example: value
-        must_not:
-          type: array
-          items:
-            type: object
-            properties:
-              match_phrase:
-                type: object
-                properties:
-                  Field:
-                    type: object
-                    properties:
-                      query:
-                        type: string
-                        example: value
-    RuleOutput:
-      type: object
-      description: Automatically sends out notifications with sample results when the rule triggers.
-      properties:
-        recipients:
-          $ref: '#/components/schemas/RuleRecipients'
-        suppressNotificationsMinutes:
-          type: integer
-          format: int32
-          minimum: 5
-          maximum: 1440
-          description: Add a waiting period in minutes to space out notifications. (The rule will still trigger but will not send out notifications during the waiting period.)
-          example: 60
-        type:
-          type: string
-          description: Selects the output format for the rule notification. If the rule has no aggregations/group by fields, `JSON` offers the option to send full sample logs without selecting specific fields.
-          enum:
-          - JSON
-          - TABLE
-    SubRuleCorrelation:
-      type: object
-      description: 'Only applicable when multiple sub-components are in use. Selects a logic for correlating the rule’s sub-components.
-
-
-        `AND` is currently the only supported operator. When `AND` is the `correlationOperator`, both sub-components must meet their triggering criteria for the rule to trigger.'
-      properties:
-        correlationOperators:
-          type: array
-          items:
-            type: string
-            enum:
-            - AND
-        joins:
-          type: array
-          description: 'Specifies which group by fields must have the same values to trigger the rule.
-
-
-            Joins the group by fields from the first and second sub-components. The key represents the index of the sub component in the array (See the example - the index of the first sub-component is 0, the second is 1).
-
-
-            The fields must be ordered pairs of the group by fields already in use in the `queryDefinition`.'
-          items:
-            type: object
-            additionalProperties: null
-            example:
-              0: region
-              1: region
-    BoolFilter:
-      type: object
-      description: Apply `must` and `must_not` filters to the monitoring alert. Filters are more efficient compared to a query, so it's recommended to opt for a filter over a query, where possible. See [Elasticsearch Bool-Query](https://www.elastic.co/guide/en/elasticsearch/reference/6.8/query-dsl-bool-query.html) for more detail.
-      properties:
-        bool:
-          $ref: '#/components/schemas/FilterLists'
-    SubRuleOutput:
-      type: object
-      description: Selects the data output to be sent in the notification when the rule triggers. Not applicable, when grouping by fields or aggregating results, as the output is auto-selected.
-      properties:
-        columns:
-          type: array
-          items:
-            $ref: '#/components/schemas/ColumnConfig'
-        shouldUseAllFields:
-          type: boolean
-          description: If `true`, the notification output will include entire logs with all of their fields in the sample data.
-        default: true
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

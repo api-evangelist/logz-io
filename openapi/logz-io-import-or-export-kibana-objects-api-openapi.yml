@@ -65,6 +65,43 @@ paths:
               $ref: '#/components/schemas/KibanaImportRequest'
 components:
   schemas:
+    KibanaImportRequest:
+      type: object
+      properties:
+        kibanaVersion:
+          type: string
+          description: The version of Kibana used at the time of export. This must match the current version of Kibana that you're importing to.
+          example: 4.0.0-beta3
+        override:
+          type: boolean
+          description: 'To update an existing object with the same ID, `true`. Otherwise, `false`.
+
+
+            If override is `true`, response message shows overwritten objects as `updated`. If override is `false`, no existing objects are updated, and response message shows these objects as `ignored`.'
+          example: false
+        hits:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: object
+          description: 'Each JSON object in the array represents a discrete Kibana object.
+
+
+            **Note:** As a best practice, import only objects that were exported from Kibana.'
+    KibanaExportRequest:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          enum:
+          - search
+          - visualization
+          - dashboard
+          - query
+          description: The object type to export
     KibanaExportResponse:
       type: object
       properties:
@@ -79,19 +116,6 @@ components:
           items:
             type: object
           description: Exported Kibana objects
-    KibanaExportRequest:
-      type: object
-      required:
-      - type
-      properties:
-        type:
-          type: string
-          enum:
-          - search
-          - visualization
-          - dashboard
-          - query
-          description: The object type to export
     KibanaImportResponse:
       type: object
       properties:
@@ -123,30 +147,6 @@ components:
             type: string
             example: Apache-Response-Over-Time
           description: Names of the Kibana objects that could not be created, updated, or ignored.
-    KibanaImportRequest:
-      type: object
-      properties:
-        kibanaVersion:
-          type: string
-          description: The version of Kibana used at the time of export. This must match the current version of Kibana that you're importing to.
-          example: 4.0.0-beta3
-        override:
-          type: boolean
-          description: 'To update an existing object with the same ID, `true`. Otherwise, `false`.
-
-
-            If override is `true`, response message shows overwritten objects as `updated`. If override is `false`, no existing objects are updated, and response message shows these objects as `ignored`.'
-          example: false
-        hits:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: object
-          description: 'Each JSON object in the array represents a discrete Kibana object.
-
-
-            **Note:** As a best practice, import only objects that were exported from Kibana.'
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

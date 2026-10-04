@@ -39,6 +39,13 @@ paths:
         required: true
 components:
   schemas:
+    CreateMarkersRequest:
+      type: object
+      properties:
+        markers:
+          type: array
+          items:
+            $ref: '#/components/schemas/MarkerDataPoint'
     MarkerDataPoint:
       type: object
       required:
@@ -78,13 +85,6 @@ components:
 
 
             (Future functionality: Metadata will be used to filter deploymentsby several dimensions. For example, to filter deployments by service and region to focus on deployments performed on a specific service and a specific region.'
-    CreateMarkersRequest:
-      type: object
-      properties:
-        markers:
-          type: array
-          items:
-            $ref: '#/components/schemas/MarkerDataPoint'
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

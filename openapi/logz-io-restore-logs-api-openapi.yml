@@ -116,6 +116,23 @@ paths:
                 $ref: '#/components/schemas/RestoreApiResponse'
 components:
   schemas:
+    RestoreApiRequest:
+      type: object
+      properties:
+        accountName:
+          type: string
+          description: Name of the restored account
+          example: My account name
+        startTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the earliest logs to be restored.
+          example: 1589947200.0
+        endTime:
+          type: integer
+          format: int64
+          description: UNIX timestamp in milliseconds specifying the latest logs to be restored.
+          example: 1589954400.0
     RestoreApiResponse:
       type: object
       properties:
@@ -194,23 +211,6 @@ components:
           format: int64
           description: UNIX timestamp in milliseconds specifying when the account is due to expire. Restored accounts expire automatically after a number of days, as specified in the account's terms.
           example: 1592334461.0
-    RestoreApiRequest:
-      type: object
-      properties:
-        accountName:
-          type: string
-          description: Name of the restored account
-          example: My account name
-        startTime:
-          type: integer
-          format: int64
-          description: UNIX timestamp in milliseconds specifying the earliest logs to be restored.
-          example: 1589947200.0
-        endTime:
-          type: integer
-          format: int64
-          description: UNIX timestamp in milliseconds specifying the latest logs to be restored.
-          example: 1589954400.0
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

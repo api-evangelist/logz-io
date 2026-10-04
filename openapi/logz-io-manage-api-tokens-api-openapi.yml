@@ -94,19 +94,6 @@ paths:
         required: true
 components:
   schemas:
-    CreateApiTokenRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          default: string
-          description: The name provided in the request for a new API token for the sub account
-          example: newTokenTest999
-        accountId:
-          type: integer
-          format: int32
-          description: Logz.io sub account ID.
-          example: 160343
     ApiTokenResponse:
       type: object
       properties:
@@ -128,6 +115,19 @@ components:
           format: int64
           description: The time at which the new sub account API token was created
           example: 1621858311.0
+    CreateApiTokenRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          default: string
+          description: The name provided in the request for a new API token for the sub account
+          example: newTokenTest999
+        accountId:
+          type: integer
+          format: int32
+          description: Logz.io sub account ID.
+          example: 160343
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
