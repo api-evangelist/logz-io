@@ -1,5 +1,9 @@
 aid: logz-io
 url: https://raw.githubusercontent.com/api-evangelist/logz-io/refs/heads/main/apis.yml
+x-docs-platform: docusaurus
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: netlify
 apis:
 - aid: logz-io:logz-io-alerts-api
   name: Logz.io Alerts API
@@ -3626,6 +3630,9 @@ accessModel:
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/logz-io.png
 access: 3rd-Party
 common:
+- type: CapabilityMap
+  url: capabilities/logz-io-capability-edges.yml
+  name: Logz.io Business Capability Map
 - type: Website
   url: https://www.logz.io/
 - type: TrustCenter
