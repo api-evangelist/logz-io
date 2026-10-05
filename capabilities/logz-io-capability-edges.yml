@@ -1,0 +1,208 @@
+slug: logz-io
+provider: Logz.io
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 20
+edges:
+- tag: Security Events
+  spec_file: logz-io-security-events-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.85
+  evidence: POST /v2/security/rules/events/search searchSecurityRulesEvents 'Fetch security events'; 'Fetch
+    the logs that triggered a security event'; schema TriggeredRule
+  reason: Cloud SIEM security event triage — fetching and editing events triggered by detection rules
+    — which is threat detection and response, not generic alerting.
+- tag: Security Rules
+  spec_file: logz-io-security-rules-api-openapi.yml
+  capability_id: BC-620.30
+  capability_id_l1: BC-620
+  capability_name: Threat Detection & Response Management
+  confidence: 0.85
+  evidence: POST /v2/security/rules createSecurityRule 'Create a security rule'; 'Enable a rule'; schemas
+    SecurityRuleRequest, SubRuleCorrelation
+  reason: Lifecycle of SIEM detection rules including correlation sub-rules, triggers and recipients —
+    SOC/SIEM detection engineering.
+- tag: Alerts
+  spec_file: logz-io-alerts-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.8
+  evidence: POST /v2/alerts createAlert "Create an alert"; POST /v1/alerts/triggered-alerts "Retrieve
+    triggered alerts"; schemas AlertQuery, AlertSchedule, AlertTrigger
+  reason: Alerts here are monitoring rules evaluated over log/metric queries on an observability platform
+    — not financial-crime or business alerts. Fits observability monitoring; could arguably touch incident
+    detection, hence 0.8.
+- tag: Grafana dashboards
+  spec_file: logz-io-grafana-dashboards-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.8
+  evidence: '"Create/update a dashboard", "Get home dashboard", "Get all dashboard versions"'
+  reason: Full lifecycle of Grafana monitoring dashboards on an observability platform — metrics/logs
+    visualisation, squarely Observability Management rather than business BI reporting.
+- tag: Manage users
+  spec_file: logz-io-manage-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /v1/user-management createUser 'Create a user'; 'Suspend a user'; 'Delete a user from
+    all accounts'
+  reason: Full user account lifecycle across accounts — create, update, delete, suspend/unsuspend — which
+    is identity and access administration rather than any business-domain capability.
+- tag: Dashboards delete
+  spec_file: logz-io-dashboards-delete-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.75
+  evidence: DELETE /perses-public/api/v1/projects/{folderId}/dashboards/{uid}/1 — "Delete a dashboard"
+  reason: Logz.io is an observability platform; Perses dashboards are monitoring visualisations over logs/metrics/traces,
+    so dashboard lifecycle operations realise Observability Management rather than general BI.
+- tag: Dashboards get all
+  spec_file: logz-io-dashboards-get-all-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.75
+  evidence: GET /perses-public/api/v1/dashboards — "Get all dashboards"
+  reason: Listing monitoring dashboards on an ELK/Grafana/Perses observability platform maps to Observability
+    Management.
+- tag: Dashboards get by ID
+  spec_file: logz-io-dashboards-get-by-id-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.75
+  evidence: '"Get dashboard by ID"'
+  reason: Retrieval of a monitoring dashboard definition on an observability platform.
+- tag: Dashboards update
+  spec_file: logz-io-dashboards-update-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.75
+  evidence: '"Update an existing dashboard"'
+  reason: Authoring/updating monitoring dashboards on an observability platform maps to Observability
+    Management.
+- tag: Authentication groups
+  spec_file: logz-io-authentication-groups-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: GET /v1/authentication/groups getAuthGroups "Get authentication groups"; POST setAuthGroups
+    "Create/update authentication groups"
+  reason: Management of authentication group mappings governs who can access the platform — identity and
+    access management. No schemas are given, so confidence is capped; it could alternatively be tenant
+    identity federation.
+- tag: Dashboards get by user
+  spec_file: logz-io-dashboards-get-by-user-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /perses-public/api/v1/dashboards/users — "Get dashboard by user"
+  reason: Returns observability dashboards associated with a user; still dashboard management on a monitoring
+    platform, not identity management.
+- tag: Dashboards move
+  spec_file: logz-io-dashboards-move-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: '"Move a dashboard to a different folder"'
+  reason: Organising observability dashboards; part of monitoring dashboard stewardship.
+- tag: Drop filters
+  spec_file: logz-io-drop-filters-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: '"Create drop filter", schema LogsDropFiltersPipelineDefinition'
+  reason: Manages filters in the log ingestion pipeline of an observability platform — log/telemetry pipeline
+    control, which sits under Observability Management.
+- tag: Grafana alerting provisioning
+  spec_file: logz-io-grafana-alerting-provisioning-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: POST /v1/grafana/api/v1/provisioning/alert-rules — "Create a new alert rule"
+  reason: Alert rules here are monitoring thresholds on telemetry, not financial-crime or business alerts;
+    this is production monitoring configuration under Observability Management.
+- tag: Grafana snapshots
+  spec_file: logz-io-grafana-snapshots-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /v1/grafana/api/dashboard/snapshots/ "Get list of Snapshots"; POST /v1/grafana/api/snapshots/
+    "Create a snapshot"
+  reason: Operations manage Grafana dashboard snapshots on a managed observability platform, i.e. artefacts
+    of metrics/log dashboards that make the running service understandable. Mapped to Observability Management,
+    though snapshot sharing is a thin slice of that capability hence moderate confidence.
+- tag: Label Values
+  spec_file: logz-io-label-values-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /v1/metrics/prometheus/api/v1/label/{label_name}/values "Returns a list of label values
+    for a provided label name"
+  reason: Prometheus-compatible metrics metadata query endpoint on an observability platform; it serves
+    metric exploration, which falls under Observability Management (logs, metrics, traces). Narrow, query-only
+    surface so not higher.
+- tag: Labels
+  spec_file: logz-io-labels-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /v1/metrics/prometheus/api/v1/labels "Returns a list of label names"
+  reason: Prometheus label-name metadata API for the platform's metrics store — metrics observability.
+    Generic metadata lookup, hence moderate confidence.
+- tag: Manage notification endpoints
+  spec_file: logz-io-manage-notification-endpoints-api-openapi.yml
+  capability_id: BC-4220.30
+  capability_id_l1: BC-4220
+  capability_name: Incident Response Management
+  confidence: 0.7
+  evidence: POST /v1/endpoints/pager-duty "Create a PagerDuty endpoint"; VictoropsEndpointUpsertRequest,
+    OpsGenieEndpointUpsertRequest, ServiceNowEndpointUpsertRequest
+  reason: Configures destinations (PagerDuty, VictorOps, OpsGenie, Slack, ServiceNow) to which monitoring
+    alerts are dispatched — the paging/notification path of on-call incident response. Could alternatively
+    be read as generic alerting configuration under Observability Management, hence 0.7.
+- tag: Query
+  spec_file: logz-io-query-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /v1/metrics/prometheus/api/v1/query GetInstantQuery 'Evaluates an instant query at a single
+    point in time'
+  reason: Prometheus-compatible metrics query endpoints — reading production metrics, which is observability
+    management, not a business data/BI capability.
+- tag: Range Query
+  spec_file: logz-io-range-query-api-openapi.yml
+  capability_id: BC-4220.20
+  capability_id_l1: BC-4220
+  capability_name: Observability Management
+  confidence: 0.7
+  evidence: GET /v1/metrics/prometheus/api/v1/query_range 'Evaluates an expression query over a range
+    of time'
+  reason: Range queries over Prometheus metrics; same observability metrics-reading surface as the instant
+    query tag.
