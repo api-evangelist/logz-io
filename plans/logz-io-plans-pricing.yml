@@ -202,3 +202,71 @@ modifiers:
     name: Monthly Billing Uplift
     description: Monthly billing carries a 1.2x uplift vs equivalent annual commitment.
     multiplier: '1.2'
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  - negotiated
+  - subscription
+  units:
+  - data
+  - object
+  - token
+  plans:
+  - name: Log Management
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - data
+    periods:
+    - day
+  - name: Infrastructure Monitoring
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - other
+    periods:
+    - day
+  - name: Distributed Tracing
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - other
+    periods:
+    - day
+  - name: Cloud SIEM
+    access: negotiated
+    model: negotiated
+    model_how: stated
+    units:
+    - object
+    periods:
+    - month
+  - name: Agentic Observability
+    access: other
+    model: metered
+    model_how: stated
+    units:
+    - token
+    periods:
+    - per-use
+  - name: Pro Plan
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - object
+    periods:
+    - month
+  - name: Enterprise Plan
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - object
+    periods:
+    - month
