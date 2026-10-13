@@ -7,29 +7,6 @@ checked:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
 marketplace_apps: []
 edges:
-- partner_name: OpenTelemetry
-  partner: null
-  type: contract
-  channel: network-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
-  contract_reference:
-    register: OpenTelemetry ecosystem + registry (opentelemetry.io data/)
-    spec_file: null
-    role: participant
-    registered_name: Logz.io
-    matched_domain: logz.io
-    partner_match: domain
-    api_families:
-    - vendor-listed
-    records:
-    - vendors.yaml: Logz.io
-      nativeOTLP: false
-    detected_by: sweep-observability.py
-    detected: '2026-10-13'
-  detected_by: sweep-observability.py
-  detected: '2026-10-13'
 - partner_name: AWS Marketplace
   partner: amazon-web-services
   partner_match: aggregator
@@ -61,6 +38,29 @@ edges:
   - Logz.io Open 360 Observability Platform
   seller_name: Logz.io
   detected_by: sweep-cloud-marketplaces.py
+  detected: '2026-10-13'
+- partner_name: OpenTelemetry
+  partner: null
+  type: contract
+  channel: network-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
+  contract_reference:
+    register: OpenTelemetry ecosystem + registry (opentelemetry.io data/)
+    spec_file: null
+    role: participant
+    registered_name: Logz.io
+    matched_domain: logz.io
+    partner_match: domain
+    api_families:
+    - vendor-listed
+    records:
+    - vendors.yaml: Logz.io
+      nativeOTLP: false
+    detected_by: sweep-observability.py
+    detected: '2026-10-13'
+  detected_by: sweep-observability.py
   detected: '2026-10-13'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
