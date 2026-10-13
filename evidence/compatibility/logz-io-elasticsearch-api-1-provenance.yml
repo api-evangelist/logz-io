@@ -1,0 +1,13 @@
+fetched: '2026-10-13'
+method: fetched
+source: https://api-docs.logz.io/docs/logz/search/
+page: https://api-docs.logz.io/docs/logz/search/
+file: logz-io-elasticsearch-api-1.md
+bytes: 5433
+sha256: 3c42f2014c9c42565c11cac3ec4c0dbf3f2c21926d239ee437fca10302741ed0
+anchor: elastic
+shape: elasticsearch-api
+classification: declares-compatibility
+quote: query object required The query can take any of the parameters described in the Elasticsearch Search API
+  DSL documentation with the exceptions stated below.
+note: text extracted from the provider's own page (tags stripped), saved for evidence

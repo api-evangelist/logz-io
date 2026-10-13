@@ -62,6 +62,25 @@ edges:
   seller_name: Logz.io
   detected_by: sweep-cloud-marketplaces.py
   detected: '2026-10-13'
+- partner_name: Elastic
+  partner: elastic
+  partner_match: shape-anchor
+  channel: provider-built
+  relationship: compatible
+  direction: provider-built
+  shape: elasticsearch-api
+  type: docs
+  degree: declared-subset
+  evidence: https://api-docs.logz.io/docs/logz/search/
+  evidence_kind: own-docs
+  evidence_file: https://github.com/api-evangelist/logz-io/blob/main/evidence/compatibility/logz-io-elasticsearch-api-1.md
+  quote: query object required The query can take any of the parameters described in the Elasticsearch Search API
+    DSL documentation with the exceptions stated below.
+  supported_operations: []
+  unsupported_operations: []
+  supported_share: 0.0
+  detected_by: sweep-shape-compat.py
+  first_seen: '2026-10-13'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
