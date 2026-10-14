@@ -51,3 +51,40 @@
   relationship: distribution-channel
   status: not-a-workflow
   arazzo: null
+- slug: logz-io-elastic
+  label: Elastic
+  partner: elastic
+  partner_name: Elastic
+  type: docs
+  channel: provider-built
+  evidence: https://api-docs.logz.io/docs/logz/search/
+  source: edge
+  relationship: compatible
+  status: not-a-workflow
+  arazzo: null
+- slug: logz-io-okta-own
+  label: Okta (own)
+  partner: okta
+  partner_name: Okta (own)
+  category: Single Sign-On
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://www.okta.com/integrations/logz_io/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
+- slug: logz-io-palo-alto-networks-own
+  label: Palo Alto Networks (own)
+  partner: palo-alto-networks
+  partner_name: Palo Alto Networks (own)
+  category: Analytics & SIEM
+  type: marketplace
+  marketplace: own
+  channel: partner-built
+  evidence: https://cortex.marketplace.pan.dev/marketplace/details/Logzio/
+  source: edge
+  relationship: platform-app
+  status: not-a-workflow
+  arazzo: null
