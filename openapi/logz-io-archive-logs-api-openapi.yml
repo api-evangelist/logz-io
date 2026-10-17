@@ -156,44 +156,20 @@ paths:
           description: successful operation
 components:
   schemas:
-    ArchiveSettingsResponse:
+    S3IamCredentials:
       type: object
       properties:
-        id:
-          type: integer
-          format: int32
-          description: Unique ID of the archive settings.
-          example: 323
-        settings:
-          $ref: '#/components/schemas/ArchiveSettings'
-    ArchiveSettings:
-      type: object
-      required:
-      - storageType
-      properties:
-        storageType:
+        arn:
           type: string
-          enum:
-          - S3
-          - BLOB
-          description: Specifies the storage provider. If `S3`, the   `amazonS3StorageSettings` are relevant. If `BLOB`, the `azureBlobStorageSettings` are relevant.
-          example: S3
-        enabled:
-          type: boolean
-          description: If `true`, archiving is currently enabled.
-          default: true
-          example: true
-        compressed:
-          type: boolean
-          description: If `true`, logs are compressed before they are archived.
-          default: true
-          example: true
-        amazonS3StorageSettings:
-          description: Applicable settings when the `storageType` is `S3`.
-          $ref: '#/components/schemas/S3StorageSettings'
-        azureBlobStorageSettings:
-          description: Applicable settings when the `storageType` is `Blob`.
-          $ref: '#/components/schemas/BlobSettings'
+          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
+    TestStorageRequest:
+      type: object
+      properties: null
+      id:
+        type: integer
+        format: int32
+      archiveSettings:
+        $ref: '#/components/schemas/ArchiveSettings'
     S3StorageSettings:
       type: object
       required:
@@ -227,6 +203,44 @@ components:
           type: string
         secretKey:
           type: string
+    ArchiveSettings:
+      type: object
+      required:
+      - storageType
+      properties:
+        storageType:
+          type: string
+          enum:
+          - S3
+          - BLOB
+          description: Specifies the storage provider. If `S3`, the   `amazonS3StorageSettings` are relevant. If `BLOB`, the `azureBlobStorageSettings` are relevant.
+          example: S3
+        enabled:
+          type: boolean
+          description: If `true`, archiving is currently enabled.
+          default: true
+          example: true
+        compressed:
+          type: boolean
+          description: If `true`, logs are compressed before they are archived.
+          default: true
+          example: true
+        amazonS3StorageSettings:
+          description: Applicable settings when the `storageType` is `S3`.
+          $ref: '#/components/schemas/S3StorageSettings'
+        azureBlobStorageSettings:
+          description: Applicable settings when the `storageType` is `Blob`.
+          $ref: '#/components/schemas/BlobSettings'
+    ArchiveSettingsResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique ID of the archive settings.
+          example: 323
+        settings:
+          $ref: '#/components/schemas/ArchiveSettings'
     BlobSettings:
       type: object
       description: Applicable settings when the `storageType` is `Blob`. For detailed instructions about setting up a storage container in Azure and locating the required parameters, [click here](/user-guide/archive-and-restore/azure-blob-permissions/).
@@ -257,20 +271,6 @@ components:
           - string
           - 'null'
           description: Optional virtual sub-folder specifiying a path within the container. Logs will be archived under the path “{container-name}/{virtual sub-folder}”. Avoid leading and trailing slashes (/). For example, the prefix “region1” is good, but “/region1/” is not.
-    S3IamCredentials:
-      type: object
-      properties:
-        arn:
-          type: string
-          description: Amazon Resource Name (ARN) to uniquely identify the S3 bucket.
-    TestStorageRequest:
-      type: object
-      properties: null
-      id:
-        type: integer
-        format: int32
-      archiveSettings:
-        $ref: '#/components/schemas/ArchiveSettings'
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

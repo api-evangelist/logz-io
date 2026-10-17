@@ -152,6 +152,12 @@ paths:
                 $ref: '#/components/schemas/MessageBean'
 components:
   schemas:
+    MessageBean:
+      type: object
+      properties:
+        message:
+          type: string
+          readOnly: true
     IdBean:
       type: object
       properties:
@@ -207,12 +213,6 @@ components:
         active:
           type: boolean
           description: If `true`, the CloudTrail connector is active and logs are being shipped to Logz.io. If `false`, the connector is disabled.
-    MessageBean:
-      type: object
-      properties:
-        message:
-          type: string
-          readOnly: true
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

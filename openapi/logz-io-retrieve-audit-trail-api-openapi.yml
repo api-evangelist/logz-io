@@ -95,6 +95,25 @@ components:
           description: To sort results in descending order, `true`. For ascending order, `false`.
         includeFiltersData:
           type: boolean
+    AuditEventUser:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user or token
+          example: 5374
+        fullName:
+          type: string
+          description: First and last name of the user, or name of the token
+          example: Larry Appleton
+        deleted:
+          type: boolean
+          description: If this user or token has been deleted, `true`. Otherwise, `false`.
+          example: false
+        userToken:
+          type: boolean
+          description: If this is a token, `true`. If this is a user, `false`.
     AuditTrailEventTypesResponse:
       type: object
       properties:
@@ -113,6 +132,34 @@ components:
           - Suspended user
           - User created a token
           - User installed an ELK app
+    AuditEventData:
+      type: object
+      properties:
+        auditEventUser:
+          $ref: '#/components/schemas/AuditEventUser'
+        date:
+          type: integer
+          format: int64
+          description: Date of the audit event, as Unix epoch milliseconds
+          example: 1527168668
+        auditEventTypeTitle:
+          type: string
+          description: The event type
+          example: Admin created a sub account
+        ip:
+          type: string
+          description: IP address of the client device that generated the event
+          example: 52.203.237.249
+        geoLocation:
+          type: string
+          description: Geographical location of the device that made the request
+          example: New York - USA
+        extraDataList:
+          type: array
+          items:
+            $ref: '#/components/schemas/AuditEventExtraData'
+        valid:
+          type: boolean
     AuditEventTypeData:
       type: object
       properties:
@@ -124,21 +171,6 @@ components:
           type: string
           description: Description of the event type
           example: Added user
-    AuditEventExtraData:
-      type: object
-      properties:
-        fieldName:
-          type: string
-          description: Name of the field
-          example: Account name
-        oldValue:
-          type: string
-          description: Original value of the field
-          example: Test account
-        newValue:
-          type: string
-          description: New value of the field
-          example: Apache access logs
     AuditTrailFilteredResponse:
       type: object
       properties:
@@ -174,53 +206,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AuditEventTypeData'
-    AuditEventData:
+    AuditEventExtraData:
       type: object
       properties:
-        auditEventUser:
-          $ref: '#/components/schemas/AuditEventUser'
-        date:
-          type: integer
-          format: int64
-          description: Date of the audit event, as Unix epoch milliseconds
-          example: 1527168668
-        auditEventTypeTitle:
+        fieldName:
           type: string
-          description: The event type
-          example: Admin created a sub account
-        ip:
+          description: Name of the field
+          example: Account name
+        oldValue:
           type: string
-          description: IP address of the client device that generated the event
-          example: 52.203.237.249
-        geoLocation:
+          description: Original value of the field
+          example: Test account
+        newValue:
           type: string
-          description: Geographical location of the device that made the request
-          example: New York - USA
-        extraDataList:
-          type: array
-          items:
-            $ref: '#/components/schemas/AuditEventExtraData'
-        valid:
-          type: boolean
-    AuditEventUser:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: ID of the user or token
-          example: 5374
-        fullName:
-          type: string
-          description: First and last name of the user, or name of the token
-          example: Larry Appleton
-        deleted:
-          type: boolean
-          description: If this user or token has been deleted, `true`. Otherwise, `false`.
-          example: false
-        userToken:
-          type: boolean
-          description: If this is a token, `true`. If this is a user, `false`.
+          description: New value of the field
+          example: Apache access logs
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.

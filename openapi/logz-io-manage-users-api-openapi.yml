@@ -292,35 +292,6 @@ paths:
                     example: Finished unsuspending user 11300 from accounts.
 components:
   schemas:
-    User:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int32
-          description: ID of the user
-          example: 33265
-        username:
-          type: string
-          description: Email address used to sign in to Logz.io
-          example: steve@winslows.com
-        fullName:
-          type: string
-          description: First and last name of the user
-          example: Stefan Urkel
-        accountID:
-          type: integer
-          format: int32
-          description: Logz.io account ID.
-          example: 55555
-        role:
-          type: string
-          description: User role. Can be `USER_ROLE_READONLY`, `USER_ROLE_REGULAR` or `USER_ROLE_ACCOUNT_ADMIN`.
-          example: USER_ROLE_READONLY
-        active:
-          type: boolean
-          description: If the user is active, `true`. If the user is suspended, `false`.
-          example: true
     UserManagementUpsertRequest:
       type: object
       required:
@@ -354,6 +325,35 @@ components:
           format: int32
           description: ID of the user
           example: 13485
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: ID of the user
+          example: 33265
+        username:
+          type: string
+          description: Email address used to sign in to Logz.io
+          example: steve@winslows.com
+        fullName:
+          type: string
+          description: First and last name of the user
+          example: Stefan Urkel
+        accountID:
+          type: integer
+          format: int32
+          description: Logz.io account ID.
+          example: 55555
+        role:
+          type: string
+          description: User role. Can be `USER_ROLE_READONLY`, `USER_ROLE_REGULAR` or `USER_ROLE_ACCOUNT_ADMIN`.
+          example: USER_ROLE_READONLY
+        active:
+          type: boolean
+          description: If the user is active, `true`. If the user is suspended, `false`.
+          example: true
   securitySchemes:
     X-API-TOKEN:
       description: 'You can manage your API tokens from the [Logz.io API tokens](https://app.logz.io/#/dashboard/settings/manage-tokens/api) page.
