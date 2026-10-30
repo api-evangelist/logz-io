@@ -1,4 +1,4 @@
-# Logz.io (logz-io)
+# Logz.io
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,470 +66,215 @@
 
 Logz.io is a managed cloud observability platform built on the ELK Stack (Elasticsearch / Logstash / Kibana, plus OpenSearch and Grafana) that unifies log management, infrastructure monitoring, distributed tracing, and Cloud SIEM behind a consumption-based pricing model. The platform pairs an AI Agent layer for root-cause analysis with native OpenTelemetry, Prometheus, Grafana, and Perses compatibility, and exposes its entire control plane through a single OpenAPI 2.0-described public API covering search, alerting, sub-account management, security rules, parsing pipelines, archive / restore, and visualization-as-code via the Logz.io fork of Grafana and Perses.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/logz-io/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/logz-io/refs/heads/main/apis.yml)
+**Areas:** Observability · Logging · Metrics · Tracing · SIEM · ELK · Elasticsearch · OpenSearch · Prometheus · Grafana · OpenTelemetry · AIOps
+
+## Logz.io on APIs.io
+
+Everything profiled for Logz.io is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/logz-io/](https://apis.io/providers/logz-io/)** — or go straight to one of the APIs or properties below.
+
+### APIs (57)
+
+- [Logz.io Alerts API](https://apis.io/apis/logz-io/logz-io-alerts-api/) — Logz.io alerts use a Kibana search query to continuously scan your logs and alert you when a certain set of conditions is met. The simplest alerts can use a…
+- [Logz.io Archive logs API](https://apis.io/apis/logz-io/logz-io-archive-logs-api/) — You can archive logs to an AWS S3 bucket or Azure Blob Storage. Archiving gives you the option to restore logs and query them after they have expired from…
+- [Logz.io Associated accounts API](https://apis.io/apis/logz-io/logz-io-associated-accounts-api/) — The Associated accounts API from Logz.io — 1 operation(s) for associated accounts.
+- [Logz.io Authentication groups API](https://apis.io/apis/logz-io/logz-io-authentication-groups-api/) — Before you can use Authentication Groups API, Logz.io support will need to enable [SSO](https://docs.logz.io/user-guide/users/single-sign-on/) for your account.
+- [Logz.io Connect to CloudTrail API](https://apis.io/apis/logz-io/logz-io-connect-to-cloudtrail-api/) — Establish a connection to ship logs to the Logz.io observability platform via an S3 bucket. Supports CloudTrail logs.
+- [Logz.io Connect to S3 Buckets API](https://apis.io/apis/logz-io/logz-io-connect-to-s3-buckets-api/) — Establish a connection for the Logz.io fetcher to fetch logs to the Logz.io observability platform via an S3 bucket. Supports ELB, S3 Access, CloudFront,…
+- [Logz.io Dashboards create new API](https://apis.io/apis/logz-io/logz-io-dashboards-create-new-api/) — The Dashboards create new API from Logz.io — 1 operation(s) for dashboards create new.
+- [Logz.io Dashboards create new folder API](https://apis.io/apis/logz-io/logz-io-dashboards-create-new-folder-api/) — The Dashboards create new folder API from Logz.io — 1 operation(s) for dashboards create new folder.
+- [Logz.io Dashboards delete API](https://apis.io/apis/logz-io/logz-io-dashboards-delete-api/) — The Dashboards delete API from Logz.io — 1 operation(s) for dashboards delete.
+- [Logz.io Dashboards delete folder API](https://apis.io/apis/logz-io/logz-io-dashboards-delete-folder-api/) — The Dashboards delete folder API from Logz.io — 1 operation(s) for dashboards delete folder.
+- [Logz.io Dashboards get all API](https://apis.io/apis/logz-io/logz-io-dashboards-get-all-api/) — The Dashboards get all API from Logz.io — 1 operation(s) for dashboards get all.
+- [Logz.io Dashboards get all folders API](https://apis.io/apis/logz-io/logz-io-dashboards-get-all-folders-api/) — The Dashboards get all folders API from Logz.io — 1 operation(s) for dashboards get all folders.
+- [Logz.io Dashboards get all global data sources API](https://apis.io/apis/logz-io/logz-io-dashboards-get-all-global-data-sources-api/) — The Dashboards get all global data sources API from Logz.io — 1 operation(s) for dashboards get all global data sources.
+- [Logz.io Dashboards get by ID API](https://apis.io/apis/logz-io/logz-io-dashboards-get-by-id-api/) — The Dashboards get by ID API from Logz.io — 1 operation(s) for dashboards get by id.
+- [Logz.io Dashboards get by user API](https://apis.io/apis/logz-io/logz-io-dashboards-get-by-user-api/) — The Dashboards get by user API from Logz.io — 1 operation(s) for dashboards get by user.
+- [Logz.io Dashboards get folder by name API](https://apis.io/apis/logz-io/logz-io-dashboards-get-folder-by-name-api/) — The Dashboards get folder by name API from Logz.io — 1 operation(s) for dashboards get folder by name.
+- [Logz.io Dashboards move API](https://apis.io/apis/logz-io/logz-io-dashboards-move-api/) — The Dashboards move API from Logz.io — 1 operation(s) for dashboards move.
+- [Logz.io Dashboards rename folder API](https://apis.io/apis/logz-io/logz-io-dashboards-rename-folder-api/) — The Dashboards rename folder API from Logz.io — 1 operation(s) for dashboards rename folder.
+- [Logz.io Dashboards search folder API](https://apis.io/apis/logz-io/logz-io-dashboards-search-folder-api/) — The Dashboards search folder API from Logz.io — 1 operation(s) for dashboards search folder.
+- [Logz.io Dashboards update API](https://apis.io/apis/logz-io/logz-io-dashboards-update-api/) — The Dashboards update API from Logz.io — 1 operation(s) for dashboards update.
+- [Logz.io Dashboards update folder API](https://apis.io/apis/logz-io/logz-io-dashboards-update-folder-api/) — The Dashboards update folder API from Logz.io — 1 operation(s) for dashboards update folder.
+- [Logz.io Delete object API](https://apis.io/apis/logz-io/logz-io-delete-object-api-api/) — The Delete object API API from Logz.io — 1 operation(s) for delete object api.
+- [Logz.io Deployments API](https://apis.io/apis/logz-io/logz-io-deployments-api/) — Send deployment logs by API to automatically correlate exceptions with service deployments directly in your Logz.io Exceptions tab.
+- [Logz.io Drop filters API](https://apis.io/apis/logz-io/logz-io-drop-filters-api/) — Drop filters provide a solution for filtering out logs before they are indexed in your account to help lower costs and reduce account volume. Drop filters…
+- [Logz.io Grafana alerting provisioning API](https://apis.io/apis/logz-io/logz-io-grafana-alerting-provisioning-api/) — The Grafana alerting provisioning API from Logz.io — 2 operation(s) for grafana alerting provisioning.
+- [Logz.io Grafana annotations API](https://apis.io/apis/logz-io/logz-io-grafana-annotations-api/) — The Grafana annotations API from Logz.io — 5 operation(s) for grafana annotations.
+- [Logz.io Grafana contact points API](https://apis.io/apis/logz-io/logz-io-grafana-contact-points-api/) — The Grafana contact points API from Logz.io — 3 operation(s) for grafana contact points.
+- [Logz.io Grafana dashboard search API](https://apis.io/apis/logz-io/logz-io-grafana-dashboard-search-api/) — The Grafana dashboard search API from Logz.io — 1 operation(s) for grafana dashboard search.
+- [Logz.io Grafana dashboards API](https://apis.io/apis/logz-io/logz-io-grafana-dashboards-api/) — The Grafana dashboards API from Logz.io — 8 operation(s) for grafana dashboards.
+- [Logz.io Grafana data source API](https://apis.io/apis/logz-io/logz-io-grafana-data-source-api/) — The Grafana data source API from Logz.io — 2 operation(s) for grafana data source.
+- [Logz.io Grafana Folders API](https://apis.io/apis/logz-io/logz-io-grafana-folders-api/) — The Grafana Folders API from Logz.io — 2 operation(s) for grafana folders.
+- [Logz.io Grafana silence management API](https://apis.io/apis/logz-io/logz-io-grafana-silence-management-api/) — The Grafana silence management API from Logz.io — 3 operation(s) for grafana silence management.
+- [Logz.io Grafana snapshots API](https://apis.io/apis/logz-io/logz-io-grafana-snapshots-api/) — The Grafana snapshots API from Logz.io — 4 operation(s) for grafana snapshots.
+- [Logz.io Import or export Kibana objects API](https://apis.io/apis/logz-io/logz-io-import-or-export-kibana-objects-api/) — The Import or export Kibana objects API from Logz.io — 2 operation(s) for import or export kibana objects.
+- [Logz.io Insights API](https://apis.io/apis/logz-io/logz-io-insights-api/) — Logz.io monitors your logs for Insights to help you preempt issues and alert you of potential problems. There are two types of Insights: * LOGCEPTION -…
+- [Logz.io Label Values API](https://apis.io/apis/logz-io/logz-io-label-values-api/) — The Label Values API from Logz.io — 1 operation(s) for label values.
+- [Logz.io Labels API](https://apis.io/apis/logz-io/logz-io-labels-api/) — The Labels API from Logz.io — 1 operation(s) for labels.
+- [Logz.io Logz.io snapshots API](https://apis.io/apis/logz-io/logz-io-logz-io-snapshots-api/) — The Logz.io snapshots API from Logz.io — 2 operation(s) for logz.io snapshots.
+- [Logz.io Lookup lists API](https://apis.io/apis/logz-io/logz-io-lookup-lists-api/) — The Lookup lists API from Logz.io — 7 operation(s) for lookup lists.
+- [Logz.io Manage API tokens API](https://apis.io/apis/logz-io/logz-io-manage-api-tokens-api/) — You can manage API tokens for sub accounts.
+- [Logz.io Manage log shipping tokens API](https://apis.io/apis/logz-io/logz-io-manage-log-shipping-tokens-api/) — Use these API endpoints to create, update, retrieve, or delete log shipping tokens.
+- [Logz.io Manage metrics account API](https://apis.io/apis/logz-io/logz-io-manage-metrics-account-api/) — The Manage metrics account API from Logz.io — 2 operation(s) for manage metrics account.
+- [Logz.io Manage notification endpoints API](https://apis.io/apis/logz-io/logz-io-manage-notification-endpoints-api/) — Logz.io can send notifications to your preferred workspaces, such as Opsgenie, BigPanda, PagerDuty, and Slack. Notifications are typically sent when alerts…
+- [Logz.io Manage shared tokens API](https://apis.io/apis/logz-io/logz-io-manage-shared-tokens-api/) — You can share Kibana visualization and dashboard snapshots using shared tokens. Snapshots are stored for 30 days and automatically deleted afterwards. Token…
+- [Logz.io Manage time-based log accounts API](https://apis.io/apis/logz-io/logz-io-manage-time-based-log-accounts-api/) — Use these API requests to manage time-based log accounts: * Create, update, or delete a sub account. * Allocate daily capacity to the main account and/or…
+- [Logz.io Manage users API](https://apis.io/apis/logz-io/logz-io-manage-users-api/) — The Manage users API from Logz.io — 8 operation(s) for manage users.
+- [Logz.io Parsing API](https://apis.io/apis/logz-io/logz-io-parsing-api/) — The Parsing API from Logz.io — 3 operation(s) for parsing.
+- [Logz.io Query API](https://apis.io/apis/logz-io/logz-io-query-api/) — The Query API from Logz.io — 1 operation(s) for query.
+- [Logz.io Range Query API](https://apis.io/apis/logz-io/logz-io-range-query-api/) — The Range Query API from Logz.io — 1 operation(s) for range query.
+- [Logz.io Restore logs API](https://apis.io/apis/logz-io/logz-io-restore-logs-api/) — You can restore data from your active archiving account, whether an AWS S3 bucket or Azure Blob Storage. Restoring data gives you the option to query logs…
+- [Logz.io Retrieve audit trail API](https://apis.io/apis/logz-io/logz-io-retrieve-audit-trail-api/) — The Retrieve audit trail API from Logz.io — 2 operation(s) for retrieve audit trail.
+- [Logz.io Search logs API](https://apis.io/apis/logz-io/logz-io-search-logs-api/) — Use the Elasticsearch Search API DSL query language to search your Logz.io data. To ensure system performance and data availability, we've introduced some…
+- [Logz.io Security account API](https://apis.io/apis/logz-io/logz-io-security-account-api/) — A security account with SIEM allows you to use the SIEM platform. You can create a SIEM account using an API call.
+- [Logz.io Security events API](https://apis.io/apis/logz-io/logz-io-security-events-api/) — A security event is logged whenever a security rule triggers in your [Logz.io Cloud SIEM…
+- [Logz.io Security rules API](https://apis.io/apis/logz-io/logz-io-security-rules-api/) — Security rules help you connect the dots between your data sources and events that could indicate a security threat or breach. Your Cloud SIEM account comes…
+- [Logz.io Time Series API](https://apis.io/apis/logz-io/logz-io-time-series-api/) — The Time Series API from Logz.io — 1 operation(s) for time series.
+- [Logz.io Whoami API](https://apis.io/apis/logz-io/logz-io-whoami-api/) — The Whoami API from Logz.io — 1 operation(s) for whoami.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### Arazzo workflows (13)
+
+Multi-step workflows that chain operations into a business task.
+
+- [Logz.io Verify Token And Discover Accounts](https://apis.io/arazzos/logz-io/logz-io-account-verify-workflow/)
+- [Logz.io Alert Create, Update, And List](https://apis.io/arazzos/logz-io/logz-io-alert-create-update-list-workflow/)
+- [Logz.io Alert Enable/Disable Lifecycle](https://apis.io/arazzos/logz-io/logz-io-alert-lifecycle-workflow/)
+- [Logz.io Custom Webhook Endpoint Then Alert](https://apis.io/arazzos/logz-io/logz-io-custom-endpoint-then-alert-workflow/)
+- [Logz.io Grafana Dashboard In New Folder](https://apis.io/arazzos/logz-io/logz-io-dashboard-in-folder-workflow/)
+- [Logz.io Notification Endpoint Cleanup](https://apis.io/arazzos/logz-io/logz-io-endpoint-cleanup-workflow/)
+- [Logz.io Notification Endpoint Then Alert](https://apis.io/arazzos/logz-io/logz-io-endpoint-then-alert-workflow/)
+- [Logz.io Grafana Contact Point Setup](https://apis.io/arazzos/logz-io/logz-io-grafana-contact-point-workflow/)
+- [Logz.io Metrics Explore And Query](https://apis.io/arazzos/logz-io/logz-io-metrics-explore-workflow/)
+- [Logz.io Search Then Scroll Logs](https://apis.io/arazzos/logz-io/logz-io-search-then-scroll-workflow/)
+- [Logz.io Sub Account Cleanup](https://apis.io/arazzos/logz-io/logz-io-subaccount-cleanup-workflow/)
+- [Logz.io Provision a Sub Account](https://apis.io/arazzos/logz-io/logz-io-subaccount-provision-workflow/)
+- [Logz.io Upsert an Alert](https://apis.io/arazzos/logz-io/logz-io-upsert-alert-workflow/)
+
+#### GraphQL (1)
+
+GraphQL schemas.
+
+- [Moved to /providers/logz-io/](https://apis.io/graphqls/logz-io/logz-io-graphql/)
+
+#### JSON Schema (4)
+
+The data models the API reads and writes.
+
+- [Logz.io Alert Rule](https://apis.io/schemas/logz-io/logz-io-alert-rule/)
+- [Logz.io Log Document](https://apis.io/schemas/logz-io/logz-io-log-document/)
+- [Logz.io Metric Sample](https://apis.io/schemas/logz-io/logz-io-metric-sample/)
+- [Logz.io Search Request](https://apis.io/schemas/logz-io/logz-io-search-request/)
 
-## Scope
+#### JSON-LD (1)
 
-- **Access:** 3rd-Party
+Linked-data contexts for the provider's vocabulary.
 
-## Tags
+- [Logz Io Context](https://apis.io/jsonld/logz-io/logz-io-context/)
 
-- Observability
-- Logging
-- Metrics
-- Tracing
-- SIEM
-- ELK
-- Elasticsearch
-- OpenSearch
-- Prometheus
-- Grafana
-- OpenTelemetry
-- AIOps
-- Cloud Observability
-- Managed ELK
-- Cost Management
+#### Governance rules (1)
 
-## Timestamps
+Spectral rulesets for the provider's contracts.
 
-- **Created:** 2026-05-25
-- **Modified:** 2026-05-25
+- [Logz.io — jsonschema rules](https://apis.io/rules/logz-io/logz-io-jsonschema-spectral-rules/)
 
-## APIs
+#### Security (2)
 
-### Logz.io Search Logs API
+Authentication, trust centre, and vulnerability disclosure.
 
-Query indexed logs against the Logz.io managed Elasticsearch / OpenSearch cluster using a request body that mirrors the upstream Elasticsearch Search API. Includes `/v1/search` for ad-hoc queries and `/v1/scroll` for iterating large result sets. Returns full Lucene-style hits, aggregations, and Elasticsearch metadata, enabling Kibana-equivalent search semantics over Logz.io-hosted indices.
+- [Logz Io Domain Security](https://apis.io/security/logz-io/logz-io-domain-security/)
+- [Logz Io Trust Center](https://apis.io/security/logz-io/logz-io-trust-center/)
 
-- **Human URL:** [https://api-docs.logz.io/docs/logz/search/](https://api-docs.logz.io/docs/logz/search/)
-- **Base URL:** `https://api.logz.io/v1/search`
+#### Plans and pricing (1)
 
-#### Tags
+Published plans, tiers and prices.
 
-- Observability
-- Logging
-- Search
-- ELK
+- [Logz Io Plans Pricing](https://apis.io/plans/logz-io/logz-io-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://api-docs.logz.io/docs/logz/search/)
-- [Documentation](https://docs.logz.io/api/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [JSON Schema](json-schema/logz-io-search-request-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/logz-io-log-document-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](json-ld/logz-io-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
+Published request limits.
 
-### Logz.io Archive and Restore API
+- [Logz Io Rate Limits](https://apis.io/rate-limits/logz-io/logz-io-rate-limits/)
 
-Configure long-term archive destinations (S3, ADLS, Google Cloud Storage), test connectivity, list and delete archive settings, then restore archived logs back into Logz.io for replay or compliance review. Backs Logz.io's tiered retention strategy of moving cold logs out of hot indices into customer-owned object storage.
+#### FinOps (1)
 
-- **Human URL:** [https://api-docs.logz.io/docs/logz/archive-logs/](https://api-docs.logz.io/docs/logz/archive-logs/)
-- **Base URL:** `https://api.logz.io/v2/archive`
+What the API costs to run, by operation.
 
-#### Tags
+- [Logz Io Finops](https://apis.io/finops/logz-io/logz-io-finops/)
 
-- Observability
-- Logging
-- Archival
-- S3
+## Where to find this API
 
-#### Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-- [Documentation](https://api-docs.logz.io/docs/logz/archive-logs/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Drop Filters API
-
-Create, list, activate, deactivate, and delete drop filters that discard matching events before they enter Logz.io's hot index. The primary tool for trimming ingest volume and managing observability cost at the platform edge without changing customer shippers.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/drop-filters/](https://api-docs.logz.io/docs/logz/drop-filters/)
-- **Base URL:** `https://api.logz.io/v1/drop`
-
-#### Tags
-
-- Observability
-- Logging
-- Data Optimization
-- Cost Management
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/drop-filters/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Alerts API
-
-Manage Logz.io alert rules — create, retrieve, update, enable, disable, and delete log-based and multi-account alerts via `/v2/alerts`, list currently triggered alerts via `/v1/alerts/triggered-alerts`, and publish event markers. Powers the unified alerting experience across log, metric, and security signals.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/get-all-alerts/](https://api-docs.logz.io/docs/logz/get-all-alerts/)
-- **Base URL:** `https://api.logz.io/v2/alerts`
-
-#### Tags
-
-- Observability
-- Alerting
-- Monitoring
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/get-all-alerts/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [JSON Schema](json-schema/logz-io-alert-rule-schema.json) — [JSON Schema](https://json-schema.org/specification)
-
-### Logz.io Notification Endpoints API
-
-Manage downstream notification destinations attached to alerts. Supports Slack, PagerDuty, Microsoft Teams, BigPanda, OpsGenie, ServiceNow, VictorOps, custom HTTPS webhooks, and email endpoints. Endpoints are decoupled from alert rules so a single destination can be reused across many alerts.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/endpoints/](https://api-docs.logz.io/docs/logz/endpoints/)
-- **Base URL:** `https://api.logz.io/v1/endpoints`
-
-#### Tags
-
-- Observability
-- Alerting
-- Notifications
-- Webhooks
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/endpoints/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Users API
-
-List, create, update, suspend, and delete users in the main account and across all associated sub-accounts. Includes authentication groups (SSO group-to-role mappings), the `whoami` introspection endpoint, and `associated-accounts` for navigating the multi-account hierarchy.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/manage-users/](https://api-docs.logz.io/docs/logz/manage-users/)
-- **Base URL:** `https://api.logz.io/v1/user-management`
-
-#### Tags
-
-- Account Management
-- Users
-- Identity
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/manage-users/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Tokens API
-
-Manage the three Logz.io credential types — API tokens (account control plane), log-shipping tokens (ingest authentication for shippers like Filebeat, Fluentd, OpenTelemetry, and the Logz.io agents), and shared tokens (cross-account read access). Returns token IDs only; secret values are emitted once at creation.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/manage-api-tokens/](https://api-docs.logz.io/docs/logz/manage-api-tokens/)
-- **Base URL:** `https://api.logz.io/v1`
-
-#### Tags
-
-- Account Management
-- Security
-- Credentials
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/manage-api-tokens/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Accounts API
-
-Provision and resize time-based log sub-accounts and metrics accounts. Lets owners split daily ingest quotas across environments, teams, or customers and reshape retention without re-shipping data. Includes the detailed view for time-based accounts with usage and quota.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/manage-time-based-log-accounts/](https://api-docs.logz.io/docs/logz/manage-time-based-log-accounts/)
-- **Base URL:** `https://api.logz.io/v1/account-management`
-
-#### Tags
-
-- Account Management
-- Sub-Accounts
-- Multi-Tenant
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/manage-time-based-log-accounts/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Metrics Prometheus API
-
-Prometheus-compatible read path against the Logz.io Infrastructure Monitoring backend. Implements `query`, `query_range`, `series`, `labels`, and `label/{name}/values` exactly as upstream Prometheus, so existing Grafana data sources, alertmanagers, and PromQL tooling work unmodified against Logz.io-hosted metrics.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/metrics-gateway/](https://api-docs.logz.io/docs/logz/metrics-gateway/)
-- **Base URL:** `https://api.logz.io/v1/metrics/prometheus/api/v1`
-
-#### Tags
-
-- Observability
-- Metrics
-- Prometheus
-- PromQL
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/metrics-gateway/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [JSON Schema](json-schema/logz-io-metric-sample-schema.json) — [JSON Schema](https://json-schema.org/specification)
-
-### Logz.io Grafana API
-
-Pass-through API to the Logz.io fork of Grafana plus a subset of upstream Grafana endpoints. Covers dashboards (`/api/dashboards`), folders, alert rules and silences (`/api/v1/provisioning/alert-rules`, `/api/alertmanager/grafana/api/v2/silences`), annotations, contact points, notification policies, datasource summaries, and dashboard snapshots. The portable way to manage Logz.io's metrics UI as code.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/grafana-alerting/](https://api-docs.logz.io/docs/logz/grafana-alerting/)
-- **Base URL:** `https://api.logz.io/v1/grafana/api`
-
-#### Tags
-
-- Observability
-- Dashboards
-- Grafana
-- Visualization
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/grafana-alerting/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Perses API
-
-Logz.io's Perses-compatible dashboard API (Perses is the CNCF observability dashboard project Logz.io helps maintain). Manages projects, dashboards, global datasources, and the Perses-flavored dashboard search/move operations alongside the Grafana surface — a forward-looking alternative for organizations standardizing on Perses-as-code.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/perses/](https://api-docs.logz.io/docs/logz/perses/)
-- **Base URL:** `https://api.logz.io/perses-public/api/v1`
-
-#### Tags
-
-- Observability
-- Dashboards
-- Perses
-- CNCF
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/perses/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Cloud SIEM API
-
-Logz.io Cloud SIEM control plane — manage detection rules (correlation and threshold), retrieve raised security events, and administer the SIEM sub-account. Backs the detect → triage → respond workflow of Logz.io's MITRE ATT&CK-aligned managed SIEM offering, including pre-built rule packs and analyst worklists.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/security-rules/](https://api-docs.logz.io/docs/logz/security-rules/)
-- **Base URL:** `https://api.logz.io/v2/security`
-
-#### Tags
-
-- Security
-- SIEM
-- Cloud SIEM
-- Threat Detection
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/security-rules/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Log Shipping API
-
-Provision the Logz.io managed pull-side log shippers. Connect AWS CloudTrail streams and S3 buckets (with IAM assume-role) directly from the API so customers can stand up log collection without deploying agents on their AWS side.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/connect-to-cloud-trail/](https://api-docs.logz.io/docs/logz/connect-to-cloud-trail/)
-- **Base URL:** `https://api.logz.io/v1/log-shipping`
-
-#### Tags
-
-- Observability
-- Data Ingestion
-- AWS
-- CloudTrail
-- S3
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/connect-to-cloud-trail/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Parsing Pipelines API
-
-Manage Sawmill log-type pipelines and external mapping uploads. Sawmill is Logz.io's open-source JSON transformation engine; this API lets customers attach declarative parsing pipelines per log-type and inject field-mapping overrides before logs hit the index.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/parsing/](https://api-docs.logz.io/docs/logz/parsing/)
-- **Base URL:** `https://api.logz.io/v1/sawmill`
-
-#### Tags
-
-- Observability
-- Logging
-- Parsing
-- Sawmill
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/parsing/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Lookup Lists API
-
-CRUD for reference data used to enrich and filter logs and alerts. Customers upload lookup lists of IPs, hostnames, user IDs, or business identifiers and reference them by name in alerts and queries, keeping SIEM and operational rules data-driven.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/lookups/](https://api-docs.logz.io/docs/logz/lookups/)
-- **Base URL:** `https://api.logz.io/v1/lookups`
-
-#### Tags
-
-- Observability
-- Logging
-- Enrichment
-- Reference Data
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/lookups/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Insights API
-
-Retrieve the cognitive-insights and anomaly findings surfaced by Logz.io's AI observability layer. Returns ranked operational insights — Exceptions, Slow Transactions, Critical Events — for downstream automation and ticketing.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/insights/](https://api-docs.logz.io/docs/logz/insights/)
-- **Base URL:** `https://api.logz.io/v1/insights`
-
-#### Tags
-
-- Observability
-- AIOps
-- Insights
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/insights/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Deployment Markers API
-
-Post deployment events into Logz.io as markers so they overlay on dashboards and contextual searches. The mechanism release pipelines use to correlate spikes in error logs or latency with the deployment that caused them.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/deployments/](https://api-docs.logz.io/docs/logz/deployments/)
-- **Base URL:** `https://api.logz.io/v2/markers`
-
-#### Tags
-
-- Observability
-- Deployments
-- DevOps
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/deployments/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io OpenSearch Snapshots API
-
-Drive the OpenSearch / Kibana saved-object snapshot lifecycle inside Logz.io — import and export visualizations, searches, and dashboard objects programmatically. The promotion-path used to ship Kibana content between Logz.io sub-accounts via CI.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/snapshots/](https://api-docs.logz.io/docs/logz/snapshots/)
-- **Base URL:** `https://api.logz.io`
-
-#### Tags
-
-- Observability
-- Logging
-- Backup
-- OpenSearch
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/snapshots/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-### Logz.io Audit Trail API
-
-Query the Logz.io account-level audit trail and list the event types it emits. Customers wire this into their own SIEM or governance pipelines for ISO 27001 / SOC 2-style activity tracking over Logz.io platform actions.
-
-- **Human URL:** [https://api-docs.logz.io/docs/logz/retrieve-audit-trail/](https://api-docs.logz.io/docs/logz/retrieve-audit-trail/)
-- **Base URL:** `https://api.logz.io/v1/audit-trail`
-
-#### Tags
-
-- Compliance
-- Audit
-- Governance
-
-#### Properties
-
-- [Documentation](https://api-docs.logz.io/docs/logz/retrieve-audit-trail/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-
-## Common Properties
-
-- [Arazzo Workflows](arazzo/) — [Arazzo Specification](https://spec.openapis.org/arazzo/latest.html)
-- [Portal](https://logz.io/)
-- [Login](https://app.logz.io/)
+- [Website](https://www.logz.io/)
 - [Documentation](https://docs.logz.io/)
-- [Documentation](https://docs.logz.io/api/)
-- [Documentation](https://api-docs.logz.io/docs/logz/logz-io-api)
-- [Authentication](https://app.logz.io/#/dashboard/settings/manage-tokens/api)
-- [Regions](https://docs.logz.io/user-guide/accounts/account-region.html)
-- [Getting Started](https://docs.logz.io/user-guide/giveittome/)
-- [Terms of Service](https://logz.io/about-us/terms-of-use/)
-- [Privacy Policy](https://logz.io/about-us/privacy-policy/)
-- [Security](https://logz.io/learn/security-and-compliance/)
-- [Trust Center](https://logz.io/trust-center/)
-- [Status Page](https://status.logz.io/)
-- [Blog](https://logz.io/blog/)
-- [Changelog](https://logz.io/blog/category/news/)
-- [Support](https://logz.io/support/)
-- [Support](https://docs.logz.io/contact-support.html)
-- [Contact Us](https://logz.io/about/contact-us/)
-- [GitHub Organization](https://github.com/logzio)
-- [LinkedIn](https://www.linkedin.com/company/logz.io/)
-- [Twitter](https://twitter.com/logzio)
-- [YouTube](https://www.youtube.com/channel/UCRtxh4MS8gWQ8mTCnTcLZ-Q)
-- [Careers](https://logz.io/about-us/careers/)
-- [About Us](https://logz.io/about-us/)
-- [License](https://logz.io/about-us/forked-statement/)
-- [Case Studies](https://logz.io/customers/)
-- [Partners](https://logz.io/partners/)
-- [Events](https://logz.io/events/)
-- [Integrations](https://docs.logz.io/integrations/)
-- [Containers](https://hub.docker.com/u/logzio)
-- [Documentation](https://docs.logz.io/integrations/terraform/)
-- [Tools](https://github.com/logzio/terraform-provider-logzio)
-- [SDK](https://github.com/logzio/logzio_terraform_client)
-- [SDK](https://github.com/logzio/logzio-go)
-- [SDK](https://github.com/logzio/logzio-nodejs)
-- [SDK](https://github.com/logzio/logzio-browser)
-- [SDK](https://github.com/logzio/logzio-java-sender)
-- [SDK](https://github.com/logzio/logzio-dotnet)
-- [SDK](https://github.com/logzio/logzio-python-handler)
-- [SDK](https://github.com/logzio/logzio-ruby)
-- [SDK](https://github.com/logzio/logzio-bunyan)
-- [SDK](https://github.com/logzio/logzio-log4j2-appender)
-- [SDK](https://github.com/logzio/logzio-logback-appender)
-- [Integrations](https://github.com/logzio/jaeger-logzio)
-- [Integrations](https://github.com/logzio/zipkin-logzio)
-- [Tools](https://github.com/logzio/logzio-helm)
-- [Tools](https://github.com/logzio/logzio-k8s)
-- [Tools](https://github.com/logzio/logzio_aws_serverless)
-- [Tools](https://github.com/logzio/logzio-azure-serverless)
-- [Tools](https://github.com/logzio/grafana-logzio-datasource)
-- [Tools](https://github.com/logzio/docker-collector-logs)
-- [Tools](https://github.com/logzio/docker-collector-metrics)
-- [Tools](https://github.com/logzio/docker-logging-plugin)
-- [Tools](https://github.com/logzio/fluent-bit-logzio-output)
-- [Tools](https://github.com/logzio/sawmill)
-- [Documentation](https://github.com/logzio/logz-docs)
-- [Community](https://github.com/logzio/community)
-- [Learning](https://logz.io/learn/complete-guide-elk-stack/)
-- [Learning](https://logz.io/learn/)
-- [Plans](https://logz.io/pricing/)
+- [Getting started](https://docs.logz.io/user-guide/giveittome/)
 - [Pricing](https://logz.io/pricing/)
-- [OpenAPI](openapi/logz-io-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Plans](plans/logz-io-plans-pricing.yml)
-- [Rate Limits](rate-limits/logz-io-rate-limits.yml)
-- [Fin Ops](finops/logz-io-finops.yml)
-- [JSON-LD](json-ld/logz-io-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
+- [Support](https://logz.io/support/)
+- [Changelog](https://logz.io/blog/category/news/)
+- [Blog](https://logz.io/blog/)
+- [Security](https://logz.io/learn/security-and-compliance/)
+- [Trust centre](https://logz.io/trust-center/)
+- [Terms of service](https://logz.io/about-us/terms-of-use/)
+- [Privacy policy](https://logz.io/about-us/privacy-policy/)
+- [GitHub](https://github.com/logzio)
+- [Status](https://status.logz.io/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** info@apievangelist.com
-**URL:** https://kinlane.com
+**Kin Score 59.7** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 58.7 |
+| Contract governance | 9.8 |
+| Operational transparency | 52.6 |
+| Developer ergonomics | 71.0 |
+| Access clarity | 68.4 |
+
+**Agent readiness 23.7** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 29.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/logz-io/](https://apis.io/providers/logz-io/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Logz.io: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/logz-io/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
